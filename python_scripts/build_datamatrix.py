@@ -76,9 +76,12 @@ parser.add_argument('-custom_exon', '--custom-sequence-exon', dest="custom_seq_e
 parser.add_argument('-custom_intron', '--custom-sequence-intron', dest="custom_seq_int", default=False,
                   help="Txt list containing custom sequences to be counted in the introns. Default: False", metavar="custom_intron.txt", required=False)
 
-parser.add_argument("--ucsc",dest="ucsc_annot", 
-                  action="store_true", default=False,
-                  help="Use this flag if you are using files with UCSCs chromossome annotation instead of Ensembl's. Default: False")
+parser.add_argument('-nuccont', '--nucleotide_content', dest="nuc_info", default=2, metavar="nuc", required=False,
+                   help="Defines the ammount of information included from the nucleotide sequence, 3 options available: 'Simple','Intermediate','Full'. Options:1 = Simple:[Length and pGC], 2 = Intermediate:[Length, pGC, pG, pC, pA, pT], 3 = Full:[All data from BedTools nucleotide sequence].' Default: 2 (Intermediate); p = percentage")
+
+parser.add_argument("--maxEntScan",dest="max_ent_scan", 
+                  action="store_true", default=True,
+                  help="Use this option if you want to use maxEntScan algorithm for scoring 3' and 5' splice sites. Although the splice sites are generally conserved, the original algorithm is trained for human datasets, which can lead to shaky results for other species. Default: True")
 
 parser.add_argument("--keepBED",dest="keep_bed", 
                   action="store_true", default=False, 
@@ -152,15 +155,10 @@ df['start'] = (df['start']-1).astype(int)
 df['end'] = df['end'].astype(int)
 
 print
-print "Filtering transcript and exons annotations"
+print "Filtering exons annotations"
     
-df_transcript = df[df['feature'] == 'transcript'].reset_index().drop('index', 1)
-df_transcript['transcript_id'] = "transcript_id_"+df_transcript['attributes'].apply(lambda x: x.split('transcript_id "')[1])
-df_transcript['transcript_id'] = df_transcript['transcript_id'].apply(lambda x: x.split('"')[0])
-
 df_exons = df[df['feature'] == 'exon'].reset_index().drop('index', 1)
-df_exons['exon_id'] = 'exon_id_'+df_exons['attributes'].apply(lambda x: x.split('exon_id "')[1])
-df_exons['exon_id'] = df_exons['exon_id'].apply(lambda x: x.split('"')[0])
+df_exons['exon_id'] = 'exon_id_E0'+((df_exons.index)+1).astype(str)
 df_exons['transcript_id'] = "transcript_id_"+df_exons['attributes'].apply(lambda x: x.split('transcript_id "')[1])
 df_exons['transcript_id'] = df_exons['transcript_id'].apply(lambda x: x.split('"')[0])
 
@@ -174,23 +172,27 @@ print "Classifing exons in: single exons, first exons, last exons and middle exo
 ## BED format.
 
 ## Single exons
-single_exons = df_exons[(df_exons['start'].isin(df_transcript['start'])) &
-                        (df_exons['end'].isin(df_transcript['end'])) &
-                        (df_exons['transcript_id'].isin(df_transcript['transcript_id']))]
+exons_grouped = df_exons.groupby('transcript_id')
+group_size_filter = (exons_grouped.size() == 1)
+single_exons = df_exons[df_exons['transcript_id'].isin(group_size_filter[group_size_filter].index)]
 
 single_exons_bed = single_exons[['seqname','start','end','tag','score','strand']
                                ].drop_duplicates().sort_values(by=['seqname','start']
                                                            ).rename(columns={'tag':'name'})
 
+##Create a frame for non-single exons:
+
+df_non_single_exons = df_exons[~df_exons['tag'].isin(single_exons['tag'])]
+
 ## For first and last exons we need to separate exons by strand
 
-df_exons_plus = df_exons[df_exons['strand'] == '+']
-df_exons_minus = df_exons[df_exons['strand'] == '-']
+df_ns_exons_plus = df_non_single_exons[df_non_single_exons['strand'] == '+']
+df_ns_exons_minus = df_non_single_exons[df_non_single_exons['strand'] == '-']
 
 #First Exons
 
-first_exons_plus = df_exons_plus.groupby(['transcript_id']).first().reset_index()
-first_exons_minus = df_exons_minus.groupby(['transcript_id']).last().reset_index()                                                                                             
+first_exons_plus = df_ns_exons_plus.groupby(['transcript_id']).first().reset_index()
+first_exons_minus = df_ns_exons_minus.groupby(['transcript_id']).last().reset_index()                                                                                             
                                                                                                          
                                                                                                          
 first_exons = pd.concat([first_exons_plus,first_exons_minus]).reindex(columns=df_exons.columns)
@@ -201,8 +203,8 @@ first_exons_bed = first_exons[['seqname','start','end','tag','score','strand']
 
 #Last Exons
                                                                                                          
-last_exons_plus = df_exons_plus.groupby(['transcript_id']).last().reset_index()
-last_exons_minus = df_exons_minus.groupby(['transcript_id']).first().reset_index()
+last_exons_plus = df_ns_exons_plus.groupby(['transcript_id']).last().reset_index()
+last_exons_minus = df_ns_exons_minus.groupby(['transcript_id']).first().reset_index()
 
 last_exons = pd.concat([last_exons_plus,last_exons_minus]).reindex(columns=df_exons.columns)
 
@@ -212,9 +214,9 @@ last_exons_bed = last_exons[['seqname','start','end','tag','score','strand']
 
 ## Get middle exons by removing the first and last exons from the total found, then create a bed file.
 
-middle_exons = df_exons[(~(df_exons['tag'].isin(first_exons['tag'])) &
-                         ~(df_exons['tag'].isin(last_exons['tag'])) &
-                         ~(df_exons['tag'].isin(single_exons['tag'])))]
+middle_exons = df_non_single_exons[(~(df_non_single_exons['tag'].isin(first_exons['tag'])) &
+                                    ~(df_non_single_exons['tag'].isin(last_exons['tag'])) &
+                                    ~(df_non_single_exons['tag'].isin(single_exons['tag'])))]
 
 middle_exons_bed = middle_exons[['seqname','start','end','tag','score','strand']
                                ].drop_duplicates().sort_values(by=['seqname','start']
@@ -662,7 +664,7 @@ if args.keep_bed == True:
     map(os.remove, glob.glob("*.bed.gz"))
     
 elif args.keep_bed == False:
-    pass
+    save_bed(all_exons_bed, str(args.prefix)+'.all.exons.bed.gz')
 
 if args.keep_temp == True:
     print
@@ -725,6 +727,14 @@ def nuc_cont(bedtool):
     nuccont_df['%T'] = nuccont_df.apply(lambda x: (float(x['%T'])/float(x['length'])), 1).round(5)
     nuccont_df['%N'] = nuccont_df.apply(lambda x: (float(x['%N'])/float(x['length'])), 1).round(5)
     nuccont_df['%O'] = nuccont_df.apply(lambda x: (float(x['%O'])/float(x['length'])), 1).round(5)
+    
+    if args.nuc_info == 1:
+        nuccont_df = nuccont_df[['name','length','%GC']]
+    elif args.nuc_info == 2:
+        nuccont_df = nuccont_df[['name','length','%GC', '%G','%C', '%A', '%T']]
+    elif args.nuc_info == 3:
+        pass
+    
     return nuccont_df
 
 def splice_site_fasta (df, name):
@@ -786,7 +796,7 @@ def get_var_counts(bedtool, var_file):
     print "Getting variation from: "+str(var_file)
     print
     var = BedTool(var_file)
-    source = str(var_file)
+    source = str(var_file).split('/')[-1]
     var_counts = pd.concat(bedtool.intersect(var,s=True, c=True).to_dataframe(iterator=True, chunksize=10000
                            ), ignore_index=True).rename(columns={'thickStart':'var_count_'+source})
     return var_counts[['name','var_count_'+source]]
@@ -861,13 +871,20 @@ def get_data(df, name, matrix):
         elif args.custom_seq_int != False:
             a['custom_seq_intron'] = a['seq'].apply(lambda x: sum(x.upper().count(y.upper()) for y in (custom_seq_int)))
             
-    if name.find("_3ss") != -1 or name.find("_5ss") != -1:
-        ss = get_maxent_score(df, name)
-        a = a.merge(ss, on='name').drop_duplicates()
+    if args.max_ent_scan == True:
+        if name.find("_3ss") != -1 or name.find("_5ss") != -1:
+            ss = get_maxent_score(df, name)
+            a = a.merge(ss, on='name').drop_duplicates()
+        else:
+            pass
     else:
         pass
     
-    z = a.drop(['seqname','start','end','score','strand','seq'], 1)
+    if str(args.nuc_info) == 3: 
+        z = a.drop(['seqname','start','end','score','strand','seq'], 1)
+    else:
+        z = a.copy()
+    
     z = z.set_index('name').add_suffix('_'+name).reset_index()
     z = filter_columns(z)
     print
