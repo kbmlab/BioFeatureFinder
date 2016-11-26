@@ -25,6 +25,8 @@ warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
+##Load the parser for arguments
+
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
         print
@@ -664,6 +666,8 @@ if args.keep_bed == True:
     map(os.remove, glob.glob("*.bed.gz"))
     
 elif args.keep_bed == False:
+    print
+    print "Saving bed file with annotated exons"
     save_bed(all_exons_bed, str(args.prefix)+'.all.exons.bed.gz')
 
 if args.keep_temp == True:
@@ -792,33 +796,14 @@ def get_cpg_islands(bedtool):
     return cpg_counts
 
 def get_var_counts(bedtool, var_file):
+    print
+    print "Getting variation from: "+str(var_file)
+    print
     var = BedTool(var_file)
     source = str(var_file).split('/')[-1]
-    print
-    print "Getting variation from: "+str(source)
-    print
     var_counts = pd.concat(bedtool.intersect(var,s=True, c=True).to_dataframe(iterator=True, chunksize=10000
                            ), ignore_index=True).rename(columns={'thickStart':'var_count_'+source})
     return var_counts[['name','var_count_'+source]]
-
-def rate(T):
-    if (T >= 1):
-        return 1
-    if (T == 0):
-        return 0
-    else:
-        print "Error in binarization of variation counts"        
-
-def get_var_bin(bedtool, bin_file):
-    binary = BedTool(bin_file)
-    source = str(bin_file).split('/')[-1]
-    print
-    print "Getting binary variation from: "+str(source)
-    print
-    var_bin = pd.concat(bedtool.intersect(var,s=True, c=True).to_dataframe(iterator=True, chunksize=10000
-                           ), ignore_index=True).rename(columns={'thickStart':'var_bin_'+source})
-    var_bin['var_bin_'+source] = var_bin['var_bin_'+source].apply(lambda x: rate(x), 1)
-    return var_bin[['name','var_bin_'+source]]
     
 def filter_columns(df):
     column_list = df.columns
@@ -957,7 +942,7 @@ print "Getting data for first exons."
 for i in range(len(frames_first)):
     matrix_first = get_data(frames_first[i], names_first[i], matrix_first)
 
-matrix_first.set_index('name').to_csv(str(args.prefix)+'.first.exons.datamatrix.tsv', sep='\t')
+matrix_first.set_index('name').drop_duplicates().to_csv(str(args.prefix)+'.first.exons.datamatrix.tsv', sep='\t')
     
 print
 print "First exons DONE. Starting middle exons."
@@ -965,7 +950,7 @@ print "First exons DONE. Starting middle exons."
 for i in range(len(frames_middle)):
     matrix_middle = get_data(frames_middle[i], names_middle[i], matrix_middle)
     
-matrix_middle.set_index('name').to_csv(str(args.prefix)+'.middle.exons.datamatrix.tsv', sep='\t')
+matrix_middle.set_index('name').drop_duplicates().to_csv(str(args.prefix)+'.middle.exons.datamatrix.tsv', sep='\t')
 
 print
 print "Middle exons DONE. Starting last exons."
@@ -973,13 +958,13 @@ print "Middle exons DONE. Starting last exons."
 for i in range(len(frames_last)):
     matrix_last = get_data(frames_last[i], names_last[i], matrix_last)
 
-matrix_last.set_index('name').to_csv(str(args.prefix)+'.last.exons.datamatrix.tsv', sep='\t')
+matrix_last.set_index('name').drop_duplicates().to_csv(str(args.prefix)+'.last.exons.datamatrix.tsv', sep='\t')
 
 print
 print "Last exons DONE. Starting single exons."
 
 matrix_single = get_data(single_exons_bed, 'single_exons', matrix_single)
-matrix_single.set_index('name').to_csv(str(args.prefix)+'.single.exons.datamatrix.tsv', sep='\t')
+matrix_single.set_index('name').drop_duplicates().to_csv(str(args.prefix)+'.single.exons.datamatrix.tsv', sep='\t')
 
 print
 print 'Single exons DONE.'
