@@ -169,7 +169,7 @@ def get_statistical_data_for_features(df, correction_type=args.padj):
     features = pd.DataFrame()
     features['Feature'] = df.drop('group',1).columns
     
-    pairwise = list(itertools.combinations(df.group.drop_duplicates(), 2))
+    pairwise = list(itertools.combinations(df.sort_values('group').group.drop_duplicates(), 2))
     
     statsR = importr('stats')
     
@@ -424,7 +424,7 @@ if args.skip_stat == False:
         elif args.twoSamp == True:
             print "Filtering statistically significantly features for classification step"
             print
-            sig_only = st[st['adj_pval_2_vs_1'] <= float(args.p_th)]['Feature'].tolist()
+            sig_only = st[st['adj_pval_1_vs_2'] <= float(args.p_th)]['Feature'].tolist()
             sig_only.append('group')
             matrix = matrix[sig_only]
     

@@ -69,7 +69,7 @@ if args.filter_list == False:
 else:
     filter_list = list(pd.read_table(args.filter_list, header=None)[0])
     print
-    print "Filtering matrix for removing columns with: "+str(filter_list)
+    print "Filtering matrix for removing columns: "+str(filter_list)
     for i in range(len(filter_list)):
         matrix = matrix.drop((matrix.filter(like=str(filter_list[i]), axis=1).columns),1)
         
@@ -105,7 +105,7 @@ def get_rand_sampling_stats(features):
     Tr['median'] = Tr.apply(lambda x: np.median(x),1)
     Tr['std'] = Tr.apply(lambda x: np.std(x),1)
     Tr.T.to_csv('random_sampling_test/'+str(args.prefix)+'/'+str(name)+'_test_for_random_sampling.csv')
-    plt.errorbar(y=Tr['median'], x=f_samp, yerr=Tr['std'], fmt='o-',)
+    plt.errorbar(y=Tr['median'], x=f_samp, yerr=Tr['std'], fmt=':',)
     plt.title(str(name))
     plt.xlabel('fraction of exons sampled')
     plt.ylabel('ks p-val')
@@ -135,7 +135,7 @@ for i in range(len(files)):
     fit = np.poly1d(coefficients) 
     
     color = cycol()
-    plt.errorbar(y=df['median'], x=f_samp, yerr=df['std'], fmt='o', c=color)
+    plt.errorbar(y=df['median'], x=f_samp, yerr=df['std'], fmt=':', c=color)
     plt.plot(f_samp,fit(np.log(f_samp)),"--", label="fit", c=color)
     plt.xlabel('fraction of total exons sampled')
     plt.ylabel('median ks p-val')
