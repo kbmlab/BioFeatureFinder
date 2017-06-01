@@ -17,8 +17,8 @@ from pybedtools import BedTool
 import pysam
 import warnings
 import glob
-import cStringIO
-from cStringIO import StringIO
+import io
+from io import StringIO
 import shutil
 import tarfile
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
@@ -29,12 +29,12 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
-        print
-        print "The following error ocurred in argument parsing:"
+        print()
+        print("The following error ocurred in argument parsing:")
         sys.stderr.write('error: %s\n' % message)
-        print
-        print "Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author"
-        print
+        print()
+        print("Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author")
+        print()
         self.print_help()
         sys.exit(2)
 
@@ -111,14 +111,14 @@ args = parser.parse_args()
 if args.debug == False:
     pass
 else:
-    print
-    print "Running in debug mode. Only the first "+str(args.debug)+" transcripts will be used."
+    print()
+    print("Running in debug mode. Only the first "+str(args.debug)+" transcripts will be used.")
     
 if args.use_threads == False:
     pass
 else:
-    print
-    print "Running with multiple threads. Watch out for that RAM!"
+    print()
+    print("Running with multiple threads. Watch out for that RAM!")
     
 #if args.genome_browser == False:
 #    pass
@@ -126,8 +126,8 @@ else:
 #    print
 #    print "Making bed output compatible with UCSC's Genome Browser (WARNING: Remember to use UCSC's FASTA file instead of #ENSEMBL's due to differences in chromosome annotation)."
 
-print
-print "Loading GTF file and creating the DataFrame"
+print()
+print("Loading GTF file and creating the DataFrame")
     
 ## Load the mouse genome GTF file and convert it to a DataFrame
 
@@ -156,8 +156,8 @@ df = pd.concat(gtf.to_dataframe(iterator=True, chunksize=10000
 df['start'] = (df['start']-1).astype(int)
 df['end'] = df['end'].astype(int)
 
-print
-print "Filtering exons annotations"
+print()
+print("Filtering exons annotations")
     
 df_exons = df[df['feature'] == 'exon'].reset_index().drop('index', 1)
 df_exons['exon_id'] = 'exon_id_E0'+((df_exons.index)+1).astype(str)
@@ -167,8 +167,8 @@ df_exons['transcript_id'] = df_exons['transcript_id'].apply(lambda x: x.split('"
 df_exons['tag'] = df_exons['exon_id']+"_"+df_exons['transcript_id']
 df_exons['score'] = 0
 
-print
-print "Classifing exons in: single exons, first exons, last exons and middle exons."
+print()
+print("Classifing exons in: single exons, first exons, last exons and middle exons.")
 
 ## Select only the exons which match the start (first exons) and end (last exons) of the transcript and convert them to
 ## BED format.
@@ -365,10 +365,10 @@ def get_upstream_and_downstream_exons(transcript_id):
                                          header=True,output=transcript_id+'_middle_exons_dn_temp.table')
 
     if (strand_counts == 2):
-        print 'Both strands are present in transcript '+transcript_id+', check if all exons are in the same strand.'
+        print('Both strands are present in transcript '+transcript_id+', check if all exons are in the same strand.')
 
-print
-print "Searching for upstream and downstream exons in each transcript. (WARNING: This may take a while, go grab a cup of cofee... or a movie... or go home and get some sleep, it'll take a few hours to run)"
+print()
+print("Searching for upstream and downstream exons in each transcript. (WARNING: This may take a while, go grab a cup of cofee... or a movie... or go home and get some sleep, it'll take a few hours to run)")
 
 if args.use_threads == True:
     if __name__ == '__main__':
@@ -589,27 +589,27 @@ def get_downstream_features(table):
 
 ## Find up/down exons for Middle exons
 
-print
-print 'Finding upstream features for middle exons'
+print()
+print('Finding upstream features for middle exons')
 
 up_middle_exon,up_middle_intron,up_middle_5ss,up_middle_3ss,up_middle_bp = get_upstream_features('upstream_middle_exons_temp.table')
 
-print
-print 'Finding downstream features for middle exons'
+print()
+print('Finding downstream features for middle exons')
 
 dn_middle_exon,dn_middle_intron,dn_middle_5ss,dn_middle_3ss,dn_middle_bp = get_downstream_features('downstream_middle_exons_temp.table')
 
 ## Find down exons for First exons
 
-print
-print 'Finding downstream features for first exons'
+print()
+print('Finding downstream features for first exons')
 
 dn_first_exon,dn_first_intron,dn_first_5ss,dn_first_3ss,dn_first_bp = get_downstream_features('downstream_first_exons_temp.table')
 
 ## Find up exons for Last exons
 
-print
-print 'Finding upstream features for last exons'
+print()
+print('Finding upstream features for last exons')
 
 up_last_exon,up_last_intron,up_last_5ss,up_last_3ss,up_last_bp = get_upstream_features('upstream_last_exons_temp.table')
 
@@ -619,16 +619,16 @@ def save_bed(df, filename):
     df.to_csv(filename, compression='gzip', sep='\t', index=False, header=False)
 
 if args.keep_bed == True:
-    print
-    print "Saving classified exons to bed files"
+    print()
+    print("Saving classified exons to bed files")
     save_bed(single_exons_bed,str(args.prefix)+'.single.exons.bed.gz')
     save_bed(first_exons_bed, str(args.prefix)+'.first.exons.bed.gz')
     save_bed(last_exons_bed, str(args.prefix)+'.last.exons.bed.gz')
     save_bed(middle_exons_bed, str(args.prefix)+'.middle.exons.bed.gz')
     save_bed(all_exons_bed, str(args.prefix)+'.all.exons.bed.gz')
     
-    print
-    print "Saving features to bed files"
+    print()
+    print("Saving features to bed files")
 
     #Up middle
     save_bed(up_middle_exon, str(args.prefix)+'.upstream_middle_exons.bed.gz')
@@ -663,26 +663,26 @@ if args.keep_bed == True:
         archive.add(filename)
     archive.close()
     
-    map(os.remove, glob.glob("*.bed.gz"))
+    list(map(os.remove, glob.glob("*.bed.gz")))
     
 elif args.keep_bed == False:
-    print
-    print "Saving bed file with annotated exons"
+    print()
+    print("Saving bed file with annotated exons")
     save_bed(all_exons_bed, str(args.prefix)+'.all.exons.bed.gz')
 
 if args.keep_temp == True:
-    print
-    print "Compressing all temporary files and cleaning up"
+    print()
+    print("Compressing all temporary files and cleaning up")
     archive = tarfile.open("temp_tables.tar.gz", "w|gz")
     for filename in glob.glob('*.table'):
         archive.add(filename)
     archive.close()
-    map(os.remove, glob.glob("*.table"))
+    list(map(os.remove, glob.glob("*.table")))
     
 if args.keep_temp == False:
-    print
-    print "Removing all temporary files"
-    map(os.remove, glob.glob("*.table"))
+    print()
+    print("Removing all temporary files")
+    list(map(os.remove, glob.glob("*.table")))
     
 ##Now we will start gathering data of each region and assemble everything into a dataframe which will be passed to 
 ## the classifier in posterior steps. For this we will need to use several functions.
@@ -773,9 +773,9 @@ def get_maxent_score(df, name):
         pass
 
 def get_conservation_scores(con_file, df, cmd="bigWigAverageOverBed"):
-    print
-    print "Getting conservation from: "+str(con_file)
-    print
+    print()
+    print("Getting conservation from: "+str(con_file))
+    print()
     BedTool.from_dataframe(df).saveas('conservation_temp.bed')
     composed_command = " ".join([cmd, con_file, 'conservation_temp.bed', 'conservation_result_temp.tab'])
     p = Popen(composed_command, shell=True)
@@ -796,9 +796,9 @@ def get_cpg_islands(bedtool):
     return cpg_counts
 
 def get_var_counts(bedtool, var_file):
-    print
-    print "Getting variation from: "+str(var_file)
-    print
+    print()
+    print("Getting variation from: "+str(var_file))
+    print()
     var = BedTool(var_file)
     source = str(var_file).split('/')[-1]
     var_counts = pd.concat(bedtool.intersect(var,s=True, c=True).to_dataframe(iterator=True, chunksize=10000
@@ -815,8 +815,8 @@ def filter_columns(df):
     return df
    
 def get_data(df, name, matrix):
-    print
-    print "Starting "+name
+    print()
+    print("Starting "+name)
     
     bedtool = BedTool.from_dataframe(df).saveas()
     a = nuc_cont(bedtool)
@@ -891,8 +891,8 @@ def get_data(df, name, matrix):
     
     z = z.set_index('name').add_suffix('_'+name).reset_index()
     z = filter_columns(z)
-    print
-    print name+" finished"
+    print()
+    print(name+" finished")
     return matrix.merge(z, on='name').drop_duplicates()
 
 ##Load the genome file that matches the version of the GTF you are using. Pysam will be used to build an index of 
@@ -934,40 +934,40 @@ names_last = list(('last_exons',
 
 matrix_single = pd.DataFrame(single_exons_bed['name'])
 
-print
-print "Starting matrix build."
-print
-print "Getting data for first exons."
+print()
+print("Starting matrix build.")
+print()
+print("Getting data for first exons.")
 
 for i in range(len(frames_first)):
     matrix_first = get_data(frames_first[i], names_first[i], matrix_first)
 
 matrix_first.set_index('name').drop_duplicates().to_csv(str(args.prefix)+'.first.exons.datamatrix.tsv', sep='\t')
     
-print
-print "First exons DONE. Starting middle exons."
+print()
+print("First exons DONE. Starting middle exons.")
 
 for i in range(len(frames_middle)):
     matrix_middle = get_data(frames_middle[i], names_middle[i], matrix_middle)
     
 matrix_middle.set_index('name').drop_duplicates().to_csv(str(args.prefix)+'.middle.exons.datamatrix.tsv', sep='\t')
 
-print
-print "Middle exons DONE. Starting last exons."
+print()
+print("Middle exons DONE. Starting last exons.")
     
 for i in range(len(frames_last)):
     matrix_last = get_data(frames_last[i], names_last[i], matrix_last)
 
 matrix_last.set_index('name').drop_duplicates().to_csv(str(args.prefix)+'.last.exons.datamatrix.tsv', sep='\t')
 
-print
-print "Last exons DONE. Starting single exons."
+print()
+print("Last exons DONE. Starting single exons.")
 
 matrix_single = get_data(single_exons_bed, 'single_exons', matrix_single)
 matrix_single.set_index('name').drop_duplicates().to_csv(str(args.prefix)+'.single.exons.datamatrix.tsv', sep='\t')
 
-print
-print 'Single exons DONE.'
+print()
+print('Single exons DONE.')
 
-print
-print "Data matrices build complete"
+print()
+print("Data matrices build complete")

@@ -14,12 +14,12 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
-        print
-        print "The following error ocurred in argument parsing:"
+        print()
+        print("The following error ocurred in argument parsing:")
         sys.stderr.write('error: %s\n' % message)
-        print
-        print "Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author"
-        print
+        print()
+        print("Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author")
+        print()
         self.print_help()
         sys.exit(2)
 
@@ -63,4 +63,4 @@ elif args.ucsc_to_ensembl == True:
     ucsc.to_csv(args.out, compression='gzip', sep='\t', index=False, header=False)
     
 else:
-    print "No conversion option selected. Please use --ucsc-to-ensembl or --ensembl-to-ucsc."
+    print("No conversion option selected. Please use --ucsc-to-ensembl or --ensembl-to-ucsc.")

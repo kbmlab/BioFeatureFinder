@@ -16,20 +16,20 @@ from multiprocessing.pool import Pool
 import multiprocessing as mp
 import warnings
 import glob
-import cStringIO
-from cStringIO import StringIO
+import io
+from io import StringIO
 from scipy.optimize import curve_fit
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
 pd.options.mode.chained_assignment = None  # default='warn'
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
-        print
-        print "The following error ocurred in argument parsing:"
+        print()
+        print("The following error ocurred in argument parsing:")
         sys.stderr.write('error: %s\n' % message)
-        print
-        print "Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author"
-        print
+        print()
+        print("Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author")
+        print()
         self.print_help()
         sys.exit(2)
 
@@ -57,8 +57,8 @@ t0 = time.time()
 
 ##Load the data matrix in an object and set the name column as index
 
-print
-print "Load data matrix"
+print()
+print("Load data matrix")
 
 matrix = pd.concat(pd.read_table(str(args.data),iterator=True, chunksize=10000), ignore_index=True).set_index('name')
 
@@ -68,23 +68,23 @@ if args.filter_list == False:
     pass
 else:
     filter_list = list(pd.read_table(args.filter_list, header=None)[0])
-    print
-    print "Filtering matrix for removing columns: "+str(filter_list)
+    print()
+    print("Filtering matrix for removing columns: "+str(filter_list))
     for i in range(len(filter_list)):
         matrix = matrix.drop((matrix.filter(like=str(filter_list[i]), axis=1).columns),1)
         
 ##Set the number of repetitions to the used and the fractions to be sampled
 
-print
-print "Setting testing parameters"
+print()
+print("Setting testing parameters")
 
 reps = np.arange(int(args.nreps))
 f_samp = list((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
 
 ##Create the folder for saving the output files and graphs
 
-print
-print "Creating output folders"
+print()
+print("Creating output folders")
 
 Popen('mkdir random_sampling_test', shell=True)
 Popen('mkdir random_sampling_test/'+str(args.prefix), shell=True)
@@ -115,18 +115,18 @@ def get_rand_sampling_stats(features):
 
 features = matrix.columns    
 
-print
-print "Running tests with "+str(args.nreps)+" repetitions per feature and saving output files"
+print()
+print("Running tests with "+str(args.nreps)+" repetitions per feature and saving output files")
 
 if __name__ == '__main__':
     p = Pool(args.ncores)
     p.map(get_rand_sampling_stats, features)
 
-print
-print "Plotting composed figures for all features"
+print()
+print("Plotting composed figures for all features")
     
 files = glob.glob('random_sampling_test/'+str(args.prefix)+'/*.csv')
-cycol = cycle('bgrcmk').next
+cycol = cycle('bgrcmk').__next__
 
 for i in range(len(files)):
     df = pd.read_csv(files[i], index_col=0).T
@@ -151,5 +151,5 @@ plt.savefig('random_sampling_test/'+str(args.prefix)+'_random_sampling.pdf',
 
 t1 = time.time()
 
-print 
-print "Done! Running time: "+str(t1-t0)+" seconds."
+print() 
+print("Done! Running time: "+str(t1-t0)+" seconds.")

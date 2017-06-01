@@ -50,12 +50,12 @@ plt.ioff()
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
-        print
-        print "The following error ocurred in argument parsing:"
+        print()
+        print("The following error ocurred in argument parsing:")
         sys.stderr.write('error: %s\n' % message)
-        print
-        print "Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author"
-        print
+        print()
+        print("Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author")
+        print()
         self.print_help()
         sys.exit(2)
 
@@ -174,8 +174,8 @@ def get_statistical_data_for_features(df, correction_type=args.padj):
     statsR = importr('stats')
     
     for i in range(len(pairwise)):
-        print "Calculating Kolmogorov-Smirnov test for: Group "+str(pairwise[i][0])+" vs Group "+str(pairwise[i][1])
-        print
+        print("Calculating Kolmogorov-Smirnov test for: Group "+str(pairwise[i][0])+" vs Group "+str(pairwise[i][1]))
+        print()
         
         features['ks_'+str(pairwise[i][0])+'_vs_'+str(pairwise[i][1])] = features['Feature'].apply(
             lambda x: stats.ks_2samp(df[df['group'] == pairwise[i][0]][x].astype(float),
@@ -187,15 +187,15 @@ def get_statistical_data_for_features(df, correction_type=args.padj):
         features['ks_'+str(pairwise[i][0])+'_vs_'+str(pairwise[i][1])
                 ] = features['ks_'+str(pairwise[i][0])+'_vs_'+str(pairwise[i][1])].apply(lambda x: x[:][0])
         
-        print "Adjusting P-value scores with "+str(correction_type)+" method"
-        print
+        print("Adjusting P-value scores with "+str(correction_type)+" method")
+        print()
         
         features['adj_pval_'+str(pairwise[i][0])+'_vs_'+str(pairwise[i][1])
                 ] = statsR.p_adjust(FloatVector(features['pval_'+str(pairwise[i][0])+'_vs_'+str(pairwise[i][1])]), 
                                    method = correction_type)
                                        
-        print "Done with KS test for: Group "+str(pairwise[i][0])+" vs Group "+str(pairwise[i][1])
-        print
+        print("Done with KS test for: Group "+str(pairwise[i][0])+" vs Group "+str(pairwise[i][1]))
+        print()
     return features
 
 def cdf(data, bins=50):
@@ -279,9 +279,9 @@ def plot_barchart_importance(df):
     
 ##Load the datamatrix generatade by "buildadatamatrix.py"
 
-print
-print "Loading datamatrix"
-print
+print()
+print("Loading datamatrix")
+print()
 
 matrix = pd.concat(pd.read_table(args.matrix,iterator=True, chunksize=10000), 
                           ignore_index=True).set_index('name').drop_duplicates()#.reset_index()
@@ -291,8 +291,8 @@ matrix = pd.concat(pd.read_table(args.matrix,iterator=True, chunksize=10000),
 if args.filter_out == False:
     pass
 else:
-    print "Filtering out columns"
-    print
+    print("Filtering out columns")
+    print()
     out_cols = open(str(args.filter_out)).read().split(',')
     out_cols = [w.replace('\n', '') for w in out_cols]
     matrix = matrix.drop(out_cols,1)
@@ -300,8 +300,8 @@ else:
 if args.filter_in == False:
     pass
 else:
-    print "Selecting columns"
-    print
+    print("Selecting columns")
+    print()
     in_cols = open(str(args.filter_in)).read().split(',')
     in_cols = [w.replace('\n', '') for w in in_cols]
     matrix = matrix[in_cols]
@@ -310,37 +310,37 @@ else:
 
 matrix = matrix.reset_index()
 
-print "Loading annotated exons in refference file"
-print 
+print("Loading annotated exons in refference file")
+print() 
 
 all_exons = BedTool(args.refference_bed).sort()
 
 ##Load the dataset of interest to be analyzed (needs to be a SORTED BED)
 
-print "Load selected exons for biological feature analysis"
-print
+print("Load selected exons for biological feature analysis")
+print()
 
 if args.twoSamp == False:
     pass
 elif args.twoSamp == True:
-    print "Running in two sample mode"
-    print
-    print "Loading bed file for sample 1"
-    print
+    print("Running in two sample mode")
+    print()
+    print("Loading bed file for sample 1")
+    print()
 
 sel_exons = BedTool(args.bed_file).sort()
 
 if args.twoSamp == True:
-    print "Loading bed file for sample 2"
-    print
+    print("Loading bed file for sample 2")
+    print()
     sel_exons_2 = BedTool(args.bed_file_2).sort()
 else:
     pass
 
 ##Intersect the exons found in the analysis to get groups 1 (positive) and 0 (negative) in the matrix
 
-print "Finding input exons in the matrix and selecting groups"
-print
+print("Finding input exons in the matrix and selecting groups")
+print()
 
 if args.twoSamp == False:
     matrix = group_matrices_one_sample(all_exons, sel_exons, matrix).set_index('name')
@@ -353,19 +353,19 @@ elif args.twoSamp == True:
 Popen('mkdir -p ./'+args.prefix+'_results', shell=True)
 
 if args.skip_stat == False:
-    print "Starting statistical analysis"
-    print
+    print("Starting statistical analysis")
+    print()
 
     st = get_statistical_data_for_features(matrix, correction_type=args.padj)
     st.to_csv('./'+args.prefix+'_results/statistical_analysis_output.tsv', sep='\t', index=False)
     
-    print "Finished statistical analysis"
-    print
+    print("Finished statistical analysis")
+    print()
     ##########################################
     ## Plot CDF for the features
     if args.dont_plot_cdf == False:
-        print "Output CDF plots for each features in matrix"
-        print 
+        print("Output CDF plots for each features in matrix")
+        print() 
         Popen('mkdir -p ./'+args.prefix+'_results/CDF_plots', shell=True)
 
         for i in range(len(st)):
@@ -407,8 +407,8 @@ if args.skip_stat == False:
             plt.savefig('./'+args.prefix+'_results/CDF_plots/'+name+'.pdf', dpi=300, bbox_inches='tight')
             plt.close()
 
-        print "Finished CDF plots for features in matrix"
-        print
+        print("Finished CDF plots for features in matrix")
+        print()
     elif args.dont_plot_cdf == True:
         pass
     
@@ -416,14 +416,14 @@ if args.skip_stat == False:
         pass
     elif args.ks_filter == True:
         if args.twoSamp == False:
-            print "Filtering statistically significantly features for classification step"
-            print
+            print("Filtering statistically significantly features for classification step")
+            print()
             sig_only = st[st['adj_pval_0_vs_1'] <= float(args.p_th)]['Feature'].tolist()
             sig_only.append('group')
             matrix = matrix[sig_only]
         elif args.twoSamp == True:
-            print "Filtering statistically significantly features for classification step"
-            print
+            print("Filtering statistically significantly features for classification step")
+            print()
             sig_only = st[st['adj_pval_1_vs_2'] <= float(args.p_th)]['Feature'].tolist()
             sig_only.append('group')
             matrix = matrix[sig_only]
@@ -432,8 +432,8 @@ elif args.skip_stat == True:
     pass
     
 if args.dont_run_clf == True:
-    print "Analysis complete. Thanks for using biofeatures."
-    print
+    print("Analysis complete. Thanks for using biofeatures.")
+    print()
     sys.exit()
 else:
     pass
@@ -496,15 +496,15 @@ for i in range(len(runs)):
     
     Popen('mkdir -p ./'+args.prefix+'_results/classifier_plots/run_'+run_id, shell=True)
     
-    print "Run ID: "+str(run_id)+', Input size: '+str(df_cl.shape[0])+', Background size: '+str(df_zero.shape[0])
-    print 
-    print "Starting classification analysis with GradientBoost. This may take a long time depending on the size of the dataset"
-    print
+    print("Run ID: "+str(run_id)+', Input size: '+str(df_cl.shape[0])+', Background size: '+str(df_zero.shape[0]))
+    print() 
+    print("Starting classification analysis with GradientBoost. This may take a long time depending on the size of the dataset")
+    print()
 
     ##The first step is separating the groups from the data in different arrays
 
-    print "Loading data in arrays"
-    print
+    print("Loading data in arrays")
+    print()
 
     y = np.array(Z.group).astype('int')
     X = np.array(Z.drop('group', 1))
@@ -512,8 +512,8 @@ for i in range(len(runs)):
     ##Then, we split the total data in 2 groups: training group (which we will train our model and optimize the parameters) 
     ## and the test group, which we will use for evaluating the performance of the classifier. The default test size is 0.25.
 
-    print "Splitting train and test datasets"
-    print
+    print("Splitting train and test datasets")
+    print()
 
     X_train, X_test, y_train, y_test = train_test_split(X,
                                                         y,
@@ -534,32 +534,32 @@ for i in range(len(runs)):
 
         clf = GradientBoostingClassifier(warm_start=True)
 
-        print "Optimizing number of features with recursive elimination using stratified 10-fold cross-validation loop"
-        print
+        print("Optimizing number of features with recursive elimination using stratified 10-fold cross-validation loop")
+        print()
 
         rfecv = RFECV(estimator=clf, step=1, cv=StratifiedKFold(10),
                       scoring='accuracy', n_jobs=args.ncores)
 
         rfecv.fit(X, y)
 
-        print("Optimal number of features : %d" % rfecv.n_features_)
-        print
+        print(("Optimal number of features : %d" % rfecv.n_features_))
+        print()
 
         best_n_features = rfecv.n_features_
 
         # Plot number of features VS. cross-validation scores ('1st metric')
-        print "Plotting N.features x Cross-validation scores curve"
-        print
+        print("Plotting N.features x Cross-validation scores curve")
+        print()
 
         plt.figure()
         plt.xlabel("Number of features selected")
         plt.ylabel("Cross validation score")
-        plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_, lw=2)
+        plt.plot(list(range(1, len(rfecv.grid_scores_) + 1)), rfecv.grid_scores_, lw=2)
         plt.savefig('./'+args.prefix+'_results/classifier_plots/run_'+run_id+'/run_'+run_id+'_feature_recursive_elimination.pdf', dpi=300, bbox_inches='tight')
         plt.close()
 
-        print "Running GridSearchCV to optimize remaining parmeters"
-        print 
+        print("Running GridSearchCV to optimize remaining parmeters")
+        print() 
 
         grid = {'n_estimators':[500,1000,2000],
                 'max_depth':[6,8,10],
@@ -578,25 +578,25 @@ for i in range(len(runs)):
         
         with open ('./'+args.prefix+'_results/classifier_plots/run_'+run_id+'/run_'+run_id+'_best_params.txt', 'w') as fp:
             fp.write('{')
-            for p in bp.items():
+            for p in list(bp.items()):
                 fp.write("'%s':%s,\n" % p)
             fp.write('}')
 
-        print "Confusion matrix: "
-        print confusion_matrix(y_test, gclf.best_estimator_.predict(X_test))
-        print
-        print "GridSeachCV best score:"
-        print gclf.best_score_
-        print
-        print "GridSearchCV best params"
-        print gclf.best_params_
-        print
+        print("Confusion matrix: ")
+        print(confusion_matrix(y_test, gclf.best_estimator_.predict(X_test)))
+        print()
+        print("GridSeachCV best score:")
+        print(gclf.best_score_)
+        print()
+        print("GridSearchCV best params")
+        print(gclf.best_params_)
+        print()
     if gbclf_params == 'default':
-        print "Using default parameters."
-        print
+        print("Using default parameters.")
+        print()
     if gbclf_params == 'preset':
-        print "Using preset parameters."
-        print
+        print("Using preset parameters.")
+        print()
         bp = {'learning_rate': 0.01,
               'loss': 'deviance',
               'max_depth': 8,
@@ -607,12 +607,12 @@ for i in range(len(runs)):
               'random_state': 1,
               'subsample': 0.8}
     if gbclf_params == 'file':
-        print "Using input file as param dictionary"
-        print
+        print("Using input file as param dictionary")
+        print()
         bp = eval(open(str(args.param_file)).read())
 
-    print "Fitting the GradientBoost model with the training set"
-    print
+    print("Fitting the GradientBoost model with the training set")
+    print()
     
     names = df_cl.drop('group',1).columns
 
@@ -623,11 +623,11 @@ for i in range(len(runs)):
 
     clf.fit(X_train, y_train)
     
-    print "Extracting feature importance for run "+run_id+" and merging with statistical data"
-    print
+    print("Extracting feature importance for run "+run_id+" and merging with statistical data")
+    print()
     
-    a = pd.DataFrame(zip(clf.feature_importances_, 
-        np.argsort(np.argsort(clf.feature_importances_)), names)).rename(columns={0:'run_'+run_id+'_raw_importance',
+    a = pd.DataFrame(list(zip(clf.feature_importances_, 
+        np.argsort(np.argsort(clf.feature_importances_)), names))).rename(columns={0:'run_'+run_id+'_raw_importance',
                                                                                   1:'Index',
                                                                                   2:'Feature'}
                                                                         ).sort_values('Index', ascending=False)
@@ -636,8 +636,8 @@ for i in range(len(runs)):
     a['run_'+run_id+'_rel_importance'] = 100.0 * (a['run_'+run_id+'_raw_importance'] / max_importance)
     importance = importance.merge(a.drop('Index',1), on='Feature')
     
-    print "Plotting partial dependance and deviance scores from classifier"
-    print
+    print("Plotting partial dependance and deviance scores from classifier")
+    print()
        
     #Select top 5 most important features and plot partial dependance and interaction plots
     
@@ -681,8 +681,8 @@ for i in range(len(runs)):
     deviance_train['run_'+run_id] = clf.train_score_
     deviance_test['run_'+run_id] = test_score
     
-    print "Run trained classifier in test subset from data"
-    print
+    print("Run trained classifier in test subset from data")
+    print()
     predicted_values = clf.predict(X_test)
     mse = mean_squared_error(y_test, predicted_values)
     ami = adjusted_mutual_info_score(y_test, predicted_values)
@@ -707,31 +707,31 @@ for i in range(len(runs)):
     
     conf_df = conf_df.append(conf_df_r).astype(int).reset_index().drop('index',1)
 
-    print "Classifier scores"
-    print("Mean Squared Error (MSE): %.4f" % mse)
-    print("adjusted Mutual Information (aMI): %.4f" % ami)
-    print 
-    print "Confusion matrix"
+    print("Classifier scores")
+    print(("Mean Squared Error (MSE): %.4f" % mse))
+    print(("adjusted Mutual Information (aMI): %.4f" % ami))
+    print() 
+    print("Confusion matrix")
     print(conf)
-    print
-    print 'Accuracy: '+str(acc)+'%'
-    print 'Positive predictive value (Precision): '+str(ppv)+'%'
-    print 'Negative predictive value: '+str(npv)+'%'
-    print 'Sensitivity (Recall): '+str(sen)+'%'
-    print 'Specificity: '+str(spe)+'%'
-    print
+    print()
+    print('Accuracy: '+str(acc)+'%')
+    print('Positive predictive value (Precision): '+str(ppv)+'%')
+    print('Negative predictive value: '+str(npv)+'%')
+    print('Sensitivity (Recall): '+str(sen)+'%')
+    print('Specificity: '+str(spe)+'%')
+    print()
     
     ##For creating ROC and precision curves, we need to binarize the output and get score functions
-    print "Binarizing output"
-    print
+    print("Binarizing output")
+    print()
     y_class = label_binarize(y_test, classes=[0,1])
     n_classes = y_class.shape[1]
     y_score = clf.fit(X_train, y_train).decision_function(X_test)
     
     ###Now, let's calculate the ROC score for the classification
     
-    print "Computing ROC score for classifier"
-    print
+    print("Computing ROC score for classifier")
+    print()
     
     fpr = dict()
     tpr = dict()
@@ -768,8 +768,8 @@ for i in range(len(runs)):
                 bbox_inches='tight')
     plt.close()
     
-    print "Plotting Precision-Recall curve"
-    print
+    print("Plotting Precision-Recall curve")
+    print()
     # Compute Precision-Recall and plot curve
     precision = dict()
     recall = dict()
@@ -806,13 +806,13 @@ for i in range(len(runs)):
                 bbox_inches='tight')
     plt.close()
     
-    print '======================='
-    print
+    print('=======================')
+    print()
 
-print "Done with classification steps"
-print
-print "Calculating median importance values and standard deviation"
-print 
+print("Done with classification steps")
+print()
+print("Calculating median importance values and standard deviation")
+print() 
 
 cols = importance.filter(like='_raw_importance',axis=1).columns
 importance['mean_raw_importance'] = importance.apply(lambda x: np.mean(x[cols]),1)
@@ -824,13 +824,13 @@ importance['std_rel_importance'] = importance.apply(lambda x: np.std(x[cols]),1)
 
 importance.to_csv('./'+args.prefix+'_results/classifier_importance.tsv', sep='\t')
 
-print "Plotting raw importance and relative importance barcharts"
-print
+print("Plotting raw importance and relative importance barcharts")
+print()
 
 plot_barchart_importance(importance)
 
-print "Plotting mean deviance curve and error region"
-print
+print("Plotting mean deviance curve and error region")
+print()
 cols = deviance_test.columns
 deviance_test['mean'] = deviance_test.apply(lambda x: np.mean(x[cols]),1)
 deviance_test['std'] = deviance_test.apply(lambda x: np.std(x[cols]),1)
@@ -872,8 +872,8 @@ plt.ylabel('Deviance', fontsize=14)
 plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_deviance.pdf',dpi=300, bbox_inches = 'tight')
 plt.close()
 
-print "Plotting barcharts for mean classifier scores, confusion matrix values and associated metrics"
-print
+print("Plotting barcharts for mean classifier scores, confusion matrix values and associated metrics")
+print()
 
 df_list = [conf_df,msr,mtc]
 title_list = ['Identified classes from confusion matrix', 
@@ -889,8 +889,8 @@ for i in range(len(df_list)):
     plt.close()
 
     
-print "Plotting mean ROC curve and error region"
-print
+print("Plotting mean ROC curve and error region")
+print()
 cols = roc_fpr_all.columns
 roc_fpr_all['mean'] = roc_fpr_all.apply(lambda x: np.mean(x[cols]),1)
 roc_fpr_all['std'] = roc_fpr_all.apply(lambda x: np.std(x[cols]),1)
@@ -938,8 +938,8 @@ plt.legend(loc="lower right")
 plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_roc.pdf',dpi=300, bbox_inches = 'tight')
 plt.close()
 
-print "Plotting mean Precision-Recall curve and error region"
-print
+print("Plotting mean Precision-Recall curve and error region")
+print()
 cols = pre_all.columns
 pre_all['mean'] = pre_all.apply(lambda x: np.mean(x[cols]),1)
 pre_all['std'] = pre_all.apply(lambda x: np.std(x[cols]),1)
@@ -986,11 +986,11 @@ plt.legend(loc="lower left")
 plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_precision_recall.pdf',dpi=300, bbox_inches = 'tight')
 plt.close()
 
-print "Zipping folders from every run in a single file"
-print 
+print("Zipping folders from every run in a single file")
+print() 
 
 Popen('tar -zcf ./'+args.prefix+'_results/classifier_plots/run_files.tar.gz ./'+args.prefix+'_results/classifier_plots/run_*/', shell=True)
 
-print "Analysis complete. Thanks for using biofeatures."
-print
+print("Analysis complete. Thanks for using biofeatures.")
+print()
 sys.exit()
