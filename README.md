@@ -46,3 +46,6 @@ to load the entire matrix as a DataFrame in python.
 ## Funding
 
 
+## Pylint
+
+    pylint biofeatures/ > lint_result && git commit -m "ran pylint" lint_result
