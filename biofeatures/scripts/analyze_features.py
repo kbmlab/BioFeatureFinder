@@ -432,7 +432,7 @@ elif args.skip_stat == True:
     pass
     
 if args.dont_run_clf == True:
-    print "Analysis complete. Thanks for using BioFeatureFinder."
+    print "Analysis complete. Thanks for using biofeatures."
     print
     sys.exit()
 else:
@@ -991,6 +991,6 @@ print
 
 Popen('tar -zcf ./'+args.prefix+'_results/classifier_plots/run_files.tar.gz ./'+args.prefix+'_results/classifier_plots/run_*/', shell=True)
 
-print "Analysis complete. Thanks for using BioFeatureFinder."
+print "Analysis complete. Thanks for using biofeatures."
 print
 sys.exit()
