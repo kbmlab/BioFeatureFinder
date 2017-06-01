@@ -364,11 +364,13 @@ def get_upstream_and_downstream_exons(transcript_id):
             first_exons_bedtool = BedTool.from_dataframe(
                 sorted_search(first_exons_df, transcript_id)).sort()
 
+            # TODO: refactor common closest call
             last_exons_bedtool.closest(all_exons_bedtool, s=True, id=True,
                                        D='ref', io=True, N=False,
                                        header=True,
                                        output=transcript_id + '_last_exons_up_temp.table')
 
+            # TODO: refactor common closest call
             first_exons_bedtool.closest(all_exons_bedtool, s=True, iu=True,
                                         D='ref', io=True, N=False,
                                         header=True,
@@ -382,6 +384,7 @@ def get_upstream_and_downstream_exons(transcript_id):
             middle_exons_bedtool = BedTool.from_dataframe(
                 sorted_search(middle_exons_df, transcript_id)).sort()
 
+            # TODO: refactor common closest call
             last_exons_bedtool.closest(all_exons_bedtool,
                                        s=True,
                                        id=True,
@@ -391,6 +394,7 @@ def get_upstream_and_downstream_exons(transcript_id):
                                        header=True,
                                        output=transcript_id + '_last_exons_up_temp.table')
 
+            # TODO: refactor common closest call
             first_exons_bedtool.closest(all_exons_bedtool,
                                         s=True,
                                         iu=True,
@@ -400,6 +404,7 @@ def get_upstream_and_downstream_exons(transcript_id):
                                         header=True,
                                         output=transcript_id + '_first_exons_dn_temp.table')
 
+            # TODO: refactor common closest call
             middle_exons_bedtool.closest(all_exons_bedtool,
                                          s=True,
                                          id=True,
@@ -409,6 +414,7 @@ def get_upstream_and_downstream_exons(transcript_id):
                                          header=True,
                                          output=transcript_id + '_middle_exons_up_temp.table')
 
+            # TODO: refactor common closest call
             middle_exons_bedtool.closest(all_exons_bedtool,
                                          s=True,
                                          iu=True,

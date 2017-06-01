@@ -157,6 +157,7 @@ args = parser.parse_args()
 
 def group_matrices_one_sample(bt, bt_a, matrix, F=args.F_bedtools,
                               f=args.f_bedtools, s=True):
+    # TODO: refactor common intersect call
     int_a = bt.intersect(bt_a,
                          s=s,
                          F=F,
@@ -171,12 +172,14 @@ def group_matrices_one_sample(bt, bt_a, matrix, F=args.F_bedtools,
 
 def group_matrices_two_samples(bt, bt_a, bt_b, matrix, F=args.F_bedtools,
                                f=args.f_bedtools, s=True):
+    # TODO: refactor common intersect call
     int_a = bt.intersect(bt_a,
                          s=s,
                          F=F,
                          f=f,
                          sorted=True).to_dataframe().drop_duplicates()
 
+    # TODO: refactor common intersect call
     int_b = bt.intersect(bt_b,
                          s=s,
                          F=F,
