@@ -1,0 +1,9 @@
+./biofeatures/__init__.py
+./biofeatures/scripts/__init__.py
+./biofeatures/scripts/accessory_scripts/__init__.py
+./biofeatures/scripts/accessory_scripts/convert_annotations.py
+./biofeatures/scripts/accessory_scripts/random_sampling_test.py
+./biofeatures/scripts/accessory_scripts/reduce_matrix.sh
+./biofeatures/scripts/analyze_features.py
+./biofeatures/scripts/build_datamatrix.py
+./setup.py
