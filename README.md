@@ -1,6 +1,12 @@
-# Biofeatures
+# biofeatures
 
-# File list:
+## Description.
+
+
+## Warnings
+
+
+## Scripts:
 
 
 ./biofeatures/scripts/accessory_scripts/convert_annotations.py
@@ -16,4 +22,27 @@ to load the entire matrix as a DataFrame in python.
 ./biofeatures/scripts/analyze_features.py
 
 ./biofeatures/scripts/build_datamatrix.py
+
+
+## Dependency Installation
+
+### With anaconda (recommended):
+
+    conda install -c bioconda pysam pybedtools matplotlib pandas pybedtools scikit-learn matplotlib scipy rpy2
+
+## Scripts installation
+
+### Install scripts
+    pip install .
+
+### Development install, local changes are reflected in command-line calls
+
+    pip install -e .
+
+
+## Authors
+
+
+## Funding
+
 
