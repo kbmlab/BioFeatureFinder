@@ -1,25 +1,19 @@
 import sys
-import os
 import time
 import argparse
-from argparse import ArgumentParser
-import subprocess
-from subprocess import PIPE,call,Popen
-import pandas as pd
-import numpy as np
-import matplotlib
-from matplotlib import pyplot as plt
-from scipy import stats
-import itertools
+from subprocess import Popen
 from itertools import cycle
 from multiprocessing.pool import Pool
 import multiprocessing as mp
 import warnings
 import glob
-import io
-from io import StringIO
-from scipy.optimize import curve_fit
-warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
+
+import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
+from scipy import stats
+
+warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 pd.options.mode.chained_assignment = None  # default='warn'
 
 class MyParser(argparse.ArgumentParser):
@@ -64,14 +58,15 @@ matrix = pd.concat(pd.read_table(str(args.data),iterator=True, chunksize=10000),
 
 ##Filter or drop columns and set the name as index for the analysis
    
-if args.filter_list == False:
+if not args.filter_list:
     pass
 else:
     filter_list = list(pd.read_table(args.filter_list, header=None)[0])
     print()
     print("Filtering matrix for removing columns: "+str(filter_list))
     for i in range(len(filter_list)):
-        matrix = matrix.drop((matrix.filter(like=str(filter_list[i]), axis=1).columns),1)
+        matrix = matrix.drop(
+            matrix.filter(like=str(filter_list[i]), axis=1).columns,1)
         
 ##Set the number of repetitions to the used and the fractions to be sampled
 

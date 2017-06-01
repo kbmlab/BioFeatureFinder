@@ -4,32 +4,22 @@
 
 import sys
 import argparse
-from argparse import ArgumentParser
-import os
-import time
-import subprocess
-from subprocess import PIPE, call, Popen
+from subprocess import Popen
+import itertools
+
 import pandas as pd
 import numpy as np
-import pybedtools
 from pybedtools import BedTool
-import scipy
 from scipy import stats
-import readline
-import rpy2
-import rpy2.robjects
+import matplotlib
+
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import FloatVector
-import itertools
-from itertools import cycle
-import matplotlib
 
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import sklearn
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble.partial_dependence import plot_partial_dependence
-from sklearn.ensemble.partial_dependence import partial_dependence
 from sklearn.metrics import adjusted_mutual_info_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import mean_squared_error
@@ -130,16 +120,16 @@ parser.add_argument("-pth", '--p_adjust_threshold', dest="p_th", default=0.05,
                     help="Threshold of adjusted p-value for significance. Only significantly different features are passed down to the classifier for group separation. Default: 0.05",
                     type=float, required=False)
 
-parser.add_argument("-runs", '--number_of_runs', dest="runs", default=(500),
+parser.add_argument("-runs", '--number_of_runs', dest="runs", default=500,
                     help="Number of times (repetitions) to run the classification step. Default:500",
                     type=int, metavar='INT')
 
 parser.add_argument("-nsample", '--random_sample_size', dest="nsample",
-                    type=int, metavar='INT', default=(1),
+                    type=int, metavar='INT', default=1,
                     help="Relative size of randomly sampled exons in comparisson to input exons. Default:1 (i.e. 1x the amount of input exons)")
 
 parser.add_argument("-tsize", '--train_size', dest="train_size",
-                    default=(0.80),
+                    default=0.80,
                     help="Fraction of sample used for training the classifier model. The remaining sample pool will be used for testing the classifier. Default: 0.80",
                     type=float)
 
@@ -222,10 +212,10 @@ def get_statistical_data_for_features(df, correction_type=args.padj):
         print()
 
         features['ks_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])] = \
-        features['Feature'].apply(
-            lambda x: stats.ks_2samp(
-                df[df['group'] == pairwise[i][0]][x].astype(float),
-                df[df['group'] == pairwise[i][1]][x].astype(float)))
+            features['Feature'].apply(
+                lambda x: stats.ks_2samp(
+                    df[df['group'] == pairwise[i][0]][x].astype(float),
+                    df[df['group'] == pairwise[i][1]][x].astype(float)))
 
         features['pval_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])
                  ] = features[
@@ -313,11 +303,13 @@ def plot_barchart_importance(df):
     width = 0.5
 
     rel = \
-    importance_ind.sort_values(by=['mean_rel_importance'], ascending=False)[
-        'mean_rel_importance'].head(N)
+        importance_ind.sort_values(by=['mean_rel_importance'],
+                                   ascending=False)[
+            'mean_rel_importance'].head(N)
     rel_err = \
-    importance_ind.sort_values(by=['mean_rel_importance'], ascending=False)[
-        'std_rel_importance'].head(N)
+        importance_ind.sort_values(by=['mean_rel_importance'],
+                                   ascending=False)[
+            'std_rel_importance'].head(N)
 
     fig, ax = plt.subplots()
     ax.bar(ind, rel, width, color='lightgrey', yerr=rel_err, ecolor='black')
@@ -331,11 +323,13 @@ def plot_barchart_importance(df):
     plt.close()
 
     raw = \
-    importance_ind.sort_values(by=['mean_raw_importance'], ascending=False)[
-        'mean_raw_importance'].head(N)
+        importance_ind.sort_values(by=['mean_raw_importance'],
+                                   ascending=False)[
+            'mean_raw_importance'].head(N)
     raw_err = \
-    importance_ind.sort_values(by=['mean_raw_importance'], ascending=False)[
-        'std_raw_importance'].head(N)
+        importance_ind.sort_values(by=['mean_raw_importance'],
+                                   ascending=False)[
+            'std_raw_importance'].head(N)
 
     fig, ax = plt.subplots()
     ax.bar(ind, raw, width, color='lightgrey', yerr=raw_err, ecolor='black')
@@ -361,7 +355,7 @@ matrix = pd.concat(pd.read_table(args.matrix, iterator=True, chunksize=10000),
 
 # Filter in/out columns in the dataframe
 
-if args.filter_out == False:
+if not args.filter_out:
     pass
 else:
     print("Filtering out columns")
@@ -370,7 +364,7 @@ else:
     out_cols = [w.replace('\n', '') for w in out_cols]
     matrix = matrix.drop(out_cols, 1)
 
-if args.filter_in == False:
+if not args.filter_in:
     pass
 else:
     print("Selecting columns")
@@ -393,9 +387,9 @@ all_exons = BedTool(args.refference_bed).sort()
 print("Load selected exons for biological feature analysis")
 print()
 
-if args.twoSamp == False:
+if not args.twoSamp:
     pass
-elif args.twoSamp == True:
+elif args.twoSamp:
     print("Running in two sample mode")
     print()
     print("Loading bed file for sample 1")
@@ -403,7 +397,7 @@ elif args.twoSamp == True:
 
 sel_exons = BedTool(args.bed_file).sort()
 
-if args.twoSamp == True:
+if args.twoSamp:
     print("Loading bed file for sample 2")
     print()
     sel_exons_2 = BedTool(args.bed_file_2).sort()
@@ -415,10 +409,10 @@ else:
 print("Finding input exons in the matrix and selecting groups")
 print()
 
-if args.twoSamp == False:
+if not args.twoSamp:
     matrix = group_matrices_one_sample(all_exons, sel_exons, matrix).set_index(
         'name')
-elif args.twoSamp == True:
+elif args.twoSamp:
     matrix = group_matrices_two_samples(all_exons, sel_exons, sel_exons_2,
                                         matrix).set_index('name')
 
@@ -427,7 +421,7 @@ elif args.twoSamp == True:
 
 Popen('mkdir -p ./' + args.prefix + '_results', shell=True)
 
-if args.skip_stat == False:
+if not args.skip_stat:
     print("Starting statistical analysis")
     print()
 
@@ -439,36 +433,36 @@ if args.skip_stat == False:
     print()
     ##########################################
     ## Plot CDF for the features
-    if args.dont_plot_cdf == False:
+    if not args.dont_plot_cdf:
         print("Output CDF plots for each features in matrix")
         print()
         Popen('mkdir -p ./' + args.prefix + '_results/CDF_plots', shell=True)
 
-        for i in range(len(st)):
-            feature = st['Feature'][i]
-            name = (st['Feature'][i]).split("/")[-1]
+        for run_i in range(len(st)):
+            feature = st['Feature'][run_i]
+            name = (st['Feature'][run_i]).split("/")[-1]
             plt.figure(figsize=(8, 8))
             plot_cdf(matrix[matrix['group'] == 0][str(feature)].values,
                      bins=100,
                      label='Exons in 0', c='black', linewidth=1.5,
-                     linestyle='solid');
+                     linestyle='solid')
             plot_cdf(matrix[matrix['group'] == 1][str(feature)].values,
                      bins=100,
                      label='Exons in 1', c='black', linewidth=1.5,
-                     linestyle='dashed');
+                     linestyle='dashed')
 
-            if args.twoSamp == False:
+            if not args.twoSamp:
                 pass
-            elif args.twoSamp == True:
+            elif args.twoSamp:
                 plot_cdf(matrix[matrix['group'] == 2][str(feature)].values,
                          bins=100,
                          label='Exons in 2', c='black', linewidth=1.5,
-                         linestyle='dotted');
+                         linestyle='dotted')
 
                 plot_cdf(matrix[matrix['group'] == 3][str(feature)].values,
                          bins=100,
                          label='Exons in both 1 and 2', c='black',
-                         linewidth=1.5, linestyle='-.');
+                         linewidth=1.5, linestyle='-.')
 
             plt.legend(loc=0)
             plt.ylim(0, 1)
@@ -485,7 +479,8 @@ if args.skip_stat == False:
             plt.xlabel(str(name), fontsize=14)
             plt.ylabel('Cumulative distribution of samples', fontsize=14)
             plt.title(
-                'KS adj. p-val: ' + str(round(st['adj_pval_0_vs_1'][i], 4)),
+                'KS adj. p-val: ' + str(
+                    round(st['adj_pval_0_vs_1'][run_i], 4)),
                 y=1.01, fontsize=14)
             plt.rc('xtick', labelsize=14)
             plt.rc('ytick', labelsize=14)
@@ -497,13 +492,13 @@ if args.skip_stat == False:
 
         print("Finished CDF plots for features in matrix")
         print()
-    elif args.dont_plot_cdf == True:
+    elif args.dont_plot_cdf:
         pass
 
-    if args.ks_filter == False:
+    if not args.ks_filter:
         pass
-    elif args.ks_filter == True:
-        if args.twoSamp == False:
+    elif args.ks_filter:
+        if not args.twoSamp:
             print(
                 "Filtering statistically significantly features for classification step")
             print()
@@ -511,7 +506,7 @@ if args.skip_stat == False:
                 'Feature'].tolist()
             sig_only.append('group')
             matrix = matrix[sig_only]
-        elif args.twoSamp == True:
+        elif args.twoSamp:
             print(
                 "Filtering statistically significantly features for classification step")
             print()
@@ -520,10 +515,10 @@ if args.skip_stat == False:
             sig_only.append('group')
             matrix = matrix[sig_only]
 
-elif args.skip_stat == True:
+elif args.skip_stat:
     pass
 
-if args.dont_run_clf == True:
+if args.dont_run_clf:
     print("Analysis complete. Thanks for using biofeatures.")
     print()
     sys.exit()
@@ -546,9 +541,9 @@ train_size = args.train_size
 
 Popen('mkdir -p ./' + args.prefix + '_results/classifier_plots', shell=True)
 
-if args.skip_stat == False:
+if not args.skip_stat:
     importance = st.copy()
-elif args.skip_stat == True:
+elif args.skip_stat:
     importance = pd.DataFrame()
     importance['Feature'] = matrix.drop('group', 1).columns
 
@@ -570,16 +565,16 @@ pre_all = pd.DataFrame()
 rec_all = pd.DataFrame()
 av_pre_all = pd.DataFrame()
 
-if args.twoSamp == True:
+if args.twoSamp:
     matrix = matrix[(matrix['group'] == 2) | (matrix['group'] == 1)]
     matrix['group'] = matrix['group'].apply(
         lambda x: int(str(x).replace('2', '0')))
 else:
     pass
 
-for i in range(len(runs)):
-    run_id = str(runs[i] + 1)
-    if args.twoSamp == True:
+for run_i in range(len(runs)):
+    run_id = str(runs[run_i] + 1)
+    if args.twoSamp:
         df_cl = matrix[matrix['group'] != 0]
         df_zero = matrix[matrix['group'] == 0]  # .sample(df_cl.shape[0]*4)
         Z = pd.concat([df_cl, df_zero]).drop_duplicates()
@@ -664,6 +659,7 @@ for i in range(len(runs)):
         print("Running GridSearchCV to optimize remaining parmeters")
         print()
 
+        # TODO: parameterize
         grid = {'n_estimators': [500, 1000, 2000],
                 'max_depth': [6, 8, 10],
                 'min_samples_split': [0.01],
@@ -688,6 +684,7 @@ for i in range(len(runs)):
                 fp.write("'%s':%s,\n" % p)
             fp.write('}')
 
+        # TODO: write to file.
         print("Confusion matrix: ")
         print(confusion_matrix(y_test, gclf.best_estimator_.predict(X_test)))
         print()
@@ -703,6 +700,9 @@ for i in range(len(runs)):
     if gbclf_params == 'preset':
         print("Using preset parameters.")
         print()
+
+        # TODO: parameterize
+        # TODO: rename
         bp = {'learning_rate': 0.01,
               'loss': 'deviance',
               'max_depth': 8,
@@ -733,17 +733,18 @@ for i in range(len(runs)):
         "Extracting feature importance for run " + run_id + " and merging with statistical data")
     print()
 
+    # TODO: rename
     a = pd.DataFrame(list(zip(clf.feature_importances_,
                               np.argsort(np.argsort(clf.feature_importances_)),
                               names))).rename(
         columns={0: 'run_' + run_id + '_raw_importance',
                  1: 'Index',
                  2: 'Feature'}
-        ).sort_values('Index', ascending=False)
+    ).sort_values('Index', ascending=False)
 
     max_importance = a['run_' + run_id + '_raw_importance'].max()
     a['run_' + run_id + '_rel_importance'] = 100.0 * (
-    a['run_' + run_id + '_raw_importance'] / max_importance)
+        a['run_' + run_id + '_raw_importance'] / max_importance)
     importance = importance.merge(a.drop('Index', 1), on='Feature')
 
     print("Plotting partial dependance and deviance scores from classifier")
@@ -808,7 +809,7 @@ for i in range(len(runs)):
     npv = round((float(conf[0, 0]) / (conf[0, 0] + conf[0, 1])) * 100, 2)
     ppv = round((float(conf[1, 1]) / (conf[1, 0] + conf[1, 1])) * 100, 2)
     acc = round((float(conf[0, 0] + conf[1, 1]) / (
-    conf[0, 0] + conf[1, 0] + conf[0, 1] + conf[1, 1])) * 100, 2)
+        conf[0, 0] + conf[1, 0] + conf[0, 1] + conf[1, 1])) * 100, 2)
 
     msr_r = pd.DataFrame(data=[[ami, mse]], columns=['aMI', 'MSE'])
 
@@ -1039,10 +1040,10 @@ save_list = ['mean_confusion_matri_classes',
              'mse_ami_scores_from_classifier',
              'classifier_metrics_from_confusion_matrix']
 
-for i in range(len(df_list)):
-    plot_barcharts(df_list[i], title_list[i], save_list[i])
+for run_i in range(len(df_list)):
+    plot_barcharts(df_list[run_i], title_list[run_i], save_list[run_i])
     plt.savefig('./' + args.prefix + '_results/classifier_plots/' + save_list[
-        i] + '.pdf', dpi=300, bbox_inches='tight')
+        run_i] + '.pdf', dpi=300, bbox_inches='tight')
     plt.close()
 
 print("Plotting mean ROC curve and error region")

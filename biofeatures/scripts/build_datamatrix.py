@@ -3,24 +3,21 @@
 import sys
 import os
 import argparse
-from argparse import ArgumentParser
-import subprocess
-from subprocess import PIPE, call, Popen
-from functools import partial
+from subprocess import PIPE, Popen
 from multiprocessing.pool import ThreadPool
 from multiprocessing.pool import Pool
 import multiprocessing as mp
+import warnings
+import glob
+from io import StringIO
+import shutil
+import tarfile
+
 import pandas as pd
 import numpy as np
 import pybedtools
 from pybedtools import BedTool
 import pysam
-import warnings
-import glob
-import io
-from io import StringIO
-import shutil
-import tarfile
 
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
@@ -134,14 +131,14 @@ args = parser.parse_args()
 
 ## Load the reference GTF file and convert it to a DataFrame
 
-if args.debug == False:
+if not args.debug:
     pass
 else:
     print()
     print("Running in debug mode. Only the first " + str(
         args.debug) + " transcripts will be used.")
 
-if args.use_threads == False:
+if not args.use_threads:
     pass
 else:
     print()
@@ -188,7 +185,7 @@ print()
 print("Filtering exons annotations")
 
 df_exons = df[df['feature'] == 'exon'].reset_index().drop('index', 1)
-df_exons['exon_id'] = 'exon_id_E0' + ((df_exons.index) + 1).astype(str)
+df_exons['exon_id'] = 'exon_id_E0' + (df_exons.index + 1).astype(str)
 df_exons['transcript_id'] = "transcript_id_" + df_exons['attributes'].apply(
     lambda x: x.split('transcript_id "')[1])
 df_exons['transcript_id'] = df_exons['transcript_id'].apply(
@@ -332,7 +329,7 @@ all_transcripts = all_exons_df['transcript_id']
 single_transcripts = single_exons_bed['name'].apply(
     lambda x: x.split('transcript_id_')[1])
 
-if args.debug == False:
+if not args.debug:
     non_single_transcripts = all_transcripts[
         all_transcripts.isin(single_transcripts) == False
         ].drop_duplicates().reset_index(drop=True)
@@ -355,8 +352,8 @@ def get_upstream_and_downstream_exons(transcript_id):
     strand_counts = transcript_all_exons['strand'].value_counts().shape[
         0]  # how many strands
     strand_id = \
-    pd.DataFrame(transcript_all_exons['strand']).reset_index()['strand'][
-        0]  # which strand
+        pd.DataFrame(transcript_all_exons['strand']).reset_index()['strand'][
+            0]  # which strand
 
     all_exons_bedtool = BedTool.from_dataframe(transcript_all_exons).sort()
 
@@ -482,7 +479,7 @@ def get_upstream_and_downstream_exons(transcript_id):
                                          header=True,
                                          output=transcript_id + '_middle_exons_dn_temp.table')
 
-    if (strand_counts == 2):
+    if strand_counts == 2:
         print(
             'Both strands are present in transcript ' + transcript_id + ', check if all exons are in the same strand.')
 
@@ -491,12 +488,12 @@ print()
 print(
     "Searching for upstream and downstream exons in each transcript. (WARNING: This may take a while, go grab a cup of cofee... or a movie... or go home and get some sleep, it'll take a few hours to run)")
 
-if args.use_threads == True:
+if args.use_threads:
     if __name__ == '__main__':
         p = ThreadPool(args.ncores)
         p.map(get_upstream_and_downstream_exons, non_single_transcripts)
 
-elif args.use_threads == False:
+elif not args.use_threads:
     if __name__ == '__main__':
         p = Pool(args.ncores)
         p.map(get_upstream_and_downstream_exons, non_single_transcripts)
@@ -506,7 +503,7 @@ def concatFiles(input_files, output_file):
     files = glob.glob(input_files)
     with open(output_file, "wb") as fo:
         for f in sorted(files):
-            with open((f), "rb") as fi:
+            with open(f, "rb") as fi:
                 shutil.copyfileobj(fi, fo)
 
 
@@ -766,7 +763,7 @@ def save_bed(df, filename):
               header=False)
 
 
-if args.keep_bed == True:
+if args.keep_bed:
     print()
     print("Saving classified exons to bed files")
     save_bed(single_exons_bed, str(args.prefix) + '.single.exons.bed.gz')
@@ -820,12 +817,12 @@ if args.keep_bed == True:
 
     list(map(os.remove, glob.glob("*.bed.gz")))
 
-elif args.keep_bed == False:
+elif not args.keep_bed:
     print()
     print("Saving bed file with annotated exons")
     save_bed(all_exons_bed, str(args.prefix) + '.all.exons.bed.gz')
 
-if args.keep_temp == True:
+if args.keep_temp:
     print()
     print("Compressing all temporary files and cleaning up")
     archive = tarfile.open("temp_tables.tar.gz", "w|gz")
@@ -834,7 +831,7 @@ if args.keep_temp == True:
     archive.close()
     list(map(os.remove, glob.glob("*.table")))
 
-if args.keep_temp == False:
+if not args.keep_temp:
     print()
     print("Removing all temporary files")
     list(map(os.remove, glob.glob("*.table")))
@@ -842,32 +839,32 @@ if args.keep_temp == False:
 ##Now we will start gathering data of each region and assemble everything into a dataframe which will be passed to 
 ## the classifier in posterior steps. For this we will need to use several functions.
 
-if args.ese_list == False:
+if not args.ese_list:
     pass
 else:
     ese_list = list(pd.read_table(args.ese_list, header=None)[0])
 
-if args.ess_list == False:
+if not args.ess_list:
     pass
 else:
     ess_list = list(pd.read_table(args.ess_list, header=None)[0])
 
-if args.ise_list == False:
+if not args.ise_list:
     pass
 else:
     ise_list = list(pd.read_table(args.ise_list, header=None)[0])
 
-if args.iss_list == False:
+if not args.iss_list:
     pass
 else:
     iss_list = list(pd.read_table(args.iss_list, header=None)[0])
 
-if args.custom_seq_ex == False:
+if not args.custom_seq_ex:
     pass
 else:
     custom_seq_ex = list(pd.read_table(args.custom_seq_ex, header=None)[0])
 
-if args.custom_seq_int == False:
+if not args.custom_seq_int:
     pass
 else:
     custom_seq_int = list(pd.read_table(args.custom_seq_int, header=None)[0])
@@ -1004,68 +1001,68 @@ def get_data(df, name, matrix):
     bedtool = BedTool.from_dataframe(df).saveas()
     a = nuc_cont(bedtool)
 
-    if args.cpg_file != False:
+    if args.cpg_file:
         cpg_counts = get_cpg_islands(bedtool)
         a = a.merge(cpg_counts[['name', 'CpG_count']],
                     on='name').drop_duplicates()
-    elif args.cpg_file == False:
+    elif not args.cpg_file:
         pass
 
-    if args.var_files != False:
+    if args.var_files:
         var_files_list = glob.glob(args.var_files)
         for i in range(len(var_files_list)):
             var = get_var_counts(bedtool, var_files_list[i])
             a = a.merge(var, on='name')
-    elif args.var_files == False:
+    elif not args.var_files:
         pass
 
-    if args.con_files != False:
+    if args.con_files:
         con_files_list = glob.glob(args.con_files)
         for i in range(len(con_files_list)):
             con = get_conservation_scores(con_files_list[i], df)
             a = a.merge(con, on='name')
-    elif args.con_files == False:
+    elif not args.con_files:
         pass
 
     if name.find("_exon") != -1 and name.find('single') == -1:
-        if args.ese_list == False:
+        if not args.ese_list:
             pass
-        elif args.ese_list != False:
+        elif args.ese_list:
             a['ese_count'] = a['seq'].apply(
-                lambda x: sum(x.upper().count(y.upper()) for y in (ese_list)))
+                lambda x: sum(x.upper().count(y.upper()) for y in ese_list))
 
-        if args.ess_list == False:
+        if not args.ess_list:
             pass
-        elif args.ess_list != False:
+        elif args.ess_list:
             a['ess_count'] = a['seq'].apply(
-                lambda x: sum(x.upper().count(y.upper()) for y in (ess_list)))
+                lambda x: sum(x.upper().count(y.upper()) for y in ess_list))
 
-        if args.custom_seq_ex == False:
+        if not args.custom_seq_ex:
             pass
-        elif args.custom_seq_ex != False:
+        elif args.custom_seq_ex:
             a['custom_seq_exon'] = a['seq'].apply(lambda x: sum(
-                x.upper().count(y.upper()) for y in (custom_seq_ex)))
+                x.upper().count(y.upper()) for y in custom_seq_ex))
 
     if name.find("_intron") != -1:
-        if args.ise_list == False:
+        if not args.ise_list:
             pass
-        elif args.ise_list != False:
+        elif args.ise_list:
             a['ise_count'] = a['seq'].apply(
-                lambda x: sum(x.upper().count(y.upper()) for y in (ise_list)))
+                lambda x: sum(x.upper().count(y.upper()) for y in ise_list))
 
-        if args.iss_list == False:
+        if not args.iss_list:
             pass
-        elif args.iss_list != False:
+        elif args.iss_list:
             a['iss_count'] = a['seq'].apply(
-                lambda x: sum(x.upper().count(y.upper()) for y in (iss_list)))
+                lambda x: sum(x.upper().count(y.upper()) for y in iss_list))
 
-        if args.custom_seq_int == False:
+        if not args.custom_seq_int:
             pass
-        elif args.custom_seq_int != False:
+        elif args.custom_seq_int:
             a['custom_seq_intron'] = a['seq'].apply(lambda x: sum(
-                x.upper().count(y.upper()) for y in (custom_seq_int)))
+                x.upper().count(y.upper()) for y in custom_seq_int))
 
-    if args.max_ent_scan == True:
+    if args.max_ent_scan:
         if name.find("_3ss") != -1 or name.find("_5ss") != -1:
             ss = get_maxent_score(df, name)
             a = a.merge(ss, on='name').drop_duplicates()
@@ -1095,7 +1092,7 @@ pysam.faidx(genome_fasta)
 ##Now, we will create the spine for our matrix by selecting only the names of the exons used in each class.
 ##We will also need a list of the frames associated with that class and the names of the objects
 
-if args.debug != False:
+if args.debug:
     first_exons_bed = first_exons_bed[
         first_exons_bed['name'].isin(dn_first_3ss['name'])]
     middle_exons_bed = middle_exons_bed[
@@ -1103,7 +1100,7 @@ if args.debug != False:
     last_exons_bed = last_exons_bed[
         last_exons_bed['name'].isin(up_last_3ss['name'])]
     single_exons_bed = single_exons_bed.head(args.debug)
-elif args.debug == False:
+elif not args.debug:
     pass
 
 matrix_first = pd.DataFrame(first_exons_bed['name'])
