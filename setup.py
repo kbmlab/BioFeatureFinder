@@ -19,4 +19,11 @@ setup(
         'scipy',
         'rpy2'
     ],
+    scripts=[
+        'biofeatures/scripts/analyze_features.py',
+        'biofeatures/scripts/build_datamatrix.py',
+        'biofeatures/scripts/accessory_scripts/convert_annotations.py',
+        'biofeatures/scripts/accessory_scripts/random_sampling_test.py',
+        'biofeatures/scripts/accessory_scripts/reduce_matrix.sh',
+    ]
 )
