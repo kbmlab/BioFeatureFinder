@@ -1,0 +1,2305 @@
+************* Module biofeatures
+C:  1, 0: Missing module docstring (missing-docstring)
+************* Module biofeatures.scripts
+C:  1, 0: Missing module docstring (missing-docstring)
+************* Module biofeatures.scripts.analyze_features
+C: 11, 0: Exactly one space required after comma
+from subprocess import PIPE,call,Popen
+                           ^ (bad-whitespace)
+C: 11, 0: Exactly one space required after comma
+from subprocess import PIPE,call,Popen
+                                ^ (bad-whitespace)
+C: 57, 0: Line too long (130/100) (line-too-long)
+C: 66, 0: Exactly one space required after comma
+parser.add_argument('-ts',"--twoSamp",dest="twoSamp",
+                         ^ (bad-whitespace)
+C: 66, 0: Exactly one space required after comma
+parser.add_argument('-ts',"--twoSamp",dest="twoSamp",
+                                     ^ (bad-whitespace)
+C: 67, 0: Wrong continued indentation (add 2 spaces).
+                  action="store_true", default=False,
+                  ^ | (bad-continuation)
+C: 68, 0: Wrong continued indentation (add 2 spaces).
+                  help="Use this flag if you want to compare two sets of samples against each other, requires the usage of -b2. In this case, the second bed file will be considered as 'negative' (or background) for the classification step. Default: False")
+                  ^ | (bad-continuation)
+C: 68, 0: Line too long (256/100) (line-too-long)
+C: 70, 0: Trailing whitespace (trailing-whitespace)
+C: 71, 0: Wrong continued indentation (add 2 spaces).
+                  help="BED file with exons/regions of interest.", required=True)
+                  ^ | (bad-continuation)
+C: 73, 0: Trailing whitespace (trailing-whitespace)
+C: 74, 0: Wrong continued indentation (add 2 spaces).
+                  help="Second BED file with exons/regions of interest.", required=False)
+                  ^ | (bad-continuation)
+C: 76, 0: Trailing whitespace (trailing-whitespace)
+C: 77, 0: Wrong continued indentation (add 2 spaces).
+                  help="BED file with annotated exons created by 'build_datamatrix.py'", required=True)
+                  ^ | (bad-continuation)
+C: 77, 0: Line too long (103/100) (line-too-long)
+C: 79, 0: Trailing whitespace (trailing-whitespace)
+C: 80, 0: Wrong continued indentation (add 2 spaces).
+                  help="Data matrix with biological features created by 'build_datamatrix.py'", required=True)
+                  ^ | (bad-continuation)
+C: 80, 0: Line too long (110/100) (line-too-long)
+C: 83, 0: Wrong continued indentation (add 2 spaces).
+                  help="prefix for use on the output files", metavar="prefix", required=True)
+                  ^ | (bad-continuation)
+C: 86, 0: Wrong continued indentation (add 2 spaces).
+                  help="Text file containing a comma-separated list with names of the columns to be removed from the dataframe in the analysis. Default: False", metavar="filter_out.txt", required=False)
+                  ^ | (bad-continuation)
+C: 86, 0: Line too long (202/100) (line-too-long)
+C: 89, 0: Wrong continued indentation (add 2 spaces).
+                  help="Text file containing a comma-separated list with names of the columns in dataframe to be used in the analysis. Default: False", metavar="filter_in.txt", required=False)
+                  ^ | (bad-continuation)
+C: 89, 0: Line too long (192/100) (line-too-long)
+C: 91, 0: Line too long (308/100) (line-too-long)
+C: 93, 0: Line too long (217/100) (line-too-long)
+C: 95, 0: Line too long (216/100) (line-too-long)
+C: 95, 0: Exactly one space required after comma
+parser.add_argument('-f','--f_bedtools', dest="f_bedtools", default=1, help="-f options passed to BedTools for intersection of reference BED (-ref, A) with input BED (-b, B). Default: 1",  metavar='f',required=False)
+                        ^ (bad-whitespace)
+C: 95, 0: Exactly one space required after comma
+parser.add_argument('-f','--f_bedtools', dest="f_bedtools", default=1, help="-f options passed to BedTools for intersection of reference BED (-ref, A) with input BED (-b, B). Default: 1",  metavar='f',required=False)
+                                                                                                                                                                                          ^ (bad-whitespace)
+C: 95, 0: Exactly one space required after comma
+parser.add_argument('-f','--f_bedtools', dest="f_bedtools", default=1, help="-f options passed to BedTools for intersection of reference BED (-ref, A) with input BED (-b, B). Default: 1",  metavar='f',required=False)
+                                                                                                                                                                                                        ^ (bad-whitespace)
+C: 97, 0: Exactly one space required after comma
+parser.add_argument("--skipStat",dest="skip_stat",
+                                ^ (bad-whitespace)
+C: 98, 0: Wrong continued indentation (add 2 spaces).
+                  action="store_true", default=False,
+                  ^ | (bad-continuation)
+C: 99, 0: Wrong continued indentation (add 2 spaces).
+                  help="Use this flag if you want to skip the Kolmogorov-Smirnov statistical analysis and cumulative distribution plotting step. Default: False")
+                  ^ | (bad-continuation)
+C: 99, 0: Line too long (161/100) (line-too-long)
+C:101, 0: Exactly one space required after comma
+parser.add_argument("--no-plotCDF",dest="dont_plot_cdf",
+                                  ^ (bad-whitespace)
+C:102, 0: Wrong continued indentation (add 2 spaces).
+                  action="store_true", default=False,
+                  ^ | (bad-continuation)
+C:103, 0: Wrong continued indentation (add 2 spaces).
+                  help="Use this flag if you want to skip plotting CDF graphs for each feature in the matrix. Default: False")
+                  ^ | (bad-continuation)
+C:103, 0: Line too long (126/100) (line-too-long)
+C:105, 0: Line too long (483/100) (line-too-long)
+C:107, 0: Line too long (270/100) (line-too-long)
+C:109, 0: Line too long (182/100) (line-too-long)
+C:109, 0: Exactly one space required after comma
+parser.add_argument("-runs",'--number_of_runs', dest="runs", default=(500), help="Number of times (repetitions) to run the classification step. Default:500", type=int, metavar='INT')
+                           ^ (bad-whitespace)
+C:111, 0: Line too long (233/100) (line-too-long)
+C:111, 0: Exactly one space required after comma
+parser.add_argument("-nsample",'--random_sample_size', dest="nsample", type=int, metavar='INT', default=(1), help="Relative size of randomly sampled exons in comparisson to input exons. Default:1 (i.e. 1x the amount of input exons)")
+                              ^ (bad-whitespace)
+C:113, 0: Line too long (239/100) (line-too-long)
+C:113, 0: Exactly one space required after comma
+parser.add_argument("-tsize",'--train_size', dest="train_size", default=(0.80), help="Fraction of sample used for training the classifier model. The remaining sample pool will be used for testing the classifier. Default: 0.80", type=float)
+                            ^ (bad-whitespace)
+C:115, 0: Line too long (620/100) (line-too-long)
+C:117, 0: Line too long (247/100) (line-too-long)
+C:119, 0: Trailing whitespace (trailing-whitespace)
+C:119, 0: Exactly one space required after comma
+parser.add_argument("--noCLF",dest="dont_run_clf", 
+                             ^ (bad-whitespace)
+C:120, 0: Wrong continued indentation (add 2 spaces).
+                  action="store_true", default=False,
+                  ^ | (bad-continuation)
+C:121, 0: Wrong continued indentation (add 2 spaces).
+                  help="Use this flag if you want to skip the classifying with GradientBoost. Default: False")
+                  ^ | (bad-continuation)
+C:121, 0: Line too long (110/100) (line-too-long)
+C:123, 0: Line too long (190/100) (line-too-long)
+C:130, 0: Trailing whitespace (trailing-whitespace)
+C:131, 0: Trailing whitespace (trailing-whitespace)
+C:132, 0: Trailing whitespace (trailing-whitespace)
+C:133, 0: Trailing whitespace (trailing-whitespace)
+C:134, 0: Trailing whitespace (trailing-whitespace)
+C:136, 0: Trailing whitespace (trailing-whitespace)
+C:139, 0: Trailing whitespace (trailing-whitespace)
+C:142, 0: Line too long (101/100) (line-too-long)
+C:143, 0: Trailing whitespace (trailing-whitespace)
+C:144, 0: Trailing whitespace (trailing-whitespace)
+C:145, 0: Trailing whitespace (trailing-whitespace)
+C:146, 0: Trailing whitespace (trailing-whitespace)
+C:147, 0: Trailing whitespace (trailing-whitespace)
+C:149, 0: Trailing whitespace (trailing-whitespace)
+C:150, 0: Trailing whitespace (trailing-whitespace)
+C:151, 0: Trailing whitespace (trailing-whitespace)
+C:152, 0: Trailing whitespace (trailing-whitespace)
+C:153, 0: Trailing whitespace (trailing-whitespace)
+C:155, 0: Trailing whitespace (trailing-whitespace)
+C:157, 0: Trailing whitespace (trailing-whitespace)
+C:159, 0: Trailing whitespace (trailing-whitespace)
+C:160, 0: Trailing whitespace (trailing-whitespace)
+C:162, 0: Trailing whitespace (trailing-whitespace)
+C:163, 0: Trailing whitespace (trailing-whitespace)
+C:165, 0: Trailing whitespace (trailing-whitespace)
+C:170, 0: Exactly one space required after comma
+    features['Feature'] = df.drop('group',1).columns
+                                         ^ (bad-whitespace)
+C:171, 0: Trailing whitespace (trailing-whitespace)
+C:173, 0: Trailing whitespace (trailing-whitespace)
+C:175, 0: Trailing whitespace (trailing-whitespace)
+C:177, 0: Line too long (117/100) (line-too-long)
+C:179, 0: Trailing whitespace (trailing-whitespace)
+C:183, 0: Trailing whitespace (trailing-whitespace)
+C:185, 0: Line too long (107/100) (line-too-long)
+C:186, 0: Trailing whitespace (trailing-whitespace)
+C:188, 0: Line too long (107/100) (line-too-long)
+C:189, 0: Trailing whitespace (trailing-whitespace)
+C:192, 0: Trailing whitespace (trailing-whitespace)
+C:194, 0: Trailing whitespace (trailing-whitespace)
+C:194, 0: Line too long (114/100) (line-too-long)
+C:195, 0: Wrong continued indentation (add 1 space).
+                                   method = correction_type)
+                                   ^| (bad-continuation)
+C:195, 0: No space allowed around keyword argument assignment
+                                   method = correction_type)
+                                          ^ (bad-whitespace)
+C:196, 0: Trailing whitespace (trailing-whitespace)
+C:222, 0: Exactly one space required after comma
+    ax.plot(x,y, **plotting_args)
+             ^ (bad-whitespace)
+C:228, 0: Exactly one space required after comma
+    df_t['mean'] = df_t.apply(lambda x: np.mean(x[cols]),1)
+                                                        ^ (bad-whitespace)
+C:229, 0: Exactly one space required after comma
+    df_t['std'] = df_t.apply(lambda x: np.std(x[cols]),1)
+                                                      ^ (bad-whitespace)
+C:232, 0: Trailing whitespace (trailing-whitespace)
+C:248, 0: Trailing whitespace (trailing-whitespace)
+C:254, 0: Trailing whitespace (trailing-whitespace)
+C:256, 0: Line too long (112/100) (line-too-long)
+C:257, 0: Line too long (115/100) (line-too-long)
+C:265, 0: Line too long (119/100) (line-too-long)
+C:265, 0: Exactly one space required after comma
+    plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_relative_importance.pdf',dpi=300, bbox_inches='tight')
+                                                                                         ^ (bad-whitespace)
+C:268, 0: Line too long (112/100) (line-too-long)
+C:269, 0: Line too long (115/100) (line-too-long)
+C:277, 0: Line too long (110/100) (line-too-long)
+C:277, 0: Exactly one space required after comma
+    plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_importance.pdf',dpi=300, bbox_inches='tight')
+                                                                                ^ (bad-whitespace)
+C:279, 0: Trailing whitespace (trailing-whitespace)
+C:286, 0: Trailing whitespace (trailing-whitespace)
+C:286, 0: Exactly one space required after comma
+matrix = pd.concat(pd.read_table(args.matrix,iterator=True, chunksize=10000), 
+                                            ^ (bad-whitespace)
+C:287, 0: Wrong continued indentation (remove 7 spaces).
+                          ignore_index=True).set_index('name').drop_duplicates()#.reset_index()
+                   |      ^ (bad-continuation)
+C:298, 0: Exactly one space required after comma
+    matrix = matrix.drop(out_cols,1)
+                                 ^ (bad-whitespace)
+C:299, 0: Trailing whitespace (trailing-whitespace)
+C:314, 0: Trailing whitespace (trailing-whitespace)
+C:340, 0: Line too long (101/100) (line-too-long)
+C:349, 0: Trailing whitespace (trailing-whitespace)
+C:361, 0: Trailing whitespace (trailing-whitespace)
+C:368, 0: Trailing whitespace (trailing-whitespace)
+C:374, 0: Trailing whitespace (trailing-whitespace)
+C:374, 0: Exactly one space required after comma
+            plt.figure(figsize=(8,8))              
+                                 ^ (bad-whitespace)
+C:375, 0: Trailing whitespace (trailing-whitespace)
+W:376, 0: Unnecessary semicolon (unnecessary-semicolon)
+C:377, 0: Trailing whitespace (trailing-whitespace)
+W:378, 0: Unnecessary semicolon (unnecessary-semicolon)
+C:383, 0: Trailing whitespace (trailing-whitespace)
+W:384, 0: Unnecessary semicolon (unnecessary-semicolon)
+C:386, 0: Trailing whitespace (trailing-whitespace)
+W:387, 0: Unnecessary semicolon (unnecessary-semicolon)
+C:390, 0: Exactly one space required after comma
+            plt.ylim(0,1)
+                      ^ (bad-whitespace)
+C:393, 0: Exactly one space required after comma
+                plt.xlim(0,1)
+                          ^ (bad-whitespace)
+C:395, 0: Exactly one space required after comma
+                plt.xlim(0,1)
+                          ^ (bad-whitespace)
+C:403, 0: Exactly one space required after comma
+            plt.title('KS adj. p-val: '+str(round(st['adj_pval_0_vs_1'][i],4)), y=1.01,fontsize=14)
+                                                                          ^ (bad-whitespace)
+C:403, 0: Exactly one space required after comma
+            plt.title('KS adj. p-val: '+str(round(st['adj_pval_0_vs_1'][i],4)), y=1.01,fontsize=14)
+                                                                                      ^ (bad-whitespace)
+C:407, 0: Line too long (105/100) (line-too-long)
+C:414, 0: Trailing whitespace (trailing-whitespace)
+C:430, 0: Trailing whitespace (trailing-whitespace)
+C:433, 0: Trailing whitespace (trailing-whitespace)
+C:442, 0: Line too long (106/100) (line-too-long)
+C:443, 0: Trailing whitespace (trailing-whitespace)
+C:443, 0: Line too long (106/100) (line-too-long)
+C:445, 0: Line too long (115/100) (line-too-long)
+C:446, 0: Trailing whitespace (trailing-whitespace)
+C:446, 0: Line too long (113/100) (line-too-long)
+C:447, 0: Line too long (112/100) (line-too-long)
+C:461, 0: Exactly one space required after comma
+    importance['Feature'] = matrix.drop('group',1).columns
+                                               ^ (bad-whitespace)
+C:462, 0: Trailing whitespace (trailing-whitespace)
+C:466, 0: Exactly one space required after comma
+msr = pd.DataFrame(columns=['aMI','MSE'])
+                                 ^ (bad-whitespace)
+C:468, 0: Exactly one space required after comma
+mtc = pd.DataFrame(columns=['Accuracy','P.P.V.','N.P.V.','Sensitivity','Specificity'])
+                                      ^ (bad-whitespace)
+C:468, 0: Exactly one space required after comma
+mtc = pd.DataFrame(columns=['Accuracy','P.P.V.','N.P.V.','Sensitivity','Specificity'])
+                                               ^ (bad-whitespace)
+C:468, 0: Exactly one space required after comma
+mtc = pd.DataFrame(columns=['Accuracy','P.P.V.','N.P.V.','Sensitivity','Specificity'])
+                                                        ^ (bad-whitespace)
+C:468, 0: Exactly one space required after comma
+mtc = pd.DataFrame(columns=['Accuracy','P.P.V.','N.P.V.','Sensitivity','Specificity'])
+                                                                      ^ (bad-whitespace)
+C:470, 0: Exactly one space required after comma
+conf_df = pd.DataFrame(columns=['T.N.','T.P.','F.N.','F.P.'])
+                                      ^ (bad-whitespace)
+C:470, 0: Exactly one space required after comma
+conf_df = pd.DataFrame(columns=['T.N.','T.P.','F.N.','F.P.'])
+                                             ^ (bad-whitespace)
+C:470, 0: Exactly one space required after comma
+conf_df = pd.DataFrame(columns=['T.N.','T.P.','F.N.','F.P.'])
+                                                    ^ (bad-whitespace)
+C:482, 0: Exactly one space required after comma
+    matrix['group'] = matrix['group'].apply(lambda x: int(str(x).replace('2','0')))
+                                                                            ^ (bad-whitespace)
+C:490, 0: Exactly one space required around comparison
+        df_zero = matrix[matrix['group']==0]#.sample(df_cl.shape[0]*4)
+                                        ^^ (bad-whitespace)
+C:491, 0: Exactly one space required after comma
+        Z = pd.concat([df_cl,df_zero]).drop_duplicates()
+                            ^ (bad-whitespace)
+C:494, 0: Exactly one space required around comparison
+        df_zero = matrix[matrix['group']==0].sample(df_cl.shape[0]*sample_size)
+                                        ^^ (bad-whitespace)
+C:495, 0: Exactly one space required after comma
+        Z = pd.concat([df_cl,df_zero]).drop_duplicates()
+                            ^ (bad-whitespace)
+C:496, 0: Trailing whitespace (trailing-whitespace)
+C:498, 0: Trailing whitespace (trailing-whitespace)
+C:499, 0: Line too long (114/100) (line-too-long)
+C:500, 0: Trailing whitespace (trailing-whitespace)
+C:501, 0: Line too long (128/100) (line-too-long)
+C:512, 0: Trailing whitespace (trailing-whitespace)
+C:512, 0: Line too long (123/100) (line-too-long)
+C:513, 0: Line too long (125/100) (line-too-long)
+C:522, 0: Trailing whitespace (trailing-whitespace)
+C:523, 0: Trailing whitespace (trailing-whitespace)
+C:523, 0: Line too long (116/100) (line-too-long)
+C:524, 0: Trailing whitespace (trailing-whitespace)
+C:525, 0: Trailing whitespace (trailing-whitespace)
+C:526, 0: Trailing whitespace (trailing-whitespace)
+C:526, 0: Line too long (111/100) (line-too-long)
+C:530, 0: Trailing whitespace (trailing-whitespace)
+C:530, 0: Line too long (106/100) (line-too-long)
+C:531, 0: Line too long (115/100) (line-too-long)
+C:532, 0: Trailing whitespace (trailing-whitespace)
+C:532, 0: Line too long (111/100) (line-too-long)
+C:537, 0: Line too long (120/100) (line-too-long)
+C:558, 0: Line too long (159/100) (line-too-long)
+C:562, 0: Trailing whitespace (trailing-whitespace)
+C:564, 0: Exactly one space required after comma
+        grid = {'n_estimators':[500,1000,2000],
+                                   ^ (bad-whitespace)
+C:564, 0: Exactly one space required after comma
+        grid = {'n_estimators':[500,1000,2000],
+                                        ^ (bad-whitespace)
+C:565, 0: Exactly one space required after comma
+                'max_depth':[6,8,10],
+                              ^ (bad-whitespace)
+C:565, 0: Exactly one space required after comma
+                'max_depth':[6,8,10],
+                                ^ (bad-whitespace)
+C:569, 0: Trailing whitespace (trailing-whitespace)
+C:569, 0: Exactly one space required after comma
+                'learning_rate':[0.01,0.05], 
+                                     ^ (bad-whitespace)
+C:571, 0: Exactly one space required after comma
+                'subsample':[0.8,0.6],
+                                ^ (bad-whitespace)
+C:576, 0: Exactly one space required after comma
+        gclf.fit(X_train,y_train)
+                        ^ (bad-whitespace)
+C:578, 0: Trailing whitespace (trailing-whitespace)
+C:579, 0: Line too long (122/100) (line-too-long)
+C:579, 0: No space allowed before bracket
+        with open ('./'+args.prefix+'_results/classifier_plots/run_'+run_id+'/run_'+run_id+'_best_params.txt', 'w') as fp:
+                  ^ (bad-whitespace)
+C:616, 0: Trailing whitespace (trailing-whitespace)
+C:617, 0: Exactly one space required after comma
+    names = df_cl.drop('group',1).columns
+                              ^ (bad-whitespace)
+C:622, 0: Exactly one space required after comma
+        clf = GradientBoostingClassifier(warm_start=True,**bp)
+                                                        ^ (bad-whitespace)
+C:625, 0: Trailing whitespace (trailing-whitespace)
+C:628, 0: Trailing whitespace (trailing-whitespace)
+C:629, 0: Trailing whitespace (trailing-whitespace)
+C:630, 0: Wrong continued indentation (add 22 spaces).
+        np.argsort(np.argsort(clf.feature_importances_)), names))).rename(columns={0:'run_'+run_id+'_raw_importance',
+        ^                     | (bad-continuation)
+C:630, 0: Line too long (117/100) (line-too-long)
+C:631, 0: Wrong continued indentation (add 1 space).
+                                                                                  1:'Index',
+                                                                                  ^| (bad-continuation)
+C:632, 0: Wrong continued indentation (add 1 space).
+                                                                                  2:'Feature'}
+                                                                                  ^| (bad-continuation)
+C:633, 0: Wrong continued indentation (add 1 space).
+                                                                        ).sort_values('Index', ascending=False)
+                                                                        ^| (bad-continuation)
+C:633, 0: Line too long (111/100) (line-too-long)
+C:634, 0: Trailing whitespace (trailing-whitespace)
+C:636, 0: Line too long (102/100) (line-too-long)
+C:637, 0: Exactly one space required after comma
+    importance = importance.merge(a.drop('Index',1), on='Feature')
+                                                ^ (bad-whitespace)
+C:638, 0: Trailing whitespace (trailing-whitespace)
+C:641, 0: Trailing whitespace (trailing-whitespace)
+C:643, 0: Trailing whitespace (trailing-whitespace)
+C:649, 0: Exactly one space required after comma
+                                       n_jobs=1, grid_resolution=15, figsize=(14,8),
+                                                                                ^ (bad-whitespace)
+C:655, 0: Line too long (123/100) (line-too-long)
+C:656, 0: Wrong continued indentation (add 1 space).
+               bbox_inches='tight')
+               ^| (bad-continuation)
+C:658, 0: Trailing whitespace (trailing-whitespace)
+C:677, 0: Line too long (111/100) (line-too-long)
+C:680, 0: Trailing whitespace (trailing-whitespace)
+C:683, 0: Trailing whitespace (trailing-whitespace)
+C:690, 0: Exactly one space required after comma
+    spe = round((float(conf[0,0])/(conf[1,0]+conf[0,0]))*100,2)
+                             ^ (bad-whitespace)
+C:690, 0: Exactly one space required after comma
+    spe = round((float(conf[0,0])/(conf[1,0]+conf[0,0]))*100,2)
+                                         ^ (bad-whitespace)
+C:690, 0: Exactly one space required after comma
+    spe = round((float(conf[0,0])/(conf[1,0]+conf[0,0]))*100,2)
+                                                   ^ (bad-whitespace)
+C:690, 0: Exactly one space required after comma
+    spe = round((float(conf[0,0])/(conf[1,0]+conf[0,0]))*100,2)
+                                                            ^ (bad-whitespace)
+C:691, 0: Exactly one space required after comma
+    sen = round((float(conf[1,1])/(conf[0,1]+conf[1,1]))*100,2)
+                             ^ (bad-whitespace)
+C:691, 0: Exactly one space required after comma
+    sen = round((float(conf[1,1])/(conf[0,1]+conf[1,1]))*100,2)
+                                         ^ (bad-whitespace)
+C:691, 0: Exactly one space required after comma
+    sen = round((float(conf[1,1])/(conf[0,1]+conf[1,1]))*100,2)
+                                                   ^ (bad-whitespace)
+C:691, 0: Exactly one space required after comma
+    sen = round((float(conf[1,1])/(conf[0,1]+conf[1,1]))*100,2)
+                                                            ^ (bad-whitespace)
+C:692, 0: Exactly one space required after comma
+    npv = round((float(conf[0,0])/(conf[0,0]+conf[0,1]))*100,2)
+                             ^ (bad-whitespace)
+C:692, 0: Exactly one space required after comma
+    npv = round((float(conf[0,0])/(conf[0,0]+conf[0,1]))*100,2)
+                                         ^ (bad-whitespace)
+C:692, 0: Exactly one space required after comma
+    npv = round((float(conf[0,0])/(conf[0,0]+conf[0,1]))*100,2)
+                                                   ^ (bad-whitespace)
+C:692, 0: Exactly one space required after comma
+    npv = round((float(conf[0,0])/(conf[0,0]+conf[0,1]))*100,2)
+                                                            ^ (bad-whitespace)
+C:693, 0: Exactly one space required after comma
+    ppv = round((float(conf[1,1])/(conf[1,0]+conf[1,1]))*100,2)
+                             ^ (bad-whitespace)
+C:693, 0: Exactly one space required after comma
+    ppv = round((float(conf[1,1])/(conf[1,0]+conf[1,1]))*100,2)
+                                         ^ (bad-whitespace)
+C:693, 0: Exactly one space required after comma
+    ppv = round((float(conf[1,1])/(conf[1,0]+conf[1,1]))*100,2)
+                                                   ^ (bad-whitespace)
+C:693, 0: Exactly one space required after comma
+    ppv = round((float(conf[1,1])/(conf[1,0]+conf[1,1]))*100,2)
+                                                            ^ (bad-whitespace)
+C:694, 0: Exactly one space required after comma
+    acc = round((float(conf[0,0]+conf[1,1])/(conf[0,0]+conf[1,0]+conf[0,1]+conf[1,1]))*100,2)
+                             ^ (bad-whitespace)
+C:694, 0: Exactly one space required after comma
+    acc = round((float(conf[0,0]+conf[1,1])/(conf[0,0]+conf[1,0]+conf[0,1]+conf[1,1]))*100,2)
+                                       ^ (bad-whitespace)
+C:694, 0: Exactly one space required after comma
+    acc = round((float(conf[0,0]+conf[1,1])/(conf[0,0]+conf[1,0]+conf[0,1]+conf[1,1]))*100,2)
+                                                   ^ (bad-whitespace)
+C:694, 0: Exactly one space required after comma
+    acc = round((float(conf[0,0]+conf[1,1])/(conf[0,0]+conf[1,0]+conf[0,1]+conf[1,1]))*100,2)
+                                                             ^ (bad-whitespace)
+C:694, 0: Exactly one space required after comma
+    acc = round((float(conf[0,0]+conf[1,1])/(conf[0,0]+conf[1,0]+conf[0,1]+conf[1,1]))*100,2)
+                                                                       ^ (bad-whitespace)
+C:694, 0: Exactly one space required after comma
+    acc = round((float(conf[0,0]+conf[1,1])/(conf[0,0]+conf[1,0]+conf[0,1]+conf[1,1]))*100,2)
+                                                                                 ^ (bad-whitespace)
+C:694, 0: Exactly one space required after comma
+    acc = round((float(conf[0,0]+conf[1,1])/(conf[0,0]+conf[1,0]+conf[0,1]+conf[1,1]))*100,2)
+                                                                                          ^ (bad-whitespace)
+C:695, 0: Trailing whitespace (trailing-whitespace)
+C:696, 0: Trailing whitespace (trailing-whitespace)
+C:696, 0: Exactly one space required after comma
+    msr_r = pd.DataFrame(data=[[ami,mse]], columns=['aMI','MSE'])    
+                                   ^ (bad-whitespace)
+C:696, 0: Exactly one space required after comma
+    msr_r = pd.DataFrame(data=[[ami,mse]], columns=['aMI','MSE'])    
+                                                         ^ (bad-whitespace)
+C:697, 0: Trailing whitespace (trailing-whitespace)
+C:698, 0: Exactly one space required after comma
+    msr = msr.append(msr_r).reset_index().drop('index',1)
+                                                      ^ (bad-whitespace)
+C:699, 0: Trailing whitespace (trailing-whitespace)
+C:700, 0: Trailing whitespace (trailing-whitespace)
+C:700, 0: Exactly one space required after comma
+    mtc_r = pd.DataFrame(data=[[acc,ppv,npv,sen,spe]], 
+                                   ^ (bad-whitespace)
+C:700, 0: Exactly one space required after comma
+    mtc_r = pd.DataFrame(data=[[acc,ppv,npv,sen,spe]], 
+                                       ^ (bad-whitespace)
+C:700, 0: Exactly one space required after comma
+    mtc_r = pd.DataFrame(data=[[acc,ppv,npv,sen,spe]], 
+                                           ^ (bad-whitespace)
+C:700, 0: Exactly one space required after comma
+    mtc_r = pd.DataFrame(data=[[acc,ppv,npv,sen,spe]], 
+                                               ^ (bad-whitespace)
+C:701, 0: Exactly one space required after comma
+                         columns=['Accuracy','P.P.V.','N.P.V.','Sensitivity','Specificity'])
+                                            ^ (bad-whitespace)
+C:701, 0: Exactly one space required after comma
+                         columns=['Accuracy','P.P.V.','N.P.V.','Sensitivity','Specificity'])
+                                                     ^ (bad-whitespace)
+C:701, 0: Exactly one space required after comma
+                         columns=['Accuracy','P.P.V.','N.P.V.','Sensitivity','Specificity'])
+                                                              ^ (bad-whitespace)
+C:701, 0: Exactly one space required after comma
+                         columns=['Accuracy','P.P.V.','N.P.V.','Sensitivity','Specificity'])
+                                                                            ^ (bad-whitespace)
+C:702, 0: Trailing whitespace (trailing-whitespace)
+C:703, 0: Exactly one space required after comma
+    mtc = mtc.append(mtc_r).reset_index().drop('index',1)
+                                                      ^ (bad-whitespace)
+C:704, 0: Trailing whitespace (trailing-whitespace)
+C:705, 0: Exactly one space required after comma
+    conf_df_r = pd.DataFrame(data=[[conf[0,0],conf[1,1],conf[1,0],conf[0,1]]],
+                                          ^ (bad-whitespace)
+C:705, 0: Exactly one space required after comma
+    conf_df_r = pd.DataFrame(data=[[conf[0,0],conf[1,1],conf[1,0],conf[0,1]]],
+                                             ^ (bad-whitespace)
+C:705, 0: Exactly one space required after comma
+    conf_df_r = pd.DataFrame(data=[[conf[0,0],conf[1,1],conf[1,0],conf[0,1]]],
+                                                    ^ (bad-whitespace)
+C:705, 0: Exactly one space required after comma
+    conf_df_r = pd.DataFrame(data=[[conf[0,0],conf[1,1],conf[1,0],conf[0,1]]],
+                                                       ^ (bad-whitespace)
+C:705, 0: Exactly one space required after comma
+    conf_df_r = pd.DataFrame(data=[[conf[0,0],conf[1,1],conf[1,0],conf[0,1]]],
+                                                              ^ (bad-whitespace)
+C:705, 0: Exactly one space required after comma
+    conf_df_r = pd.DataFrame(data=[[conf[0,0],conf[1,1],conf[1,0],conf[0,1]]],
+                                                                 ^ (bad-whitespace)
+C:705, 0: Exactly one space required after comma
+    conf_df_r = pd.DataFrame(data=[[conf[0,0],conf[1,1],conf[1,0],conf[0,1]]],
+                                                                        ^ (bad-whitespace)
+C:706, 0: Exactly one space required after comma
+                             columns=['T.N.','T.P.','F.N.','F.P.'])
+                                            ^ (bad-whitespace)
+C:706, 0: Exactly one space required after comma
+                             columns=['T.N.','T.P.','F.N.','F.P.'])
+                                                   ^ (bad-whitespace)
+C:706, 0: Exactly one space required after comma
+                             columns=['T.N.','T.P.','F.N.','F.P.'])
+                                                          ^ (bad-whitespace)
+C:707, 0: Trailing whitespace (trailing-whitespace)
+C:708, 0: Exactly one space required after comma
+    conf_df = conf_df.append(conf_df_r).astype(int).reset_index().drop('index',1)
+                                                                              ^ (bad-whitespace)
+C:713, 0: Trailing whitespace (trailing-whitespace)
+C:723, 0: Trailing whitespace (trailing-whitespace)
+C:727, 0: Exactly one space required after comma
+    y_class = label_binarize(y_test, classes=[0,1])
+                                               ^ (bad-whitespace)
+C:730, 0: Trailing whitespace (trailing-whitespace)
+C:732, 0: Trailing whitespace (trailing-whitespace)
+C:735, 0: Trailing whitespace (trailing-whitespace)
+C:741, 0: Line too long (102/100) (line-too-long)
+C:743, 0: Trailing whitespace (trailing-whitespace)
+C:745, 0: Line too long (114/100) (line-too-long)
+C:746, 0: Trailing whitespace (trailing-whitespace)
+C:748, 0: Line too long (114/100) (line-too-long)
+C:749, 0: Trailing whitespace (trailing-whitespace)
+C:750, 0: Exactly one space required after comma
+    roc_fpr_all = pd.concat([roc_fpr_all,fpr_r], ignore_index=True, axis=1)#.fillna(1)
+                                        ^ (bad-whitespace)
+C:751, 0: Exactly one space required after comma
+    roc_tpr_all = pd.concat([roc_tpr_all,tpr_r], ignore_index=True, axis=1)#.fillna(1)
+                                        ^ (bad-whitespace)
+C:757, 0: Wrong continued indentation (add 1 space).
+            label='ROC curve (AUC = {0:0.2f})'
+            ^| (bad-continuation)
+C:767, 0: Line too long (114/100) (line-too-long)
+C:770, 0: Trailing whitespace (trailing-whitespace)
+C:777, 0: Trailing whitespace (trailing-whitespace)
+C:778, 0: Line too long (107/100) (line-too-long)
+C:778, 0: Exactly one space required after comma
+    precision["micro_run_"+run_id], recall["micro_run_"+run_id], _ = precision_recall_curve(y_test,y_score)
+                                                                                                  ^ (bad-whitespace)
+C:780, 0: Trailing whitespace (trailing-whitespace)
+C:782, 0: Line too long (116/100) (line-too-long)
+C:783, 0: Trailing whitespace (trailing-whitespace)
+C:785, 0: Line too long (113/100) (line-too-long)
+C:786, 0: Trailing whitespace (trailing-whitespace)
+C:787, 0: Exactly one space required after comma
+    pre_all = pd.concat([pre_all,pre_r], ignore_index=True, axis=1)#.fillna(0)
+                                ^ (bad-whitespace)
+C:788, 0: Exactly one space required after comma
+    rec_all = pd.concat([rec_all,rec_r], ignore_index=True, axis=1)#.fillna(0)
+                                ^ (bad-whitespace)
+C:790, 0: Trailing whitespace (trailing-whitespace)
+C:793, 0: Exactly one space required after comma
+    plt.figure(figsize=(6,6))
+                         ^ (bad-whitespace)
+C:797, 0: Line too long (106/100) (line-too-long)
+C:805, 0: Line too long (127/100) (line-too-long)
+C:808, 0: Trailing whitespace (trailing-whitespace)
+C:815, 0: Trailing whitespace (trailing-whitespace)
+C:817, 0: Exactly one space required after comma
+cols = importance.filter(like='_raw_importance',axis=1).columns
+                                               ^ (bad-whitespace)
+C:818, 0: Exactly one space required after comma
+importance['mean_raw_importance'] = importance.apply(lambda x: np.mean(x[cols]),1)
+                                                                               ^ (bad-whitespace)
+C:819, 0: Exactly one space required after comma
+importance['std_raw_importance'] = importance.apply(lambda x: np.std(x[cols]),1)
+                                                                             ^ (bad-whitespace)
+C:821, 0: Exactly one space required after comma
+cols = importance.filter(like='_rel_importance',axis=1).columns
+                                               ^ (bad-whitespace)
+C:822, 0: Exactly one space required after comma
+importance['mean_rel_importance'] = importance.apply(lambda x: np.mean(x[cols]),1)
+                                                                               ^ (bad-whitespace)
+C:823, 0: Exactly one space required after comma
+importance['std_rel_importance'] = importance.apply(lambda x: np.std(x[cols]),1)
+                                                                             ^ (bad-whitespace)
+C:835, 0: Exactly one space required after comma
+deviance_test['mean'] = deviance_test.apply(lambda x: np.mean(x[cols]),1)
+                                                                      ^ (bad-whitespace)
+C:836, 0: Exactly one space required after comma
+deviance_test['std'] = deviance_test.apply(lambda x: np.std(x[cols]),1)
+                                                                    ^ (bad-whitespace)
+C:841, 0: Exactly one space required after comma
+deviance_train['mean'] = deviance_train.apply(lambda x: np.mean(x[cols]),1)
+                                                                        ^ (bad-whitespace)
+C:842, 0: Exactly one space required after comma
+deviance_train['std'] = deviance_train.apply(lambda x: np.std(x[cols]),1)
+                                                                      ^ (bad-whitespace)
+C:857, 0: Trailing whitespace (trailing-whitespace)
+C:859, 0: Wrong continued indentation (add 1 space).
+                alpha=0.2)
+                ^| (bad-continuation)
+C:865, 0: Trailing whitespace (trailing-whitespace)
+C:867, 0: Wrong continued indentation (add 1 space).
+                alpha=0.2, color='red')
+                ^| (bad-continuation)
+C:872, 0: Line too long (106/100) (line-too-long)
+C:872, 0: Exactly one space required after comma
+plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_deviance.pdf',dpi=300, bbox_inches = 'tight')
+                                                                          ^ (bad-whitespace)
+C:872, 0: No space allowed around keyword argument assignment
+plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_deviance.pdf',dpi=300, bbox_inches = 'tight')
+                                                                                                ^ (bad-whitespace)
+C:875, 0: Line too long (102/100) (line-too-long)
+C:878, 0: Exactly one space required after comma
+df_list = [conf_df,msr,mtc]
+                  ^ (bad-whitespace)
+C:878, 0: Exactly one space required after comma
+df_list = [conf_df,msr,mtc]
+                      ^ (bad-whitespace)
+C:879, 0: Trailing whitespace (trailing-whitespace)
+C:888, 0: Line too long (111/100) (line-too-long)
+C:888, 0: Exactly one space required after comma
+    plt.savefig('./'+args.prefix+'_results/classifier_plots/'+save_list[i]+'.pdf',dpi=300, bbox_inches='tight')
+                                                                                 ^ (bad-whitespace)
+C:891, 0: Trailing whitespace (trailing-whitespace)
+C:895, 0: Exactly one space required after comma
+roc_fpr_all['mean'] = roc_fpr_all.apply(lambda x: np.mean(x[cols]),1)
+                                                                  ^ (bad-whitespace)
+C:896, 0: Exactly one space required after comma
+roc_fpr_all['std'] = roc_fpr_all.apply(lambda x: np.std(x[cols]),1)
+                                                                ^ (bad-whitespace)
+C:901, 0: Exactly one space required after comma
+roc_tpr_all['mean'] = roc_tpr_all.apply(lambda x: np.mean(x[cols]),1)
+                                                                  ^ (bad-whitespace)
+C:902, 0: Exactly one space required after comma
+roc_tpr_all['std'] = roc_tpr_all.apply(lambda x: np.std(x[cols]),1)
+                                                                ^ (bad-whitespace)
+C:907, 0: Exactly one space required after comma
+roc_auc_all['mean'] = roc_auc_all.apply(lambda x: np.mean(x[cols]),1)
+                                                                  ^ (bad-whitespace)
+C:908, 0: Exactly one space required after comma
+roc_auc_all['std'] = roc_auc_all.apply(lambda x: np.std(x[cols]),1)
+                                                                ^ (bad-whitespace)
+C:917, 0: Exactly one space required after comma
+m_auc = str(round(np.array(roc_auc_all['mean'])[0],3))
+                                                  ^ (bad-whitespace)
+C:918, 0: Exactly one space required after comma
+m_auc_std = str(round(np.array(roc_auc_all['std'])[0],3))
+                                                     ^ (bad-whitespace)
+C:923, 0: Trailing whitespace (trailing-whitespace)
+C:927, 0: Trailing whitespace (trailing-whitespace)
+C:938, 0: Line too long (101/100) (line-too-long)
+C:938, 0: Exactly one space required after comma
+plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_roc.pdf',dpi=300, bbox_inches = 'tight')
+                                                                     ^ (bad-whitespace)
+C:938, 0: No space allowed around keyword argument assignment
+plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_roc.pdf',dpi=300, bbox_inches = 'tight')
+                                                                                           ^ (bad-whitespace)
+C:944, 0: Exactly one space required after comma
+pre_all['mean'] = pre_all.apply(lambda x: np.mean(x[cols]),1)
+                                                          ^ (bad-whitespace)
+C:945, 0: Exactly one space required after comma
+pre_all['std'] = pre_all.apply(lambda x: np.std(x[cols]),1)
+                                                        ^ (bad-whitespace)
+C:950, 0: Exactly one space required after comma
+rec_all['mean'] = rec_all.apply(lambda x: np.mean(x[cols]),1)
+                                                          ^ (bad-whitespace)
+C:951, 0: Exactly one space required after comma
+rec_all['std'] = rec_all.apply(lambda x: np.std(x[cols]),1)
+                                                        ^ (bad-whitespace)
+C:956, 0: Exactly one space required after comma
+av_pre_all['mean'] = av_pre_all.apply(lambda x: np.mean(x[cols]),1)
+                                                                ^ (bad-whitespace)
+C:957, 0: Exactly one space required after comma
+av_pre_all['std'] = av_pre_all.apply(lambda x: np.std(x[cols]),1)
+                                                              ^ (bad-whitespace)
+C:966, 0: Exactly one space required after comma
+m_auc = str(round(np.array(av_pre_all['mean'])[0],3))
+                                                 ^ (bad-whitespace)
+C:967, 0: Exactly one space required after comma
+m_auc_std = str(round(np.array(av_pre_all['std'])[0],3))
+                                                    ^ (bad-whitespace)
+C:972, 0: Trailing whitespace (trailing-whitespace)
+C:976, 0: Trailing whitespace (trailing-whitespace)
+C:986, 0: Line too long (114/100) (line-too-long)
+C:986, 0: Exactly one space required after comma
+plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_precision_recall.pdf',dpi=300, bbox_inches = 'tight')
+                                                                                  ^ (bad-whitespace)
+C:986, 0: No space allowed around keyword argument assignment
+plt.savefig('./'+args.prefix+'_results/classifier_plots/mean_precision_recall.pdf',dpi=300, bbox_inches = 'tight')
+                                                                                                        ^ (bad-whitespace)
+C:990, 0: Trailing whitespace (trailing-whitespace)
+C:992, 0: Line too long (139/100) (line-too-long)
+C:  1, 0: Missing module docstring (missing-docstring)
+E: 14, 0: Unable to import 'pybedtools' (import-error)
+E: 15, 0: Unable to import 'pybedtools' (import-error)
+E: 19, 0: Unable to import 'rpy2' (import-error)
+E: 20, 0: Unable to import 'rpy2.robjects' (import-error)
+E: 21, 0: Unable to import 'rpy2.robjects.packages' (import-error)
+E: 22, 0: Unable to import 'rpy2.robjects.vectors' (import-error)
+C: 27, 0: Import "import matplotlib.pyplot as plt" should be placed at the top of the module (wrong-import-position)
+C: 28, 0: Import "import sklearn" should be placed at the top of the module (wrong-import-position)
+C: 29, 0: Import "from sklearn.ensemble import GradientBoostingClassifier" should be placed at the top of the module (wrong-import-position)
+C: 30, 0: Import "from sklearn.ensemble.partial_dependence import plot_partial_dependence" should be placed at the top of the module (wrong-import-position)
+C: 31, 0: Import "from sklearn.ensemble.partial_dependence import partial_dependence" should be placed at the top of the module (wrong-import-position)
+C: 32, 0: Import "from sklearn.metrics import adjusted_mutual_info_score" should be placed at the top of the module (wrong-import-position)
+C: 33, 0: Import "from sklearn.metrics import confusion_matrix" should be placed at the top of the module (wrong-import-position)
+C: 34, 0: Import "from sklearn.metrics import mean_squared_error" should be placed at the top of the module (wrong-import-position)
+C: 35, 0: Import "from sklearn.metrics import precision_recall_curve" should be placed at the top of the module (wrong-import-position)
+C: 36, 0: Import "from sklearn.metrics import average_precision_score" should be placed at the top of the module (wrong-import-position)
+C: 37, 0: Import "from sklearn.model_selection import GridSearchCV" should be placed at the top of the module (wrong-import-position)
+C: 38, 0: Import "from sklearn.metrics import roc_curve, auc" should be placed at the top of the module (wrong-import-position)
+C: 39, 0: Import "from sklearn.model_selection import train_test_split" should be placed at the top of the module (wrong-import-position)
+C: 40, 0: Import "from sklearn.preprocessing import label_binarize" should be placed at the top of the module (wrong-import-position)
+C: 41, 0: Import "from sklearn.model_selection import StratifiedKFold" should be placed at the top of the module (wrong-import-position)
+C: 42, 0: Import "from sklearn.feature_selection import RFECV" should be placed at the top of the module (wrong-import-position)
+C: 43, 0: Import "import multiprocessing as mp" should be placed at the top of the module (wrong-import-position)
+C: 51, 0: Missing class docstring (missing-docstring)
+C: 64, 0: Invalid constant name "parser" (invalid-name)
+C:125, 0: Invalid constant name "args" (invalid-name)
+C:129, 0: Invalid argument name "bt" (invalid-name)
+C:129, 0: Invalid argument name "F" (invalid-name)
+C:129, 0: Invalid argument name "f" (invalid-name)
+C:129, 0: Invalid argument name "s" (invalid-name)
+C:129, 0: Missing function docstring (missing-docstring)
+W:129,40: Redefining name 'matrix' from outer scope (line 286) (redefined-outer-name)
+R:129, 0: Too many arguments (6/5) (too-many-arguments)
+C:142, 0: Invalid argument name "bt" (invalid-name)
+C:142, 0: Invalid argument name "F" (invalid-name)
+C:142, 0: Invalid argument name "f" (invalid-name)
+C:142, 0: Invalid argument name "s" (invalid-name)
+C:142, 0: Missing function docstring (missing-docstring)
+W:142,47: Redefining name 'matrix' from outer scope (line 286) (redefined-outer-name)
+R:142, 0: Too many arguments (7/5) (too-many-arguments)
+C:168, 0: Invalid function name "get_statistical_data_for_features" (invalid-name)
+C:168, 0: Invalid argument name "df" (invalid-name)
+C:168, 0: Missing function docstring (missing-docstring)
+W:169, 4: Redefining name 'features' from outer scope (line 646) (redefined-outer-name)
+W:176, 8: Redefining name 'i' from outer scope (line 371) (redefined-outer-name)
+C:174, 4: Invalid variable name "statsR" (invalid-name)
+C:176, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+W:181,64: Cell variable i defined in loop (cell-var-from-loop)
+W:182,64: Cell variable i defined in loop (cell-var-from-loop)
+C:201, 0: Missing function docstring (missing-docstring)
+W:212, 8: Redefining name 'i' from outer scope (line 371) (redefined-outer-name)
+W:212,15: Redefining name 'y' from outer scope (line 509) (redefined-outer-name)
+C:207, 4: Invalid variable name "xs" (invalid-name)
+C:208, 4: Invalid variable name "ys" (invalid-name)
+C:211, 4: Invalid variable name "cumSum" (invalid-name)
+C:212,12: Invalid variable name "x" (invalid-name)
+C:212,15: Invalid variable name "y" (invalid-name)
+C:214, 8: Invalid variable name "cumSum" (invalid-name)
+C:218, 0: Invalid argument name "ax" (invalid-name)
+C:218, 0: Missing function docstring (missing-docstring)
+W:221, 7: Redefining name 'y' from outer scope (line 509) (redefined-outer-name)
+C:221, 4: Invalid variable name "x" (invalid-name)
+C:221, 7: Invalid variable name "y" (invalid-name)
+C:224, 0: Invalid argument name "df" (invalid-name)
+C:224, 0: Missing function docstring (missing-docstring)
+W:226, 4: Redefining name 'cols' from outer scope (line 817) (redefined-outer-name)
+W:240, 4: Redefining name 'fig' from outer scope (line 648) (redefined-outer-name)
+C:233, 4: Invalid variable name "N" (invalid-name)
+C:240, 9: Invalid variable name "ax" (invalid-name)
+W:240, 4: Unused variable 'fig' (unused-variable)
+W:241, 4: Unused variable 'rects1' (unused-variable)
+C:249, 0: Invalid argument name "df" (invalid-name)
+C:249, 0: Missing function docstring (missing-docstring)
+W:259, 4: Redefining name 'fig' from outer scope (line 648) (redefined-outer-name)
+C:252, 4: Invalid variable name "N" (invalid-name)
+C:259, 9: Invalid variable name "ax" (invalid-name)
+C:271, 9: Invalid variable name "ax" (invalid-name)
+W:259, 4: Unused variable 'fig' (unused-variable)
+C:286, 0: Invalid constant name "matrix" (invalid-name)
+C:291, 3: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:296, 4: Invalid constant name "out_cols" (invalid-name)
+C:297, 4: Invalid constant name "out_cols" (invalid-name)
+C:298, 4: Invalid constant name "matrix" (invalid-name)
+C:300, 3: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:305, 4: Invalid constant name "in_cols" (invalid-name)
+C:306, 4: Invalid constant name "in_cols" (invalid-name)
+C:307, 4: Invalid constant name "matrix" (invalid-name)
+C:311, 0: Invalid constant name "matrix" (invalid-name)
+C:316, 0: Invalid constant name "all_exons" (invalid-name)
+C:323, 3: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:325, 5: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:331, 0: Invalid constant name "sel_exons" (invalid-name)
+C:333, 3: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:336, 4: Invalid constant name "sel_exons_2" (invalid-name)
+C:345, 3: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:346, 4: Invalid constant name "matrix" (invalid-name)
+C:347, 5: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:348, 4: Invalid constant name "matrix" (invalid-name)
+C:355, 3: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:359, 4: Invalid constant name "st" (invalid-name)
+C:366, 7: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:380,15: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:382,17: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:412, 9: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:415, 7: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:417, 9: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:418,11: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:421,12: Invalid constant name "sig_only" (invalid-name)
+C:423,12: Invalid constant name "matrix" (invalid-name)
+C:424,13: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:427,12: Invalid constant name "sig_only" (invalid-name)
+C:429,12: Invalid constant name "matrix" (invalid-name)
+C:431, 5: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:434, 3: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:450, 0: Invalid constant name "runs" (invalid-name)
+C:451, 0: Invalid constant name "sample_size" (invalid-name)
+C:452, 0: Invalid constant name "gbclf_params" (invalid-name)
+C:453, 0: Invalid constant name "train_size" (invalid-name)
+C:457, 3: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:458, 4: Invalid constant name "importance" (invalid-name)
+C:459, 5: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:460, 4: Invalid constant name "importance" (invalid-name)
+C:463, 0: Invalid constant name "deviance_train" (invalid-name)
+C:464, 0: Invalid constant name "deviance_test" (invalid-name)
+C:466, 0: Invalid constant name "msr" (invalid-name)
+C:468, 0: Invalid constant name "mtc" (invalid-name)
+C:470, 0: Invalid constant name "conf_df" (invalid-name)
+C:472, 0: Invalid constant name "roc_tpr_all" (invalid-name)
+C:473, 0: Invalid constant name "roc_fpr_all" (invalid-name)
+C:474, 0: Invalid constant name "roc_auc_all" (invalid-name)
+C:476, 0: Invalid constant name "pre_all" (invalid-name)
+C:477, 0: Invalid constant name "rec_all" (invalid-name)
+C:478, 0: Invalid constant name "av_pre_all" (invalid-name)
+C:480, 3: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+C:481, 4: Invalid constant name "matrix" (invalid-name)
+C:486, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:488, 7: Comparison to True should be just 'expr' or 'expr is True' (singleton-comparison)
+W:612,13: Use of eval (eval-used)
+E:662,59: Module 'numpy' has no 'float64' member (no-member)
+C:817, 0: Invalid constant name "cols" (invalid-name)
+C:821, 0: Invalid constant name "cols" (invalid-name)
+C:834, 0: Invalid constant name "cols" (invalid-name)
+C:840, 0: Invalid constant name "cols" (invalid-name)
+C:850, 0: Invalid constant name "train_err" (invalid-name)
+C:851, 0: Invalid constant name "test_err" (invalid-name)
+C:878, 0: Invalid constant name "df_list" (invalid-name)
+C:879, 0: Invalid constant name "title_list" (invalid-name)
+C:882, 0: Invalid constant name "save_list" (invalid-name)
+C:886, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:894, 0: Invalid constant name "cols" (invalid-name)
+C:900, 0: Invalid constant name "cols" (invalid-name)
+C:906, 0: Invalid constant name "cols" (invalid-name)
+C:915, 0: Invalid constant name "fpr_err" (invalid-name)
+C:916, 0: Invalid constant name "tpr_err" (invalid-name)
+C:917, 0: Invalid constant name "m_auc" (invalid-name)
+C:918, 0: Invalid constant name "m_auc_std" (invalid-name)
+C:943, 0: Invalid constant name "cols" (invalid-name)
+C:949, 0: Invalid constant name "cols" (invalid-name)
+C:955, 0: Invalid constant name "cols" (invalid-name)
+C:964, 0: Invalid constant name "pre_err" (invalid-name)
+C:965, 0: Invalid constant name "rec_err" (invalid-name)
+C:966, 0: Invalid constant name "m_auc" (invalid-name)
+C:967, 0: Invalid constant name "m_auc_std" (invalid-name)
+R:751, 4: Redefinition of roc_tpr_all type from pandas.core.frame.DataFrame to pandas.sparse.series.SparseSeries (redefined-variable-type)
+R:750, 4: Redefinition of roc_fpr_all type from pandas.core.frame.DataFrame to pandas.sparse.series.SparseSeries (redefined-variable-type)
+R:787, 4: Redefinition of pre_all type from pandas.core.frame.DataFrame to pandas.sparse.series.SparseSeries (redefined-variable-type)
+R:788, 4: Redefinition of rec_all type from pandas.core.frame.DataFrame to pandas.sparse.series.SparseSeries (redefined-variable-type)
+W:  7, 0: Unused ArgumentParser imported from argparse (unused-import)
+W:  8, 0: Unused import os (unused-import)
+W:  9, 0: Unused import time (unused-import)
+W: 10, 0: Unused import subprocess (unused-import)
+W: 11, 0: Unused PIPE imported from subprocess (unused-import)
+W: 11, 0: Unused call imported from subprocess (unused-import)
+W: 14, 0: Unused import pybedtools (unused-import)
+W: 16, 0: Unused import scipy (unused-import)
+W: 18, 0: Unused import readline (unused-import)
+W: 19, 0: Unused import rpy2 (unused-import)
+W: 20, 0: Unused import rpy2.robjects (unused-import)
+W: 24, 0: Unused cycle imported from itertools (unused-import)
+W: 28, 0: Unused import sklearn (unused-import)
+W: 31, 0: Unused partial_dependence imported from sklearn.ensemble.partial_dependence (unused-import)
+C: 18, 0: standard import "import readline" comes before "import pandas as pd" (wrong-import-order)
+C: 23, 0: standard import "import itertools" comes before "import pandas as pd" (wrong-import-order)
+C: 24, 0: standard import "from itertools import cycle" comes before "import pandas as pd" (wrong-import-order)
+C: 43, 0: standard import "import multiprocessing as mp" comes before "import pandas as pd" (wrong-import-order)
+************* Module biofeatures.scripts.build_datamatrix
+C:  8, 0: Exactly one space required after comma
+from subprocess import PIPE,call,Popen
+                           ^ (bad-whitespace)
+C:  8, 0: Exactly one space required after comma
+from subprocess import PIPE,call,Popen
+                                ^ (bad-whitespace)
+C: 24, 0: Trailing whitespace (trailing-whitespace)
+C: 36, 0: Line too long (130/100) (line-too-long)
+C: 45, 0: Trailing whitespace (trailing-whitespace)
+C: 46, 0: Wrong continued indentation (add 2 spaces).
+                  help="GTF file downloaded from Ensembl database. Available at http://www.ensembl.org/info/data/ftp/index.html", required=True)
+                  ^ | (bad-continuation)
+C: 46, 0: Line too long (144/100) (line-too-long)
+C: 48, 0: Trailing whitespace (trailing-whitespace)
+C: 49, 0: Wrong continued indentation (add 2 spaces).
+                  help="Genome FASTA associated with the build of the GTF file", required=True)
+                  ^ | (bad-continuation)
+C: 51, 0: Trailing whitespace (trailing-whitespace)
+C: 52, 0: Wrong continued indentation (add 2 spaces).
+                  help="prefix for use on the output files", metavar="prefix", required=True)
+                  ^ | (bad-continuation)
+C: 55, 0: Wrong continued indentation (add 2 spaces).
+                  help="bigWig file with phastCon scores for multiple alignments. Used as a measure of conservation of the features among the aligned species, obtained from 'http://hgdownload.cse.ucsc.edu/downloads.html' under 'Conservation scores' and downloading bigWig (.bw) files. Can take multiple files as input by using wildcard characters (*) with single quotation marks (ex. 'hg38.*.bw'). REQUIRES bigWigAverageOverBed tool to be installed and available on PATH (can be obtained at UCSCs binaries directory (http://hgdownload.cse.ucsc.edu/admin/exe/). If no bigWig file is available, you can download the raw phastCon scores (.pp files) and create your own bigWig files using the wigToBigWig tool from the same repository. Default: False" , metavar="sp.phastCons*.bw", required=False)
+                  ^ | (bad-continuation)
+C: 55, 0: Line too long (793/100) (line-too-long)
+C: 55, 0: No space allowed before comma
+                  help="bigWig file with phastCon scores for multiple alignments. Used as a measure of conservation of the features among the aligned species, obtained from 'http://hgdownload.cse.ucsc.edu/downloads.html' under 'Conservation scores' and downloading bigWig (.bw) files. Can take multiple files as input by using wildcard characters (*) with single quotation marks (ex. 'hg38.*.bw'). REQUIRES bigWigAverageOverBed tool to be installed and available on PATH (can be obtained at UCSCs binaries directory (http://hgdownload.cse.ucsc.edu/admin/exe/). If no bigWig file is available, you can download the raw phastCon scores (.pp files) and create your own bigWig files using the wigToBigWig tool from the same repository. Default: False" , metavar="sp.phastCons*.bw", required=False)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^ (bad-whitespace)
+C: 58, 0: Wrong continued indentation (add 2 spaces).
+                  help='BED file containing the CpG islands sites found in the genome. Can be obtained from UCSCs Table Browser utility under "Regulation" group and saving the output as a bed file. You can also obtain it from UCSCs database under the "cpgIslandExt.txt.gz" file, but be sure to convert the .txt file into a proper .bed file before usage.', required=False)
+                  ^ | (bad-continuation)
+C: 58, 0: Line too long (371/100) (line-too-long)
+C: 61, 0: Wrong continued indentation (add 2 spaces).
+                  help="Annotation file containing variation regions found in the genome (can be SNPs, strucutural variations, mutations or custom annotations). Can be obtained from UCSCs database or from Ensembl's GVF ftp directory.  Can take multiple files as input by using wildcard characters (*) with single quotation marks (ex. 'Homo_sapiens_*.gvf.gz'). Default: False", required=False)
+                  ^ | (bad-continuation)
+C: 61, 0: Line too long (392/100) (line-too-long)
+C: 64, 0: Wrong continued indentation (add 2 spaces).
+                  help="Txt list containing k-mers for exon splicing enhancer sequences. Default: False", metavar="ese.txt", required=False)
+                  ^ | (bad-continuation)
+C: 64, 0: Line too long (140/100) (line-too-long)
+C: 67, 0: Wrong continued indentation (add 2 spaces).
+                  help="Txt list containing k-mers for exon splicing silencer sequences. Default: False", metavar="ess.txt", required=False)
+                  ^ | (bad-continuation)
+C: 67, 0: Line too long (140/100) (line-too-long)
+C: 70, 0: Wrong continued indentation (add 2 spaces).
+                  help="Txt list containing k-mers for intron splicing enhancer sequences. Default: False", metavar="ise.txt", required=False)
+                  ^ | (bad-continuation)
+C: 70, 0: Line too long (142/100) (line-too-long)
+C: 73, 0: Wrong continued indentation (add 2 spaces).
+                  help="Txt list containing k-mers for intron splicing silencer sequences. Default: False", metavar="iss.txt", required=False)
+                  ^ | (bad-continuation)
+C: 73, 0: Line too long (142/100) (line-too-long)
+C: 76, 0: Wrong continued indentation (add 2 spaces).
+                  help="Txt list containing custom sequences to be counted in the exons. Default: False", metavar="custom_exon.txt", required=False)
+                  ^ | (bad-continuation)
+C: 76, 0: Line too long (148/100) (line-too-long)
+C: 78, 0: Line too long (103/100) (line-too-long)
+C: 79, 0: Wrong continued indentation (add 2 spaces).
+                  help="Txt list containing custom sequences to be counted in the introns. Default: False", metavar="custom_intron.txt", required=False)
+                  ^ | (bad-continuation)
+C: 79, 0: Line too long (152/100) (line-too-long)
+C: 81, 0: Line too long (114/100) (line-too-long)
+C: 82, 0: Wrong continued indentation (add 1 space).
+                   help="Defines the ammount of information included from the nucleotide sequence, 3 options available: 'Simple','Intermediate','Full'. Options:1 = Simple:[Length and pGC], 2 = Intermediate:[Length, pGC, pG, pC, pA, pT], 3 = Full:[All data from BedTools nucleotide sequence].' Default: 2 (Intermediate); p = percentage")
+                   ^| (bad-continuation)
+C: 82, 0: Line too long (336/100) (line-too-long)
+C: 84, 0: Trailing whitespace (trailing-whitespace)
+C: 84, 0: Exactly one space required after comma
+parser.add_argument("--maxEntScan",dest="max_ent_scan", 
+                                  ^ (bad-whitespace)
+C: 85, 0: Wrong continued indentation (add 2 spaces).
+                  action="store_true", default=True,
+                  ^ | (bad-continuation)
+C: 86, 0: Wrong continued indentation (add 2 spaces).
+                  help="Use this option if you want to use maxEntScan algorithm for scoring 3' and 5' splice sites. Although the splice sites are generally conserved, the original algorithm is trained for human datasets, which can lead to shaky results for other species. Default: True")
+                  ^ | (bad-continuation)
+C: 86, 0: Line too long (287/100) (line-too-long)
+C: 88, 0: Trailing whitespace (trailing-whitespace)
+C: 88, 0: Exactly one space required after comma
+parser.add_argument("--keepBED",dest="keep_bed", 
+                               ^ (bad-whitespace)
+C: 89, 0: Wrong continued indentation (add 2 spaces).
+                  action="store_true", default=False, 
+                  ^ | (bad-continuation)
+C: 89, 0: Trailing whitespace (trailing-whitespace)
+C: 90, 0: Wrong continued indentation (add 2 spaces).
+                  help="Save the bed files generated for each class along with their up/downstream files. Default: False")
+                  ^ | (bad-continuation)
+C: 90, 0: Line too long (122/100) (line-too-long)
+C: 92, 0: Trailing whitespace (trailing-whitespace)
+C: 92, 0: Exactly one space required after comma
+parser.add_argument("--keepTEMP",dest="keep_temp", 
+                                ^ (bad-whitespace)
+C: 93, 0: Wrong continued indentation (add 2 spaces).
+                  action="store_true", default=False, 
+                  ^ | (bad-continuation)
+C: 93, 0: Trailing whitespace (trailing-whitespace)
+C: 94, 0: Wrong continued indentation (add 2 spaces).
+                  help="Keep the temporary files generated for each transcript during up/downstream search. Default: False")
+                  ^ | (bad-continuation)
+C: 94, 0: Line too long (124/100) (line-too-long)
+C: 96, 0: Line too long (197/100) (line-too-long)
+C:100, 0: Line too long (174/100) (line-too-long)
+C:102, 0: Exactly one space required after comma
+parser.add_argument("--debug",dest="debug", metavar='INT',
+                             ^ (bad-whitespace)
+C:103, 0: Trailing whitespace (trailing-whitespace)
+C:104, 0: Line too long (149/100) (line-too-long)
+C:116, 0: Trailing whitespace (trailing-whitespace)
+C:122, 0: Trailing whitespace (trailing-whitespace)
+C:127, 0: Line too long (180/100) (line-too-long)
+C:131, 0: Trailing whitespace (trailing-whitespace)
+C:136, 0: Exactly one space required after comma
+                               ), ignore_index=True).dropna().sort_values(by=['seqname','start'])
+                                                                                       ^ (bad-whitespace)
+C:138, 0: Line too long (106/100) (line-too-long)
+C:141, 0: Trailing whitespace (trailing-whitespace)
+C:141, 0: Line too long (107/100) (line-too-long)
+C:143, 0: Line too long (103/100) (line-too-long)
+C:144, 0: Line too long (107/100) (line-too-long)
+C:161, 0: Trailing whitespace (trailing-whitespace)
+C:164, 0: Line too long (114/100) (line-too-long)
+C:173, 0: Line too long (119/100) (line-too-long)
+C:181, 0: Exactly one space required after comma
+single_exons_bed = single_exons[['seqname','start','end','tag','score','strand']
+                                          ^ (bad-whitespace)
+C:181, 0: Exactly one space required after comma
+single_exons_bed = single_exons[['seqname','start','end','tag','score','strand']
+                                                  ^ (bad-whitespace)
+C:181, 0: Exactly one space required after comma
+single_exons_bed = single_exons[['seqname','start','end','tag','score','strand']
+                                                        ^ (bad-whitespace)
+C:181, 0: Exactly one space required after comma
+single_exons_bed = single_exons[['seqname','start','end','tag','score','strand']
+                                                              ^ (bad-whitespace)
+C:181, 0: Exactly one space required after comma
+single_exons_bed = single_exons[['seqname','start','end','tag','score','strand']
+                                                                      ^ (bad-whitespace)
+C:182, 0: Exactly one space required after comma
+                               ].drop_duplicates().sort_values(by=['seqname','start']
+                                                                            ^ (bad-whitespace)
+C:183, 0: Wrong continued indentation (add 3 spaces).
+                                                           ).rename(columns={'tag':'name'})
+                                                           ^  | (bad-continuation)
+C:197, 0: Trailing whitespace (trailing-whitespace)
+C:198, 0: Trailing whitespace (trailing-whitespace)
+C:199, 0: Trailing whitespace (trailing-whitespace)
+C:200, 0: Exactly one space required after comma
+first_exons = pd.concat([first_exons_plus,first_exons_minus]).reindex(columns=df_exons.columns)
+                                         ^ (bad-whitespace)
+C:202, 0: Exactly one space required after comma
+first_exons_bed = first_exons[['seqname','start','end','tag','score','strand']
+                                        ^ (bad-whitespace)
+C:202, 0: Exactly one space required after comma
+first_exons_bed = first_exons[['seqname','start','end','tag','score','strand']
+                                                ^ (bad-whitespace)
+C:202, 0: Exactly one space required after comma
+first_exons_bed = first_exons[['seqname','start','end','tag','score','strand']
+                                                      ^ (bad-whitespace)
+C:202, 0: Exactly one space required after comma
+first_exons_bed = first_exons[['seqname','start','end','tag','score','strand']
+                                                            ^ (bad-whitespace)
+C:202, 0: Exactly one space required after comma
+first_exons_bed = first_exons[['seqname','start','end','tag','score','strand']
+                                                                    ^ (bad-whitespace)
+C:203, 0: Exactly one space required after comma
+                             ].drop_duplicates().sort_values(by=['seqname','start']
+                                                                          ^ (bad-whitespace)
+C:204, 0: Wrong continued indentation (add 1 space).
+                                                           ).rename(columns={'tag':'name'})
+                                                           ^| (bad-continuation)
+C:207, 0: Trailing whitespace (trailing-whitespace)
+C:211, 0: Exactly one space required after comma
+last_exons = pd.concat([last_exons_plus,last_exons_minus]).reindex(columns=df_exons.columns)
+                                       ^ (bad-whitespace)
+C:213, 0: Exactly one space required after comma
+last_exons_bed = last_exons[['seqname','start','end','tag','score','strand']
+                                      ^ (bad-whitespace)
+C:213, 0: Exactly one space required after comma
+last_exons_bed = last_exons[['seqname','start','end','tag','score','strand']
+                                              ^ (bad-whitespace)
+C:213, 0: Exactly one space required after comma
+last_exons_bed = last_exons[['seqname','start','end','tag','score','strand']
+                                                    ^ (bad-whitespace)
+C:213, 0: Exactly one space required after comma
+last_exons_bed = last_exons[['seqname','start','end','tag','score','strand']
+                                                          ^ (bad-whitespace)
+C:213, 0: Exactly one space required after comma
+last_exons_bed = last_exons[['seqname','start','end','tag','score','strand']
+                                                                  ^ (bad-whitespace)
+C:214, 0: Exactly one space required after comma
+                           ].drop_duplicates().sort_values(by=['seqname','start']
+                                                                        ^ (bad-whitespace)
+C:215, 0: Wrong continued indentation (remove 1 space).
+                                                           ).rename(columns={'tag':'name'})
+                                                          |^ (bad-continuation)
+C:217, 0: Line too long (102/100) (line-too-long)
+C:223, 0: Exactly one space required after comma
+middle_exons_bed = middle_exons[['seqname','start','end','tag','score','strand']
+                                          ^ (bad-whitespace)
+C:223, 0: Exactly one space required after comma
+middle_exons_bed = middle_exons[['seqname','start','end','tag','score','strand']
+                                                  ^ (bad-whitespace)
+C:223, 0: Exactly one space required after comma
+middle_exons_bed = middle_exons[['seqname','start','end','tag','score','strand']
+                                                        ^ (bad-whitespace)
+C:223, 0: Exactly one space required after comma
+middle_exons_bed = middle_exons[['seqname','start','end','tag','score','strand']
+                                                              ^ (bad-whitespace)
+C:223, 0: Exactly one space required after comma
+middle_exons_bed = middle_exons[['seqname','start','end','tag','score','strand']
+                                                                      ^ (bad-whitespace)
+C:224, 0: Exactly one space required after comma
+                               ].drop_duplicates().sort_values(by=['seqname','start']
+                                                                            ^ (bad-whitespace)
+C:225, 0: Wrong continued indentation (add 3 spaces).
+                                                           ).rename(columns={'tag':'name'})
+                                                           ^  | (bad-continuation)
+C:230, 0: Exactly one space required after comma
+all_exons_bed = df_exons[['seqname','start','end','tag','score','strand']
+                                   ^ (bad-whitespace)
+C:230, 0: Exactly one space required after comma
+all_exons_bed = df_exons[['seqname','start','end','tag','score','strand']
+                                           ^ (bad-whitespace)
+C:230, 0: Exactly one space required after comma
+all_exons_bed = df_exons[['seqname','start','end','tag','score','strand']
+                                                 ^ (bad-whitespace)
+C:230, 0: Exactly one space required after comma
+all_exons_bed = df_exons[['seqname','start','end','tag','score','strand']
+                                                       ^ (bad-whitespace)
+C:230, 0: Exactly one space required after comma
+all_exons_bed = df_exons[['seqname','start','end','tag','score','strand']
+                                                               ^ (bad-whitespace)
+C:231, 0: Wrong continued indentation (remove 3 spaces).
+                           ].drop_duplicates().sort_values(by=['seqname','start']
+                        |  ^ (bad-continuation)
+C:231, 0: Exactly one space required after comma
+                           ].drop_duplicates().sort_values(by=['seqname','start']
+                                                                        ^ (bad-whitespace)
+C:232, 0: Wrong continued indentation (remove 1 space).
+                                                           ).rename(columns={'tag':'name'})
+                                                          |^ (bad-continuation)
+C:239, 0: Line too long (106/100) (line-too-long)
+C:240, 0: Line too long (104/100) (line-too-long)
+C:241, 0: Line too long (108/100) (line-too-long)
+C:252, 0: Trailing whitespace (trailing-whitespace)
+C:252, 0: Line too long (104/100) (line-too-long)
+C:253, 0: Trailing whitespace (trailing-whitespace)
+C:253, 0: Line too long (104/100) (line-too-long)
+C:254, 0: Trailing whitespace (trailing-whitespace)
+C:254, 0: Line too long (107/100) (line-too-long)
+C:255, 0: Trailing whitespace (trailing-whitespace)
+C:255, 0: Line too long (106/100) (line-too-long)
+C:256, 0: Trailing whitespace (trailing-whitespace)
+C:256, 0: Line too long (106/100) (line-too-long)
+C:257, 0: Trailing whitespace (trailing-whitespace)
+C:258, 0: Trailing whitespace (trailing-whitespace)
+C:258, 0: Line too long (101/100) (line-too-long)
+C:261, 0: Trailing whitespace (trailing-whitespace)
+C:262, 0: Trailing whitespace (trailing-whitespace)
+C:289, 0: Exactly one space required around comparison
+    non_single_transcripts = all_transcripts[all_transcripts.isin(single_transcripts)==False
+                                                                                     ^^ (bad-whitespace)
+C:292, 0: Exactly one space required around comparison
+    non_single_transcripts = all_transcripts[all_transcripts.isin(single_transcripts)==False
+                                                                                     ^^ (bad-whitespace)
+C:293, 0: Line too long (103/100) (line-too-long)
+C:295, 0: Line too long (101/100) (line-too-long)
+C:302, 0: Trailing whitespace (trailing-whitespace)
+C:307, 0: Line too long (101/100) (line-too-long)
+C:308, 0: Trailing whitespace (trailing-whitespace)
+C:310, 0: Trailing whitespace (trailing-whitespace)
+C:313, 0: Line too long (107/100) (line-too-long)
+C:314, 0: Line too long (109/100) (line-too-long)
+C:315, 0: Trailing whitespace (trailing-whitespace)
+C:316, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                        ^ (bad-whitespace)
+C:316, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                               ^ (bad-whitespace)
+C:316, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                       ^ (bad-whitespace)
+C:316, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                               ^ (bad-whitespace)
+C:316, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                       ^ (bad-whitespace)
+C:317, 0: Exactly one space required after comma
+                                       header=True,output=transcript_id+'_last_exons_up_temp.table')
+                                                  ^ (bad-whitespace)
+C:319, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                         ^ (bad-whitespace)
+C:319, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                ^ (bad-whitespace)
+C:319, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                        ^ (bad-whitespace)
+C:319, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                ^ (bad-whitespace)
+C:319, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                        ^ (bad-whitespace)
+C:320, 0: Line too long (102/100) (line-too-long)
+C:320, 0: Exactly one space required after comma
+                                        header=True,output=transcript_id+'_first_exons_dn_temp.table')
+                                                   ^ (bad-whitespace)
+C:323, 0: Line too long (107/100) (line-too-long)
+C:324, 0: Line too long (109/100) (line-too-long)
+C:325, 0: Line too long (111/100) (line-too-long)
+C:327, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                        ^ (bad-whitespace)
+C:327, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                               ^ (bad-whitespace)
+C:327, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                       ^ (bad-whitespace)
+C:327, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                               ^ (bad-whitespace)
+C:327, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                       ^ (bad-whitespace)
+C:328, 0: Exactly one space required after comma
+                                       header=True,output=transcript_id+'_last_exons_up_temp.table')
+                                                  ^ (bad-whitespace)
+C:330, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                         ^ (bad-whitespace)
+C:330, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                ^ (bad-whitespace)
+C:330, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                        ^ (bad-whitespace)
+C:330, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                ^ (bad-whitespace)
+C:330, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                        ^ (bad-whitespace)
+C:331, 0: Line too long (102/100) (line-too-long)
+C:331, 0: Exactly one space required after comma
+                                        header=True,output=transcript_id+'_first_exons_dn_temp.table')
+                                                   ^ (bad-whitespace)
+C:333, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                          ^ (bad-whitespace)
+C:333, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                 ^ (bad-whitespace)
+C:333, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                         ^ (bad-whitespace)
+C:333, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                 ^ (bad-whitespace)
+C:333, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                         ^ (bad-whitespace)
+C:334, 0: Line too long (104/100) (line-too-long)
+C:334, 0: Exactly one space required after comma
+                                         header=True,output=transcript_id+'_middle_exons_up_temp.table')
+                                                    ^ (bad-whitespace)
+C:336, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                          ^ (bad-whitespace)
+C:336, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                 ^ (bad-whitespace)
+C:336, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                         ^ (bad-whitespace)
+C:336, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                 ^ (bad-whitespace)
+C:336, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                         ^ (bad-whitespace)
+C:337, 0: Trailing whitespace (trailing-whitespace)
+C:337, 0: Line too long (104/100) (line-too-long)
+C:337, 0: Exactly one space required after comma
+                                         header=True,output=transcript_id+'_middle_exons_dn_temp.table')     
+                                                    ^ (bad-whitespace)
+C:341, 0: Line too long (107/100) (line-too-long)
+C:342, 0: Line too long (109/100) (line-too-long)
+C:343, 0: Trailing whitespace (trailing-whitespace)
+C:344, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                        ^ (bad-whitespace)
+C:344, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                               ^ (bad-whitespace)
+C:344, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                       ^ (bad-whitespace)
+C:344, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                               ^ (bad-whitespace)
+C:344, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                       ^ (bad-whitespace)
+C:345, 0: Exactly one space required after comma
+                                       header=True,output=transcript_id+'_last_exons_up_temp.table')
+                                                  ^ (bad-whitespace)
+C:347, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                         ^ (bad-whitespace)
+C:347, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                ^ (bad-whitespace)
+C:347, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                        ^ (bad-whitespace)
+C:347, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                ^ (bad-whitespace)
+C:347, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                        ^ (bad-whitespace)
+C:348, 0: Line too long (102/100) (line-too-long)
+C:348, 0: Exactly one space required after comma
+                                        header=True,output=transcript_id+'_first_exons_dn_temp.table')
+                                                   ^ (bad-whitespace)
+C:351, 0: Line too long (107/100) (line-too-long)
+C:352, 0: Line too long (109/100) (line-too-long)
+C:353, 0: Line too long (111/100) (line-too-long)
+C:355, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                        ^ (bad-whitespace)
+C:355, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                               ^ (bad-whitespace)
+C:355, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                       ^ (bad-whitespace)
+C:355, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                               ^ (bad-whitespace)
+C:355, 0: Exactly one space required after comma
+            last_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                       ^ (bad-whitespace)
+C:356, 0: Exactly one space required after comma
+                                       header=True,output=transcript_id+'_last_exons_up_temp.table')
+                                                  ^ (bad-whitespace)
+C:358, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                         ^ (bad-whitespace)
+C:358, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                ^ (bad-whitespace)
+C:358, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                        ^ (bad-whitespace)
+C:358, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                ^ (bad-whitespace)
+C:358, 0: Exactly one space required after comma
+            first_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                        ^ (bad-whitespace)
+C:359, 0: Line too long (102/100) (line-too-long)
+C:359, 0: Exactly one space required after comma
+                                        header=True,output=transcript_id+'_first_exons_dn_temp.table')
+                                                   ^ (bad-whitespace)
+C:361, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                          ^ (bad-whitespace)
+C:361, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                 ^ (bad-whitespace)
+C:361, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                         ^ (bad-whitespace)
+C:361, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                 ^ (bad-whitespace)
+C:361, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,iu=True,D='ref',io=True,N=False,
+                                                                                         ^ (bad-whitespace)
+C:362, 0: Line too long (104/100) (line-too-long)
+C:362, 0: Exactly one space required after comma
+                                         header=True,output=transcript_id+'_middle_exons_up_temp.table')
+                                                    ^ (bad-whitespace)
+C:364, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                          ^ (bad-whitespace)
+C:364, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                 ^ (bad-whitespace)
+C:364, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                         ^ (bad-whitespace)
+C:364, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                 ^ (bad-whitespace)
+C:364, 0: Exactly one space required after comma
+            middle_exons_bedtool.closest(all_exons_bedtool,s=True,id=True,D='ref',io=True,N=False,
+                                                                                         ^ (bad-whitespace)
+C:365, 0: Line too long (104/100) (line-too-long)
+C:365, 0: Exactly one space required after comma
+                                         header=True,output=transcript_id+'_middle_exons_dn_temp.table')
+                                                    ^ (bad-whitespace)
+C:367, 0: Unnecessary parens after 'if' keyword (superfluous-parens)
+C:368, 0: Line too long (117/100) (line-too-long)
+C:371, 0: Line too long (207/100) (line-too-long)
+C:383, 0: Trailing whitespace (trailing-whitespace)
+C:391, 0: Trailing whitespace (trailing-whitespace)
+C:392, 0: Exactly one space required after comma
+concatFiles('*_last_exons_up_temp.table','upstream_last_exons_temp.table')
+                                        ^ (bad-whitespace)
+C:393, 0: Exactly one space required after comma
+concatFiles('*_first_exons_dn_temp.table','downstream_first_exons_temp.table')
+                                         ^ (bad-whitespace)
+C:394, 0: Exactly one space required after comma
+concatFiles('*_middle_exons_up_temp.table','upstream_middle_exons_temp.table')
+                                          ^ (bad-whitespace)
+C:395, 0: Exactly one space required after comma
+concatFiles('*_middle_exons_dn_temp.table','downstream_middle_exons_temp.table')
+                                          ^ (bad-whitespace)
+C:402, 0: Line too long (235/100) (line-too-long)
+C:403, 0: Trailing whitespace (trailing-whitespace)
+C:405, 0: Trailing whitespace (trailing-whitespace)
+C:406, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,8,1,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:406, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,8,1,'tag',4,5]]
+                             ^ (bad-whitespace)
+C:406, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,8,1,'tag',4,5]]
+                               ^ (bad-whitespace)
+C:406, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,8,1,'tag',4,5]]
+                                     ^ (bad-whitespace)
+C:406, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,8,1,'tag',4,5]]
+                                       ^ (bad-whitespace)
+C:409, 0: Exactly one space required after comma
+    df_introns_p = df_introns_p.rename(columns={0:'chrom',8:'start',1:'end',
+                                                         ^ (bad-whitespace)
+C:409, 0: Exactly one space required after comma
+    df_introns_p = df_introns_p.rename(columns={0:'chrom',8:'start',1:'end',
+                                                                   ^ (bad-whitespace)
+C:410, 0: Line too long (102/100) (line-too-long)
+C:410, 0: Exactly one space required after comma
+                                                'tag':'name',4:'score',5:'strand'})#.drop_duplicates()
+                                                            ^ (bad-whitespace)
+C:410, 0: Exactly one space required after comma
+                                                'tag':'name',4:'score',5:'strand'})#.drop_duplicates()
+                                                                      ^ (bad-whitespace)
+C:411, 0: Trailing whitespace (trailing-whitespace)
+C:412, 0: Exactly one space required before assignment
+    ss_5p_p  = cat_p[[0,8,1,'tag',4,5]]
+             ^ (bad-whitespace)
+C:412, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,8,1,'tag',4,5]]
+                       ^ (bad-whitespace)
+C:412, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,8,1,'tag',4,5]]
+                         ^ (bad-whitespace)
+C:412, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,8,1,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:412, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,8,1,'tag',4,5]]
+                                 ^ (bad-whitespace)
+C:412, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,8,1,'tag',4,5]]
+                                   ^ (bad-whitespace)
+C:415, 0: Exactly one space required after comma
+    ss_5p_p = ss_5p_p.rename(columns={0:'chrom',8:'start',1:'end',
+                                               ^ (bad-whitespace)
+C:415, 0: Exactly one space required after comma
+    ss_5p_p = ss_5p_p.rename(columns={0:'chrom',8:'start',1:'end',
+                                                         ^ (bad-whitespace)
+C:416, 0: Wrong continued indentation (add 1 space).
+                                     'tag':'name',4:'score',5:'strand'})
+                                     ^| (bad-continuation)
+C:416, 0: Exactly one space required after comma
+                                     'tag':'name',4:'score',5:'strand'})
+                                                 ^ (bad-whitespace)
+C:416, 0: Exactly one space required after comma
+                                     'tag':'name',4:'score',5:'strand'})
+                                                           ^ (bad-whitespace)
+C:417, 0: Trailing whitespace (trailing-whitespace)
+C:418, 0: Exactly one space required after assignment
+    ss_3p_p =  cat_p[[0,8,1,'tag',4,5]]
+            ^ (bad-whitespace)
+C:418, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,8,1,'tag',4,5]]
+                       ^ (bad-whitespace)
+C:418, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,8,1,'tag',4,5]]
+                         ^ (bad-whitespace)
+C:418, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,8,1,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:418, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,8,1,'tag',4,5]]
+                                 ^ (bad-whitespace)
+C:418, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,8,1,'tag',4,5]]
+                                   ^ (bad-whitespace)
+C:421, 0: Exactly one space required after comma
+    ss_3p_p = ss_3p_p.rename(columns={0:'chrom',8:'start',1:'end',
+                                               ^ (bad-whitespace)
+C:421, 0: Exactly one space required after comma
+    ss_3p_p = ss_3p_p.rename(columns={0:'chrom',8:'start',1:'end',
+                                                         ^ (bad-whitespace)
+C:422, 0: Wrong continued indentation (add 1 space).
+                                     'tag':'name',4:'score',5:'strand'})
+                                     ^| (bad-continuation)
+C:422, 0: Exactly one space required after comma
+                                     'tag':'name',4:'score',5:'strand'})
+                                                 ^ (bad-whitespace)
+C:422, 0: Exactly one space required after comma
+                                     'tag':'name',4:'score',5:'strand'})
+                                                           ^ (bad-whitespace)
+C:423, 0: Trailing whitespace (trailing-whitespace)
+C:424, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,8,1,'tag',4,5]]
+                       ^ (bad-whitespace)
+C:424, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,8,1,'tag',4,5]]
+                         ^ (bad-whitespace)
+C:424, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,8,1,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:424, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,8,1,'tag',4,5]]
+                                 ^ (bad-whitespace)
+C:424, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,8,1,'tag',4,5]]
+                                   ^ (bad-whitespace)
+C:428, 0: Trailing whitespace (trailing-whitespace)
+C:431, 0: Trailing whitespace (trailing-whitespace)
+C:434, 0: Trailing whitespace (trailing-whitespace)
+C:435, 0: Exactly one space required after comma
+    bp_seq_p = pd.concat([bp_seq_p_200,bp_seq_p_small]
+                                      ^ (bad-whitespace)
+C:437, 0: Exactly one space required after comma
+                                 ).rename(columns={0:'chrom',8:'start',1:'end',
+                                                            ^ (bad-whitespace)
+C:437, 0: Exactly one space required after comma
+                                 ).rename(columns={0:'chrom',8:'start',1:'end',
+                                                                      ^ (bad-whitespace)
+C:438, 0: Exactly one space required after comma
+                                                   'tag':'name',4:'score',5:'strand'})
+                                                               ^ (bad-whitespace)
+C:438, 0: Exactly one space required after comma
+                                                   'tag':'name',4:'score',5:'strand'})
+                                                                         ^ (bad-whitespace)
+C:440, 0: Trailing whitespace (trailing-whitespace)
+C:441, 0: Exactly one space required before assignment
+    cat_m  = cat[cat[5] == '-'].copy()
+           ^ (bad-whitespace)
+C:442, 0: Trailing whitespace (trailing-whitespace)
+C:443, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,2,7,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:443, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,2,7,'tag',4,5]]
+                             ^ (bad-whitespace)
+C:443, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,2,7,'tag',4,5]]
+                               ^ (bad-whitespace)
+C:443, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,2,7,'tag',4,5]]
+                                     ^ (bad-whitespace)
+C:443, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,2,7,'tag',4,5]]
+                                       ^ (bad-whitespace)
+C:446, 0: Exactly one space required after comma
+    df_introns_m = df_introns_m.rename(columns={0:'chrom',2:'start',7:'end',
+                                                         ^ (bad-whitespace)
+C:446, 0: Exactly one space required after comma
+    df_introns_m = df_introns_m.rename(columns={0:'chrom',2:'start',7:'end',
+                                                                   ^ (bad-whitespace)
+C:447, 0: Line too long (102/100) (line-too-long)
+C:447, 0: Exactly one space required after comma
+                                                'tag':'name',4:'score',5:'strand'})#.drop_duplicates()
+                                                            ^ (bad-whitespace)
+C:447, 0: Exactly one space required after comma
+                                                'tag':'name',4:'score',5:'strand'})#.drop_duplicates()
+                                                                      ^ (bad-whitespace)
+C:448, 0: Trailing whitespace (trailing-whitespace)
+C:449, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,2,7,'tag',4,5]]
+                      ^ (bad-whitespace)
+C:449, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,2,7,'tag',4,5]]
+                        ^ (bad-whitespace)
+C:449, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,2,7,'tag',4,5]]
+                          ^ (bad-whitespace)
+C:449, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,2,7,'tag',4,5]]
+                                ^ (bad-whitespace)
+C:449, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,2,7,'tag',4,5]]
+                                  ^ (bad-whitespace)
+C:452, 0: Exactly one space required after comma
+    ss_5p_m = ss_5p_m.rename(columns={0:'chrom','tag':'name',2:'start',
+                                               ^ (bad-whitespace)
+C:452, 0: Exactly one space required after comma
+    ss_5p_m = ss_5p_m.rename(columns={0:'chrom','tag':'name',2:'start',
+                                                            ^ (bad-whitespace)
+C:453, 0: Exactly one space required after comma
+                                      7:'end',4:'score',5:'strand'})
+                                             ^ (bad-whitespace)
+C:453, 0: Exactly one space required after comma
+                                      7:'end',4:'score',5:'strand'})
+                                                       ^ (bad-whitespace)
+C:454, 0: Trailing whitespace (trailing-whitespace)
+C:455, 0: Exactly one space required after assignment
+    ss_3p_m =  cat_m[[0,2,7,'tag',4,5]]
+            ^ (bad-whitespace)
+C:455, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,2,7,'tag',4,5]]
+                       ^ (bad-whitespace)
+C:455, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,2,7,'tag',4,5]]
+                         ^ (bad-whitespace)
+C:455, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,2,7,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:455, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,2,7,'tag',4,5]]
+                                 ^ (bad-whitespace)
+C:455, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,2,7,'tag',4,5]]
+                                   ^ (bad-whitespace)
+C:458, 0: Exactly one space required after comma
+    ss_3p_m = ss_3p_m.rename(columns={0:'chrom','tag':'name',2:'start',
+                                               ^ (bad-whitespace)
+C:458, 0: Exactly one space required after comma
+    ss_3p_m = ss_3p_m.rename(columns={0:'chrom','tag':'name',2:'start',
+                                                            ^ (bad-whitespace)
+C:459, 0: Exactly one space required after comma
+                                      7:'end',4:'score',5:'strand'})
+                                             ^ (bad-whitespace)
+C:459, 0: Exactly one space required after comma
+                                      7:'end',4:'score',5:'strand'})
+                                                       ^ (bad-whitespace)
+C:460, 0: Trailing whitespace (trailing-whitespace)
+C:461, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,2,7,'tag',4,5]].copy()
+                       ^ (bad-whitespace)
+C:461, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,2,7,'tag',4,5]].copy()
+                         ^ (bad-whitespace)
+C:461, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,2,7,'tag',4,5]].copy()
+                           ^ (bad-whitespace)
+C:461, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,2,7,'tag',4,5]].copy()
+                                 ^ (bad-whitespace)
+C:461, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,2,7,'tag',4,5]].copy()
+                                   ^ (bad-whitespace)
+C:465, 0: Trailing whitespace (trailing-whitespace)
+C:468, 0: Trailing whitespace (trailing-whitespace)
+C:471, 0: Trailing whitespace (trailing-whitespace)
+C:472, 0: Exactly one space required after comma
+    bp_seq_m = pd.concat([bp_seq_m_200,bp_seq_m_small]
+                                      ^ (bad-whitespace)
+C:474, 0: Exactly one space required after comma
+                                 ).rename(columns={0:'chrom',2:'start',7:'end',
+                                                            ^ (bad-whitespace)
+C:474, 0: Exactly one space required after comma
+                                 ).rename(columns={0:'chrom',2:'start',7:'end',
+                                                                      ^ (bad-whitespace)
+C:475, 0: Wrong continued indentation (add 1 space).
+                                                  'tag':'name',4:'score',5:'strand'})
+                                                  ^| (bad-continuation)
+C:475, 0: Exactly one space required after comma
+                                                  'tag':'name',4:'score',5:'strand'})
+                                                              ^ (bad-whitespace)
+C:475, 0: Exactly one space required after comma
+                                                  'tag':'name',4:'score',5:'strand'})
+                                                                        ^ (bad-whitespace)
+C:476, 0: Trailing whitespace (trailing-whitespace)
+C:477, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                     ^ (bad-whitespace)
+C:477, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                       ^ (bad-whitespace)
+C:477, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                         ^ (bad-whitespace)
+C:477, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                               ^ (bad-whitespace)
+C:477, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                                  ^ (bad-whitespace)
+C:478, 0: Wrong hanging indentation (remove 8 spaces).
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+        |       ^ (bad-continuation)
+C:478, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                  ^ (bad-whitespace)
+C:478, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                            ^ (bad-whitespace)
+C:478, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                                    ^ (bad-whitespace)
+C:478, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                                                 ^ (bad-whitespace)
+C:478, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                                                            ^ (bad-whitespace)
+C:479, 0: Trailing whitespace (trailing-whitespace)
+C:480, 0: Exactly one space required after comma
+    df_introns = pd.concat([df_introns_p,df_introns_m]
+                                        ^ (bad-whitespace)
+C:482, 0: Trailing whitespace (trailing-whitespace)
+C:484, 0: Wrong continued indentation (remove 2 spaces).
+                          ).drop_duplicates().reindex(columns=ss_5p_p.columns).dropna()
+                        | ^ (bad-continuation)
+C:485, 0: Trailing whitespace (trailing-whitespace)
+C:487, 0: Wrong continued indentation (remove 2 spaces).
+                          ).drop_duplicates().reindex(columns=ss_3p_p.columns).dropna()
+                        | ^ (bad-continuation)
+C:488, 0: Trailing whitespace (trailing-whitespace)
+C:490, 0: Wrong continued indentation (remove 1 space).
+                          ).drop_duplicates().reindex(columns=bp_seq_p.columns).drop('length',1).dropna()
+                         |^ (bad-continuation)
+C:490, 0: Line too long (105/100) (line-too-long)
+C:490, 0: Exactly one space required after comma
+                          ).drop_duplicates().reindex(columns=bp_seq_p.columns).drop('length',1).dropna()
+                                                                                             ^ (bad-whitespace)
+C:491, 0: Trailing whitespace (trailing-whitespace)
+C:492, 0: Exactly one space required after comma
+    return df_exons,df_introns,df_5p_ss,df_3p_ss,df_bp_seq
+                   ^ (bad-whitespace)
+C:492, 0: Exactly one space required after comma
+    return df_exons,df_introns,df_5p_ss,df_3p_ss,df_bp_seq
+                              ^ (bad-whitespace)
+C:492, 0: Exactly one space required after comma
+    return df_exons,df_introns,df_5p_ss,df_3p_ss,df_bp_seq
+                                       ^ (bad-whitespace)
+C:492, 0: Exactly one space required after comma
+    return df_exons,df_introns,df_5p_ss,df_3p_ss,df_bp_seq
+                                                ^ (bad-whitespace)
+C:495, 0: Trailing whitespace (trailing-whitespace)
+C:497, 0: Line too long (235/100) (line-too-long)
+C:498, 0: Trailing whitespace (trailing-whitespace)
+C:499, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                     ^ (bad-whitespace)
+C:499, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                       ^ (bad-whitespace)
+C:499, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                         ^ (bad-whitespace)
+C:499, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                               ^ (bad-whitespace)
+C:499, 0: Exactly one space required after comma
+    df_exons = cat[[6,7,8,'tag',10,11]].drop_duplicates().rename(
+                                  ^ (bad-whitespace)
+C:500, 0: Wrong hanging indentation (remove 8 spaces).
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+        |       ^ (bad-continuation)
+C:500, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                  ^ (bad-whitespace)
+C:500, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                            ^ (bad-whitespace)
+C:500, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                                    ^ (bad-whitespace)
+C:500, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                                                 ^ (bad-whitespace)
+C:500, 0: Exactly one space required after comma
+                columns={6:'chrom',7:'start',8:'end','tag':'name',10:'score',11:'strand'})
+                                                                            ^ (bad-whitespace)
+C:501, 0: Trailing whitespace (trailing-whitespace)
+C:503, 0: Trailing whitespace (trailing-whitespace)
+C:504, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,2,7,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:504, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,2,7,'tag',4,5]]
+                             ^ (bad-whitespace)
+C:504, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,2,7,'tag',4,5]]
+                               ^ (bad-whitespace)
+C:504, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,2,7,'tag',4,5]]
+                                     ^ (bad-whitespace)
+C:504, 0: Exactly one space required after comma
+    df_introns_p = cat_p[[0,2,7,'tag',4,5]]
+                                       ^ (bad-whitespace)
+C:507, 0: Exactly one space required after comma
+    df_introns_p = df_introns_p.rename(columns={0:'chrom',2:'start',7:'end',
+                                                         ^ (bad-whitespace)
+C:507, 0: Exactly one space required after comma
+    df_introns_p = df_introns_p.rename(columns={0:'chrom',2:'start',7:'end',
+                                                                   ^ (bad-whitespace)
+C:508, 0: Exactly one space required after comma
+                                                'tag':'name',4:'score',5:'strand'})
+                                                            ^ (bad-whitespace)
+C:508, 0: Exactly one space required after comma
+                                                'tag':'name',4:'score',5:'strand'})
+                                                                      ^ (bad-whitespace)
+C:509, 0: Trailing whitespace (trailing-whitespace)
+C:510, 0: Exactly one space required before assignment
+    ss_5p_p  = cat_p[[0,2,7,'tag',4,5]]
+             ^ (bad-whitespace)
+C:510, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,2,7,'tag',4,5]]
+                       ^ (bad-whitespace)
+C:510, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,2,7,'tag',4,5]]
+                         ^ (bad-whitespace)
+C:510, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,2,7,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:510, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,2,7,'tag',4,5]]
+                                 ^ (bad-whitespace)
+C:510, 0: Exactly one space required after comma
+    ss_5p_p  = cat_p[[0,2,7,'tag',4,5]]
+                                   ^ (bad-whitespace)
+C:513, 0: Exactly one space required after comma
+    ss_5p_p = ss_5p_p.rename(columns={0:'chrom',2:'start',7:'end',
+                                               ^ (bad-whitespace)
+C:513, 0: Exactly one space required after comma
+    ss_5p_p = ss_5p_p.rename(columns={0:'chrom',2:'start',7:'end',
+                                                         ^ (bad-whitespace)
+C:514, 0: Wrong continued indentation (add 1 space).
+                                     'tag':'name',4:'score',5:'strand'})
+                                     ^| (bad-continuation)
+C:514, 0: Exactly one space required after comma
+                                     'tag':'name',4:'score',5:'strand'})
+                                                 ^ (bad-whitespace)
+C:514, 0: Exactly one space required after comma
+                                     'tag':'name',4:'score',5:'strand'})
+                                                           ^ (bad-whitespace)
+C:515, 0: Trailing whitespace (trailing-whitespace)
+C:516, 0: Exactly one space required after assignment
+    ss_3p_p =  cat_p[[0,2,7,'tag',4,5]]
+            ^ (bad-whitespace)
+C:516, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,2,7,'tag',4,5]]
+                       ^ (bad-whitespace)
+C:516, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,2,7,'tag',4,5]]
+                         ^ (bad-whitespace)
+C:516, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,2,7,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:516, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,2,7,'tag',4,5]]
+                                 ^ (bad-whitespace)
+C:516, 0: Exactly one space required after comma
+    ss_3p_p =  cat_p[[0,2,7,'tag',4,5]]
+                                   ^ (bad-whitespace)
+C:519, 0: Exactly one space required after comma
+    ss_3p_p = ss_3p_p.rename(columns={0:'chrom',2:'start',7:'end',
+                                               ^ (bad-whitespace)
+C:519, 0: Exactly one space required after comma
+    ss_3p_p = ss_3p_p.rename(columns={0:'chrom',2:'start',7:'end',
+                                                         ^ (bad-whitespace)
+C:520, 0: Wrong continued indentation (add 1 space).
+                                     'tag':'name',4:'score',5:'strand'})
+                                     ^| (bad-continuation)
+C:520, 0: Exactly one space required after comma
+                                     'tag':'name',4:'score',5:'strand'})
+                                                 ^ (bad-whitespace)
+C:520, 0: Exactly one space required after comma
+                                     'tag':'name',4:'score',5:'strand'})
+                                                           ^ (bad-whitespace)
+C:521, 0: Trailing whitespace (trailing-whitespace)
+C:522, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,2,7,'tag',4,5]]
+                       ^ (bad-whitespace)
+C:522, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,2,7,'tag',4,5]]
+                         ^ (bad-whitespace)
+C:522, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,2,7,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:522, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,2,7,'tag',4,5]]
+                                 ^ (bad-whitespace)
+C:522, 0: Exactly one space required after comma
+    bp_seq_p = cat_p[[0,2,7,'tag',4,5]]
+                                   ^ (bad-whitespace)
+C:526, 0: Trailing whitespace (trailing-whitespace)
+C:529, 0: Trailing whitespace (trailing-whitespace)
+C:532, 0: Trailing whitespace (trailing-whitespace)
+C:533, 0: Exactly one space required after comma
+    bp_seq_p = pd.concat([bp_seq_p_200,bp_seq_p_small]
+                                      ^ (bad-whitespace)
+C:535, 0: Exactly one space required after comma
+                                 ).rename(columns={0:'chrom',2:'start',7:'end',
+                                                            ^ (bad-whitespace)
+C:535, 0: Exactly one space required after comma
+                                 ).rename(columns={0:'chrom',2:'start',7:'end',
+                                                                      ^ (bad-whitespace)
+C:536, 0: Exactly one space required after comma
+                                                   'tag':'name',4:'score',5:'strand'})
+                                                               ^ (bad-whitespace)
+C:536, 0: Exactly one space required after comma
+                                                   'tag':'name',4:'score',5:'strand'})
+                                                                         ^ (bad-whitespace)
+C:538, 0: Exactly one space required before assignment
+    cat_m  = cat[cat[5] == '-'].copy()
+           ^ (bad-whitespace)
+C:539, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,8,1,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:539, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,8,1,'tag',4,5]]
+                             ^ (bad-whitespace)
+C:539, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,8,1,'tag',4,5]]
+                               ^ (bad-whitespace)
+C:539, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,8,1,'tag',4,5]]
+                                     ^ (bad-whitespace)
+C:539, 0: Exactly one space required after comma
+    df_introns_m = cat_m[[0,8,1,'tag',4,5]]
+                                       ^ (bad-whitespace)
+C:542, 0: Exactly one space required after comma
+    df_introns_m = df_introns_m.rename(columns={0:'chrom',8:'start',1:'end',
+                                                         ^ (bad-whitespace)
+C:542, 0: Exactly one space required after comma
+    df_introns_m = df_introns_m.rename(columns={0:'chrom',8:'start',1:'end',
+                                                                   ^ (bad-whitespace)
+C:543, 0: Exactly one space required after comma
+                                                'tag':'name',4:'score',5:'strand'})
+                                                            ^ (bad-whitespace)
+C:543, 0: Exactly one space required after comma
+                                                'tag':'name',4:'score',5:'strand'})
+                                                                      ^ (bad-whitespace)
+C:544, 0: Trailing whitespace (trailing-whitespace)
+C:545, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,8,1,'tag',4,5]]
+                      ^ (bad-whitespace)
+C:545, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,8,1,'tag',4,5]]
+                        ^ (bad-whitespace)
+C:545, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,8,1,'tag',4,5]]
+                          ^ (bad-whitespace)
+C:545, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,8,1,'tag',4,5]]
+                                ^ (bad-whitespace)
+C:545, 0: Exactly one space required after comma
+    ss_5p_m = cat_m[[0,8,1,'tag',4,5]]
+                                  ^ (bad-whitespace)
+C:548, 0: Exactly one space required after comma
+    ss_5p_m = ss_5p_m.rename(columns={0:'chrom','tag':'name',8:'start',
+                                               ^ (bad-whitespace)
+C:548, 0: Exactly one space required after comma
+    ss_5p_m = ss_5p_m.rename(columns={0:'chrom','tag':'name',8:'start',
+                                                            ^ (bad-whitespace)
+C:549, 0: Exactly one space required after comma
+                                      1:'end',4:'score',5:'strand'})
+                                             ^ (bad-whitespace)
+C:549, 0: Exactly one space required after comma
+                                      1:'end',4:'score',5:'strand'})
+                                                       ^ (bad-whitespace)
+C:550, 0: Trailing whitespace (trailing-whitespace)
+C:551, 0: Exactly one space required after assignment
+    ss_3p_m =  cat_m[[0,8,1,'tag',4,5]]
+            ^ (bad-whitespace)
+C:551, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,8,1,'tag',4,5]]
+                       ^ (bad-whitespace)
+C:551, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,8,1,'tag',4,5]]
+                         ^ (bad-whitespace)
+C:551, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,8,1,'tag',4,5]]
+                           ^ (bad-whitespace)
+C:551, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,8,1,'tag',4,5]]
+                                 ^ (bad-whitespace)
+C:551, 0: Exactly one space required after comma
+    ss_3p_m =  cat_m[[0,8,1,'tag',4,5]]
+                                   ^ (bad-whitespace)
+C:554, 0: Exactly one space required after comma
+    ss_3p_m = ss_3p_m.rename(columns={0:'chrom','tag':'name',8:'start',
+                                               ^ (bad-whitespace)
+C:554, 0: Exactly one space required after comma
+    ss_3p_m = ss_3p_m.rename(columns={0:'chrom','tag':'name',8:'start',
+                                                            ^ (bad-whitespace)
+C:555, 0: Exactly one space required after comma
+                                      1:'end',4:'score',5:'strand'})
+                                             ^ (bad-whitespace)
+C:555, 0: Exactly one space required after comma
+                                      1:'end',4:'score',5:'strand'})
+                                                       ^ (bad-whitespace)
+C:556, 0: Trailing whitespace (trailing-whitespace)
+C:557, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,8,1,'tag',4,5]].copy()
+                       ^ (bad-whitespace)
+C:557, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,8,1,'tag',4,5]].copy()
+                         ^ (bad-whitespace)
+C:557, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,8,1,'tag',4,5]].copy()
+                           ^ (bad-whitespace)
+C:557, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,8,1,'tag',4,5]].copy()
+                                 ^ (bad-whitespace)
+C:557, 0: Exactly one space required after comma
+    bp_seq_m = cat_m[[0,8,1,'tag',4,5]].copy()
+                                   ^ (bad-whitespace)
+C:561, 0: Trailing whitespace (trailing-whitespace)
+C:564, 0: Trailing whitespace (trailing-whitespace)
+C:567, 0: Trailing whitespace (trailing-whitespace)
+C:568, 0: Exactly one space required after comma
+    bp_seq_m = pd.concat([bp_seq_m_200,bp_seq_m_small]
+                                      ^ (bad-whitespace)
+C:570, 0: Exactly one space required after comma
+                                 ).rename(columns={0:'chrom',8:'start',1:'end',
+                                                            ^ (bad-whitespace)
+C:570, 0: Exactly one space required after comma
+                                 ).rename(columns={0:'chrom',8:'start',1:'end',
+                                                                      ^ (bad-whitespace)
+C:571, 0: Wrong continued indentation (add 1 space).
+                                                  'tag':'name',4:'score',5:'strand'})
+                                                  ^| (bad-continuation)
+C:571, 0: Exactly one space required after comma
+                                                  'tag':'name',4:'score',5:'strand'})
+                                                              ^ (bad-whitespace)
+C:571, 0: Exactly one space required after comma
+                                                  'tag':'name',4:'score',5:'strand'})
+                                                                        ^ (bad-whitespace)
+C:572, 0: Trailing whitespace (trailing-whitespace)
+C:573, 0: Exactly one space required after comma
+    df_introns = pd.concat([df_introns_p,df_introns_m]
+                                        ^ (bad-whitespace)
+C:575, 0: Trailing whitespace (trailing-whitespace)
+C:577, 0: Wrong continued indentation (remove 2 spaces).
+                          ).drop_duplicates().reindex(columns=ss_5p_p.columns).dropna()
+                        | ^ (bad-continuation)
+C:578, 0: Trailing whitespace (trailing-whitespace)
+C:580, 0: Wrong continued indentation (remove 2 spaces).
+                          ).drop_duplicates().reindex(columns=ss_3p_p.columns).dropna()
+                        | ^ (bad-continuation)
+C:581, 0: Trailing whitespace (trailing-whitespace)
+C:583, 0: Wrong continued indentation (remove 1 space).
+                          ).drop_duplicates().reindex(columns=bp_seq_p.columns).drop('length',1).dropna()
+                         |^ (bad-continuation)
+C:583, 0: Line too long (105/100) (line-too-long)
+C:583, 0: Exactly one space required after comma
+                          ).drop_duplicates().reindex(columns=bp_seq_p.columns).drop('length',1).dropna()
+                                                                                             ^ (bad-whitespace)
+C:584, 0: Trailing whitespace (trailing-whitespace)
+C:585, 0: Exactly one space required after comma
+    return df_exons,df_introns,df_5p_ss,df_3p_ss,df_bp_seq
+                   ^ (bad-whitespace)
+C:585, 0: Exactly one space required after comma
+    return df_exons,df_introns,df_5p_ss,df_3p_ss,df_bp_seq
+                              ^ (bad-whitespace)
+C:585, 0: Exactly one space required after comma
+    return df_exons,df_introns,df_5p_ss,df_3p_ss,df_bp_seq
+                                       ^ (bad-whitespace)
+C:585, 0: Exactly one space required after comma
+    return df_exons,df_introns,df_5p_ss,df_3p_ss,df_bp_seq
+                                                ^ (bad-whitespace)
+C:595, 0: Line too long (132/100) (line-too-long)
+C:595, 0: Exactly one space required after comma
+up_middle_exon,up_middle_intron,up_middle_5ss,up_middle_3ss,up_middle_bp = get_upstream_features('upstream_middle_exons_temp.table')
+              ^ (bad-whitespace)
+C:595, 0: Exactly one space required after comma
+up_middle_exon,up_middle_intron,up_middle_5ss,up_middle_3ss,up_middle_bp = get_upstream_features('upstream_middle_exons_temp.table')
+                               ^ (bad-whitespace)
+C:595, 0: Exactly one space required after comma
+up_middle_exon,up_middle_intron,up_middle_5ss,up_middle_3ss,up_middle_bp = get_upstream_features('upstream_middle_exons_temp.table')
+                                             ^ (bad-whitespace)
+C:595, 0: Exactly one space required after comma
+up_middle_exon,up_middle_intron,up_middle_5ss,up_middle_3ss,up_middle_bp = get_upstream_features('upstream_middle_exons_temp.table')
+                                                           ^ (bad-whitespace)
+C:600, 0: Line too long (136/100) (line-too-long)
+C:600, 0: Exactly one space required after comma
+dn_middle_exon,dn_middle_intron,dn_middle_5ss,dn_middle_3ss,dn_middle_bp = get_downstream_features('downstream_middle_exons_temp.table')
+              ^ (bad-whitespace)
+C:600, 0: Exactly one space required after comma
+dn_middle_exon,dn_middle_intron,dn_middle_5ss,dn_middle_3ss,dn_middle_bp = get_downstream_features('downstream_middle_exons_temp.table')
+                               ^ (bad-whitespace)
+C:600, 0: Exactly one space required after comma
+dn_middle_exon,dn_middle_intron,dn_middle_5ss,dn_middle_3ss,dn_middle_bp = get_downstream_features('downstream_middle_exons_temp.table')
+                                             ^ (bad-whitespace)
+C:600, 0: Exactly one space required after comma
+dn_middle_exon,dn_middle_intron,dn_middle_5ss,dn_middle_3ss,dn_middle_bp = get_downstream_features('downstream_middle_exons_temp.table')
+                                                           ^ (bad-whitespace)
+C:607, 0: Line too long (130/100) (line-too-long)
+C:607, 0: Exactly one space required after comma
+dn_first_exon,dn_first_intron,dn_first_5ss,dn_first_3ss,dn_first_bp = get_downstream_features('downstream_first_exons_temp.table')
+             ^ (bad-whitespace)
+C:607, 0: Exactly one space required after comma
+dn_first_exon,dn_first_intron,dn_first_5ss,dn_first_3ss,dn_first_bp = get_downstream_features('downstream_first_exons_temp.table')
+                             ^ (bad-whitespace)
+C:607, 0: Exactly one space required after comma
+dn_first_exon,dn_first_intron,dn_first_5ss,dn_first_3ss,dn_first_bp = get_downstream_features('downstream_first_exons_temp.table')
+                                          ^ (bad-whitespace)
+C:607, 0: Exactly one space required after comma
+dn_first_exon,dn_first_intron,dn_first_5ss,dn_first_3ss,dn_first_bp = get_downstream_features('downstream_first_exons_temp.table')
+                                                       ^ (bad-whitespace)
+C:614, 0: Line too long (120/100) (line-too-long)
+C:614, 0: Exactly one space required after comma
+up_last_exon,up_last_intron,up_last_5ss,up_last_3ss,up_last_bp = get_upstream_features('upstream_last_exons_temp.table')
+            ^ (bad-whitespace)
+C:614, 0: Exactly one space required after comma
+up_last_exon,up_last_intron,up_last_5ss,up_last_3ss,up_last_bp = get_upstream_features('upstream_last_exons_temp.table')
+                           ^ (bad-whitespace)
+C:614, 0: Exactly one space required after comma
+up_last_exon,up_last_intron,up_last_5ss,up_last_3ss,up_last_bp = get_upstream_features('upstream_last_exons_temp.table')
+                                       ^ (bad-whitespace)
+C:614, 0: Exactly one space required after comma
+up_last_exon,up_last_intron,up_last_5ss,up_last_3ss,up_last_bp = get_upstream_features('upstream_last_exons_temp.table')
+                                                   ^ (bad-whitespace)
+C:624, 0: Exactly one space required after comma
+    save_bed(single_exons_bed,str(args.prefix)+'.single.exons.bed.gz')
+                             ^ (bad-whitespace)
+C:629, 0: Trailing whitespace (trailing-whitespace)
+C:660, 0: Trailing whitespace (trailing-whitespace)
+C:665, 0: Trailing whitespace (trailing-whitespace)
+C:667, 0: Trailing whitespace (trailing-whitespace)
+C:681, 0: Trailing whitespace (trailing-whitespace)
+C:686, 0: Trailing whitespace (trailing-whitespace)
+C:687, 0: Trailing whitespace (trailing-whitespace)
+C:687, 0: Line too long (114/100) (line-too-long)
+C:694, 0: Trailing whitespace (trailing-whitespace)
+C:699, 0: Trailing whitespace (trailing-whitespace)
+C:704, 0: Trailing whitespace (trailing-whitespace)
+C:709, 0: Trailing whitespace (trailing-whitespace)
+C:714, 0: Trailing whitespace (trailing-whitespace)
+C:722, 0: Line too long (103/100) (line-too-long)
+C:722, 0: Exactly one space required after comma
+    nuccont_df = pd.concat(nuccont.to_dataframe(names=['seqname','start','end','name','score','strand',
+                                                                ^ (bad-whitespace)
+C:722, 0: Exactly one space required after comma
+    nuccont_df = pd.concat(nuccont.to_dataframe(names=['seqname','start','end','name','score','strand',
+                                                                        ^ (bad-whitespace)
+C:722, 0: Exactly one space required after comma
+    nuccont_df = pd.concat(nuccont.to_dataframe(names=['seqname','start','end','name','score','strand',
+                                                                              ^ (bad-whitespace)
+C:722, 0: Exactly one space required after comma
+    nuccont_df = pd.concat(nuccont.to_dataframe(names=['seqname','start','end','name','score','strand',
+                                                                                     ^ (bad-whitespace)
+C:722, 0: Exactly one space required after comma
+    nuccont_df = pd.concat(nuccont.to_dataframe(names=['seqname','start','end','name','score','strand',
+                                                                                             ^ (bad-whitespace)
+C:723, 0: Exactly one space required after comma
+                                                       '%AT','%GC','%A','%C','%G','%T',
+                                                            ^ (bad-whitespace)
+C:723, 0: Exactly one space required after comma
+                                                       '%AT','%GC','%A','%C','%G','%T',
+                                                                  ^ (bad-whitespace)
+C:723, 0: Exactly one space required after comma
+                                                       '%AT','%GC','%A','%C','%G','%T',
+                                                                       ^ (bad-whitespace)
+C:723, 0: Exactly one space required after comma
+                                                       '%AT','%GC','%A','%C','%G','%T',
+                                                                            ^ (bad-whitespace)
+C:723, 0: Exactly one space required after comma
+                                                       '%AT','%GC','%A','%C','%G','%T',
+                                                                                 ^ (bad-whitespace)
+C:724, 0: Exactly one space required after comma
+                                                       '%N','%O','length','seq'],
+                                                           ^ (bad-whitespace)
+C:724, 0: Exactly one space required after comma
+                                                       '%N','%O','length','seq'],
+                                                                ^ (bad-whitespace)
+C:724, 0: Exactly one space required after comma
+                                                       '%N','%O','length','seq'],
+                                                                         ^ (bad-whitespace)
+C:725, 0: Line too long (106/100) (line-too-long)
+C:734, 0: Trailing whitespace (trailing-whitespace)
+C:736, 0: Exactly one space required after comma
+        nuccont_df = nuccont_df[['name','length','%GC']]
+                                       ^ (bad-whitespace)
+C:736, 0: Exactly one space required after comma
+        nuccont_df = nuccont_df[['name','length','%GC']]
+                                                ^ (bad-whitespace)
+C:738, 0: Exactly one space required after comma
+        nuccont_df = nuccont_df[['name','length','%GC', '%G','%C', '%A', '%T']]
+                                       ^ (bad-whitespace)
+C:738, 0: Exactly one space required after comma
+        nuccont_df = nuccont_df[['name','length','%GC', '%G','%C', '%A', '%T']]
+                                                ^ (bad-whitespace)
+C:738, 0: Exactly one space required after comma
+        nuccont_df = nuccont_df[['name','length','%GC', '%G','%C', '%A', '%T']]
+                                                            ^ (bad-whitespace)
+C:741, 0: Trailing whitespace (trailing-whitespace)
+C:744, 0: No space allowed before bracket
+def splice_site_fasta (df, name):
+                      ^ (bad-whitespace)
+C:749, 0: No space allowed before bracket
+def run_maxent3p (fasta, cmd="perl maxEntScan/score3.pl"):
+                 ^ (bad-whitespace)
+C:754, 0: Exactly one space required after comma
+                        ).rename(columns={1:'name',2:'ss_scr'}).drop(0, 1)
+                                                  ^ (bad-whitespace)
+C:756, 0: No space allowed before bracket
+def run_maxent5p (fasta, cmd="perl maxEntScan/score5.pl"):
+                 ^ (bad-whitespace)
+C:761, 0: Exactly one space required after comma
+                        ).rename(columns={1:'name',2:'ss_scr'}).drop(0, 1)
+                                                  ^ (bad-whitespace)
+C:780, 0: Line too long (105/100) (line-too-long)
+C:784, 0: Trailing whitespace (trailing-whitespace)
+C:785, 0: Wrong continued indentation (add 10 spaces).
+                           names=('name','length','covered',
+                           ^         | (bad-continuation)
+C:785, 0: Exactly one space required after comma
+                           names=('name','length','covered',
+                                        ^ (bad-whitespace)
+C:785, 0: Exactly one space required after comma
+                           names=('name','length','covered',
+                                                 ^ (bad-whitespace)
+C:786, 0: Line too long (103/100) (line-too-long)
+C:786, 0: Exactly one space required after comma
+                                  'sum','mean_'+source,'mean0_'+source), iterator=True, chunksize=10000
+                                       ^ (bad-whitespace)
+C:786, 0: Exactly one space required after comma
+                                  'sum','mean_'+source,'mean0_'+source), iterator=True, chunksize=10000
+                                                      ^ (bad-whitespace)
+C:787, 0: Wrong continued indentation (add 1 space).
+                                   ), ignore_index=True)
+                                   ^| (bad-continuation)
+C:790, 0: Exactly one space required after comma
+    return result[['name','mean_'+source]]
+                         ^ (bad-whitespace)
+C:794, 0: Line too long (101/100) (line-too-long)
+C:795, 0: Wrong continued indentation (add 43 spaces).
+                           ), ignore_index=True).rename(columns={'thickStart':'CpG_count'})
+                           ^                                          | (bad-continuation)
+C:804, 0: Line too long (108/100) (line-too-long)
+C:804, 0: Exactly one space required after comma
+    var_counts = pd.concat(bedtool.intersect(var,s=True, c=True).to_dataframe(iterator=True, chunksize=10000
+                                                ^ (bad-whitespace)
+C:805, 0: Wrong continued indentation (add 50 spaces).
+                           ), ignore_index=True).rename(columns={'thickStart':'var_count_'+source})
+                           ^                                                 | (bad-continuation)
+C:806, 0: Exactly one space required after comma
+    return var_counts[['name','var_count_'+source]]
+                             ^ (bad-whitespace)
+C:807, 0: Trailing whitespace (trailing-whitespace)
+C:816, 0: Trailing whitespace (trailing-whitespace)
+C:820, 0: Trailing whitespace (trailing-whitespace)
+C:826, 0: Exactly one space required after comma
+        a = a.merge(cpg_counts[['name','CpG_count']], on='name').drop_duplicates()
+                                      ^ (bad-whitespace)
+C:829, 0: Trailing whitespace (trailing-whitespace)
+C:837, 0: Trailing whitespace (trailing-whitespace)
+C:844, 0: Trailing whitespace (trailing-whitespace)
+C:845, 0: Trailing whitespace (trailing-whitespace)
+C:850, 0: Line too long (106/100) (line-too-long)
+C:850, 0: Unnecessary parens after 'in' keyword (superfluous-parens)
+C:851, 0: Trailing whitespace (trailing-whitespace)
+C:855, 0: Line too long (106/100) (line-too-long)
+C:855, 0: Unnecessary parens after 'in' keyword (superfluous-parens)
+C:856, 0: Trailing whitespace (trailing-whitespace)
+C:860, 0: Line too long (117/100) (line-too-long)
+C:860, 0: Unnecessary parens after 'in' keyword (superfluous-parens)
+C:861, 0: Trailing whitespace (trailing-whitespace)
+C:866, 0: Line too long (106/100) (line-too-long)
+C:866, 0: Unnecessary parens after 'in' keyword (superfluous-parens)
+C:867, 0: Trailing whitespace (trailing-whitespace)
+C:871, 0: Line too long (106/100) (line-too-long)
+C:871, 0: Unnecessary parens after 'in' keyword (superfluous-parens)
+C:872, 0: Trailing whitespace (trailing-whitespace)
+C:876, 0: Line too long (120/100) (line-too-long)
+C:876, 0: Unnecessary parens after 'in' keyword (superfluous-parens)
+C:877, 0: Trailing whitespace (trailing-whitespace)
+C:886, 0: Trailing whitespace (trailing-whitespace)
+C:887, 0: Trailing whitespace (trailing-whitespace)
+C:888, 0: Exactly one space required after comma
+        z = a.drop(['seqname','start','end','score','strand','seq'], 1)
+                             ^ (bad-whitespace)
+C:888, 0: Exactly one space required after comma
+        z = a.drop(['seqname','start','end','score','strand','seq'], 1)
+                                     ^ (bad-whitespace)
+C:888, 0: Exactly one space required after comma
+        z = a.drop(['seqname','start','end','score','strand','seq'], 1)
+                                           ^ (bad-whitespace)
+C:888, 0: Exactly one space required after comma
+        z = a.drop(['seqname','start','end','score','strand','seq'], 1)
+                                                   ^ (bad-whitespace)
+C:888, 0: Exactly one space required after comma
+        z = a.drop(['seqname','start','end','score','strand','seq'], 1)
+                                                            ^ (bad-whitespace)
+C:891, 0: Trailing whitespace (trailing-whitespace)
+C:898, 0: Trailing whitespace (trailing-whitespace)
+C:898, 0: Line too long (113/100) (line-too-long)
+C:904, 0: Line too long (107/100) (line-too-long)
+C:915, 0: Trailing whitespace (trailing-whitespace)
+C:916, 0: Trailing whitespace (trailing-whitespace)
+C:918, 0: Trailing whitespace (trailing-whitespace)
+C:945, 0: Line too long (113/100) (line-too-long)
+C:946, 0: Trailing whitespace (trailing-whitespace)
+C:952, 0: Trailing whitespace (trailing-whitespace)
+C:953, 0: Line too long (115/100) (line-too-long)
+C:957, 0: Trailing whitespace (trailing-whitespace)
+C:961, 0: Line too long (111/100) (line-too-long)
+C:967, 0: Line too long (115/100) (line-too-long)
+C:  1, 0: Missing module docstring (missing-docstring)
