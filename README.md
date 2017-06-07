@@ -21,6 +21,8 @@ to load the entire matrix as a DataFrame in python.
 
 ./biofeatures/scripts/analyze_features.py
 
+Main script used for analyzing biological features associated with groups of exons. Uses .bed files of exon coordinates to compare with annotated exons in the data matrix (created by build_datamatrix.py), runs KS statistic to filter non-significant differences and then uses GradientBoost classifier to determine wich features are more “important” in group separation (input vs background).
+
 ./biofeatures/scripts/build_datamatrix.py
 
 Script used for creating the data matrix for biological features associated with exons and their neighouring regions. Uses a .GTF annotation, genome FASTA, .BW and .BED files as input for BioFeatures. Can also use MaxEntScan for calculating splice site score.
