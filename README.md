@@ -1,4 +1,4 @@
-# biofeatures
+﻿# biofeatures
 
 ## Description.
 
@@ -23,6 +23,7 @@ to load the entire matrix as a DataFrame in python.
 
 ./biofeatures/scripts/build_datamatrix.py
 
+Script used for creating the data matrix for biological features associated with exons and their neighouring regions. Uses a .GTF annotation, genome FASTA, .BW and .BED files as input for BioFeatures. Can also use MaxEntScan for calculating splice site score.
 
 ## Dependency Installation
 
