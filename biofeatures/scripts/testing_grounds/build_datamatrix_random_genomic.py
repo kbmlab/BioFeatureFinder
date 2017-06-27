@@ -97,6 +97,10 @@ parser.add_argument('-custom_intron', '--custom-sequence-intron',
                     help="Txt list containing custom sequences to be counted in the introns. Default: False",
                     metavar="custom_intron.txt", required=False)
 
+parser.add_argument('-k', '--kmer', nargs='+', dest="kmer_list",
+                    help="List of INT to create k-mers for countin. Default: False",
+                    type=int, default=False, required=False)
+
 parser.add_argument('-nuccont', '--nucleotide_content', dest="nuc_info",
                     default=2, metavar="nuc", required=False,
                     help="Defines the ammount of information included from the nucleotide sequence, 3 options available: 'Simple','Intermediate','Full'. Options:1 = Simple:[Length and pGC], 2 = Intermediate:[Length, pGC, pG, pC, pA, pT], 3 = Full:[All data from BedTools nucleotide sequence].' Default: 2 (Intermediate); p = percentage")
@@ -552,10 +556,9 @@ def nuc_cont(bedtool):
         lambda x: (float(x['%O']) / float(x['length'])), 1).round(5)
 
     if args.nuc_info == 1:
-        nuccont_df = nuccont_df[['name', 'length', '%GC']]
+        nuccont_df = nuccont_df[['name', 'length', '%GC', 'seq']]
     elif args.nuc_info == 2:
-        nuccont_df = nuccont_df[
-            ['name', 'length', '%GC', '%G', '%C', '%A', '%T']]
+        nuccont_df = nuccont_df[['name', 'length', '%GC', '%G', '%C', '%A', '%T', 'seq']]
     elif args.nuc_info == 3:
         pass
 
@@ -645,12 +648,31 @@ def filter_columns(df):
             pass
     return df
 
+def get_kmer_counts(df):
+    print
+    print "Extracting K-mer counts"
+    bases=['A','T','G','C']
+    kmers = pd.DataFrame()
+    for i in range(len(args.kmer_list)):
+        k = pd.DataFrame([''.join(p) for p in itertools.product(bases, repeat=args.kmer_list[i])])
+        kmers = pd.concat([kmers, k])
+    kmers.reset_index(inplace=True)
+    kmers.drop('index', 1, inplace=True)
+    for i in range(len(kmers[0])):
+        df['kmer_'+str(kmers[0][i])] = df.apply(lambda x: str(x['seq']).upper().count(str(kmers[0][i]).upper()),1)
+    return df
+
 def get_data(df, name, matrix):
     print()
     print("Starting " + name)
 
     bedtool = BedTool.from_dataframe(df).saveas()
     a = nuc_cont(bedtool)
+    
+    if args.kmer_list:
+        a = get_kmer_counts(a)
+    elif not args.kmer_list:
+        pass
 
     if args.cpg_file:
         cpg_counts = get_cpg_islands(bedtool)
@@ -725,7 +747,7 @@ def get_data(df, name, matrix):
     if str(args.nuc_info) == 3:
         z = a.drop(['seqname', 'start', 'end', 'score', 'strand', 'seq'], 1)
     else:
-        z = a.copy()
+        z = a.drop(['seq'], 1)
 
     z = z.set_index('name').add_suffix('_' + name).reset_index()
     z = filter_columns(z)
