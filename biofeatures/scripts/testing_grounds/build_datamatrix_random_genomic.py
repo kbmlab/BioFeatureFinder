@@ -755,6 +755,12 @@ def get_data(df, name, matrix):
     print(name + " finished")
     return matrix.merge(z, on='name').drop_duplicates()    
 
+##Load the genome file that matches the version of the GTF you are using. Pysam will be used to build an index of
+##the FASTA file.
+
+genome_fasta = args.genome_file
+pysam.faidx(genome_fasta)
+
 ## Load the GTF file and convert it to a DataFrame
 
 print()
@@ -1085,12 +1091,6 @@ if not args.custom_seq_int:
     pass
 else:
     custom_seq_int = list(pd.read_table(args.custom_seq_int, header=None)[0])
-
-##Load the genome file that matches the version of the GTF you are using. Pysam will be used to build an index of
-##the FASTA file.
-
-genome_fasta = args.genome_file
-pysam.faidx(genome_fasta)
 
 ##Now, we will create the spine for our matrix by selecting only the names of the exons used in each class.
 ##We will also need a list of the frames associated with that class and the names of the objects
