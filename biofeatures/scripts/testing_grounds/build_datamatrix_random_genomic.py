@@ -56,7 +56,11 @@ parser.add_argument('-o', '--outfile', dest="prefix",
                     metavar="prefix", required=True)
 
 parser.add_argument('-g', '--gtf', dest="gtf_file",
-                    help="GTF file downloaded from Ensembl database. Available at http://www.ensembl.org/info/data/ftp/index.html",
+                    help="GTF file downloaded from Ensembl database. Available at http://www.ensembl.org/info/data/ftp/index.html. Required for exon and intron running modes. Optional for generic mode.",
+                    required=False)
+
+parser.add_argument('-b', '--bed', dest="bed_file",
+                    help="List of BED intervals for creating the generic matrix. Required for generic running mode. Default: False",
                     required=False)
 
 parser.add_argument('-cs', '--conservation_scores', dest="con_files",
@@ -132,7 +136,7 @@ parser.add_argument("--useThreads", dest="use_threads",
 
 parser.add_argument("--debug", dest="debug", metavar='INT',
                     type=int, default=False,
-                    help="Only seaches for the first N transcripts. Useful for debugin and checking if the code is working properly. Default: False")
+                    help="Only seaches for the first N entries. Useful for debugin and checking if the code is working properly. Default: False")
 
 args = parser.parse_args()
 
@@ -666,6 +670,19 @@ def get_kmer_counts(df):
     for i in range(len(kmers[0])):
         df['kmer_'+str(kmers[0][i])] = df.apply(lambda x: str(x['seq']).upper().count(str(kmers[0][i]).upper()),1)
     return df
+
+def get_chromsizes(genome_fasta, cmd="cut -f 1,2"):
+    composed_command = " ".join([cmd, genome_fasta+'.fai', '>', genome_fasta+'.chromsizes'])
+    p = Popen(composed_command, stdout=PIPE, shell=True)
+    p.communicate()
+    
+def shuffle_bedtools(number):
+    composed_command = " ".join(['bedtools shuffle', '-i', bed, 
+                                 '-g', genome_fasta+'.chromsizes', 
+                                 '-incl', gtf_ref, 
+                                 '> shuffled.entry.'+str(number)+'.bed'])
+    p = Popen(composed_command, stdout=PIPE, shell=True)
+    p.communicate()
 
 def get_data(df, name, matrix):
     print()
