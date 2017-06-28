@@ -107,8 +107,12 @@ parser.add_argument('-custom_intron', '--custom-sequence-intron',
                     metavar="custom_intron.txt", required=False)
 
 parser.add_argument('-k', '--kmer', nargs='+', dest="kmer_list",
-                    help="List of INT to create k-mers for countin. Default: False",
+                    help="List of INT to create k-mers for counting. Default: False",
                     type=int, default=False, required=False)
+
+parser.add_argument('-n', '--n_rand', dest="n_rand",
+                    help="Number of times to shuffle BED input for background generator. Default: 10",
+                    type=int, default=10, required=False)
 
 parser.add_argument('-nuccont', '--nucleotide_content', dest="nuc_info",
                     default=2, metavar="nuc", required=False,
@@ -676,10 +680,27 @@ def get_chromsizes(genome_fasta, cmd="cut -f 1,2"):
     p = Popen(composed_command, stdout=PIPE, shell=True)
     p.communicate()
     
-def shuffle_bedtools(number):
-    composed_command = " ".join(['bedtools shuffle', '-i', bed, 
-                                 '-g', genome_fasta+'.chromsizes', 
-                                 '-incl', gtf_ref, 
+def shuffle_bedtools_gtf(number):
+    composed_command = " ".join(['bedtools shuffle', '-i', args.bed_file, 
+                                 '-g', args.genome_file+'.chromsizes', 
+                                 '-incl', args.gtf_file,
+                                 '-chromFirst',
+                                 '> shuffled.entry.'+str(number)+'.bed'])
+    p = Popen(composed_command, stdout=PIPE, shell=True)
+    p.communicate()
+    
+def shuffle_bedtools_no_gtf(number):
+    composed_command = " ".join(['bedtools shuffle', '-i', args.bed_file, 
+                                 '-g', args.genome_fasta+'.chromsizes',
+                                 '-chromFirst',
+                                 '> shuffled.entry.'+str(number)+'.bed'])
+    p = Popen(composed_command, stdout=PIPE, shell=True)
+    p.communicate()
+    
+def shuffle_bedtools_no_gtf(number):
+    composed_command = " ".join(['bedtools shuffle', '-i', args.bed_file, 
+                                 '-g', args.genome_fasta+'.chromsizes',
+                                 '-chromFirst',
                                  '> shuffled.entry.'+str(number)+'.bed'])
     p = Popen(composed_command, stdout=PIPE, shell=True)
     p.communicate()
@@ -776,6 +797,9 @@ def get_data(df, name, matrix):
     print()
     print(name + " finished")
     return matrix.merge(z, on='name').drop_duplicates()    
+
+print
+print "Starting datamatrix assembly process"
 
 ##Load the genome file that matches the version of the GTF you are using. Pysam will be used to build an index of
 ##the FASTA file.
@@ -1202,11 +1226,52 @@ if args.run_mode == 'exon':
     print('Single exons DONE.')
 
 if args.run_mode == 'intron':
+    print
     print "This  mode is not functional, work in progress. Sorry for the inconvenience."
     
 if args.run_mode == 'generic':
-    print "This  mode is not functional, work in progress. Sorry for the inconvenience."
-
+    print
+    print "Running in Generic mode."
+    print
+    print "Sorting input bed file."
     
-print()
+    input_bed = BedTool(args.bed_file).sort()
+    
+    print
+    print "Extracting chrosizes from FASTA index."
+    
+    get_chromsizes(args.genome_file)
+    
+    if args.n_rand >= 1:
+        print
+        print "Shuffling input bed in the genome and generating randomized background."
+        print
+        print "Generating "+str(args.n_rand)+" times the size for random background."
+        n_rand = np.arange(args.n_rand)
+        
+        if args.gtf_file:
+            if __name__ == '__main__':
+                p = Pool((mp.cpu_count() - 1))
+                p.map(shuffle_bedtools_gtf, n_rand)
+       
+        elif not args.gtf_file:
+            if __name__ == '__main__':
+                p = Pool((mp.cpu_count() - 1))
+                p.map(shuffle_bedtools_no_gtf, n_rand)
+        
+        concatFiles('shuffled.entry.*.bed','shuffled.bed')
+        list(map(os.remove, glob.glob("shuffled.entry.*.bed")))
+        
+        cat_command = " ".join(['cat shuffled.bed', args.bed_file, '> genomic_ranges.bed'])
+        p = Popen(cat_command, stdout=PIPE, shell=True)
+        p.communicate()
+    
+    if args.n_rand == 0:
+        print
+        print "Skipping randomized background step"
+        cat_command = " ".join(['cat', args.bed_file, '> genomic_ranges.bed'])
+        p = Popen(cat_command, stdout=PIPE, shell=True)
+        p.communicate()
+
+print
 print("Data matrices build complete")
