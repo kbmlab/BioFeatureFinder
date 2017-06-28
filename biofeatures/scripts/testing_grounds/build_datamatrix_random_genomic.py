@@ -44,7 +44,7 @@ parser = MyParser(description='')
 
 parser.add_argument('-mode', '--run_mode', dest="run_mode",
                     help="Select base type of interval to build of datamatrix: exon, intron or generic. Default: exon.",
-                    default='exon'
+                    default='exon',
                     required=True)
 
 parser.add_argument('-gen', '--genome', dest="genome_file",
@@ -783,6 +783,8 @@ def get_data(df, name, matrix):
 genome_fasta = args.genome_file
 pysam.faidx(genome_fasta)
 
+if args.run_mode == 'exon': 
+
     ## Load the GTF file and convert it to a DataFrame
 
     print()
@@ -1196,5 +1198,12 @@ pysam.faidx(genome_fasta)
     print()
     print('Single exons DONE.')
 
+if args.run_mode == 'intron':
+    print "This  mode is not functional, work in progress. Sorry for the inconvenience."
+    
+if args.run_mode == 'generic':
+    print "This  mode is not functional, work in progress. Sorry for the inconvenience."
+
+    
 print()
 print("Data matrices build complete")
