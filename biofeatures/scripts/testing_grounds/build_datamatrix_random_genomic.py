@@ -44,7 +44,7 @@ parser = MyParser(description='')
 
 parser.add_argument('-mode', '--run_mode', dest="run_mode",
                     help="Select base type of interval to build of datamatrix: exon, intron or generic. Default: exon.",
-                    default='exon',
+                    default='exon', type=str,
                     required=True)
 
 parser.add_argument('-gen', '--genome', dest="genome_file",
@@ -779,6 +779,9 @@ def get_data(df, name, matrix):
 
 ##Load the genome file that matches the version of the GTF you are using. Pysam will be used to build an index of
 ##the FASTA file.
+
+print
+print "Loading genome and creating FASTA index file"
 
 genome_fasta = args.genome_file
 pysam.faidx(genome_fasta)
