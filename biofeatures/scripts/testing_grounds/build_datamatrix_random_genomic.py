@@ -1235,7 +1235,7 @@ if args.run_mode == 'generic':
     print
     print "Sorting input bed file."
     
-    input_bed = BedTool(args.bed_file).sort()
+    input_bed = BedTool(args.bed_file).sort().saveas('input_list.bed')
     
     print
     print "Extracting chrosizes from FASTA index."
@@ -1246,7 +1246,7 @@ if args.run_mode == 'generic':
         print
         print "Shuffling input bed in the genome and generating randomized background."
         print
-        print "Generating "+str(args.n_rand)+" times the size for random background."
+        print "Generating "+str(args.n_rand)+" times the size of input list for random background."
         n_rand = np.arange(args.n_rand)
         
         if args.gtf_file:
@@ -1262,16 +1262,27 @@ if args.run_mode == 'generic':
         concatFiles('shuffled.entry.*.bed','shuffled.bed')
         list(map(os.remove, glob.glob("shuffled.entry.*.bed")))
         
-        cat_command = " ".join(['cat shuffled.bed', args.bed_file, '> genomic_ranges.bed'])
+        cat_command = " ".join(['cat shuffled.bed input_list.bed > genomic_ranges.bed'])
         p = Popen(cat_command, stdout=PIPE, shell=True)
         p.communicate()
     
     if args.n_rand == 0:
         print
         print "Skipping randomized background step"
-        cat_command = " ".join(['cat', args.bed_file, '> genomic_ranges.bed'])
+        cat_command = " ".join(['cat input_list.bed > genomic_ranges.bed'])
         p = Popen(cat_command, stdout=PIPE, shell=True)
         p.communicate()
+        
+    
+    bed = BedTool('genomic_ranges.bed').to_dataframe()
+    bed['name'] = 'range_id_' + \
+                  bed['chrom'].astype(str) + '_' + \
+                  bed['start'].astype(str) + '_' + \
+                  bed['end'].astype(str)
+    
+    bed = bed[['chrom','start','end','name','score','strand']
+    bed.set_index('name').drop_duplicates().to_csv(
+        str(args.prefix) + '.genomic.ranges.datamatrix.tsv', sep='\t')
 
 print
 print("Data matrices build complete")
