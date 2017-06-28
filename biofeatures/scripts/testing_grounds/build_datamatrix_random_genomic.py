@@ -17,6 +17,7 @@ import numpy as np
 import pybedtools
 from pybedtools import BedTool
 import pysam
+import itertools
 
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
@@ -27,13 +28,13 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
-        print()
+        print
         print("The following error ocurred in argument parsing:")
         sys.stderr.write('error: %s\n' % message)
-        print()
+        print
         print(
             "Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author")
-        print()
+        print
         self.print_help()
         sys.exit(2)
 
@@ -119,8 +120,8 @@ parser.add_argument('-nuccont', '--nucleotide_content', dest="nuc_info",
                     help="Defines the ammount of information included from the nucleotide sequence, 3 options available: 'Simple','Intermediate','Full'. Options:1 = Simple:[Length and pGC], 2 = Intermediate:[Length, pGC, pG, pC, pA, pT], 3 = Full:[All data from BedTools nucleotide sequence].' Default: 2 (Intermediate); p = percentage")
 
 parser.add_argument("--maxEntScan", dest="max_ent_scan",
-                    action="store_true", default=True,
-                    help="Use this option if you want to use maxEntScan algorithm for scoring 3' and 5' splice sites. Although the splice sites are generally conserved, the original algorithm is trained for human datasets, which can lead to shaky results for other species. Default: True")
+                    action="store_true", default=False,
+                    help="Use this option if you want to use maxEntScan algorithm for scoring 3' and 5' splice sites. Although the splice sites are generally conserved, the original algorithm is trained for human datasets, which can lead to shaky results for other species. Default: False")
 
 parser.add_argument("--keepBED", dest="keep_bed",
                     action="store_true", default=False,
@@ -150,14 +151,14 @@ args = parser.parse_args()
 if not args.debug:
     pass
 else:
-    print()
+    print
     print("Running in debug mode. Only the first " + str(
         args.debug) + " entries will be used.")
 
 if not args.use_threads:
     pass
 else:
-    print()
+    print
     print("Running with multiple threads. Watch out for that RAM!")
 
 # if args.genome_browser == False:
@@ -587,14 +588,14 @@ def run_maxent3p(fasta, cmd="perl maxEntScan/score3.pl"):
     composed_command = " ".join([cmd, fasta])
     p = Popen(composed_command, stdout=PIPE, shell=True)
     stdout, stderr = p.communicate()
-    return pd.read_table(StringIO(stdout), sep='\t', header=None
+    return pd.read_table(StringIO(unicode(stdout)), sep='\t', header=None
                          ).rename(columns={1: 'name', 2: 'ss_scr'}).drop(0, 1)
 
 def run_maxent5p(fasta, cmd="perl maxEntScan/score5.pl"):
     composed_command = " ".join([cmd, fasta])
     p = Popen(composed_command, stdout=PIPE, shell=True)
     stdout, stderr = p.communicate()
-    return pd.read_table(StringIO(stdout), sep='\t', header=None
+    return pd.read_table(StringIO(unicode(stdout)), sep='\t', header=None
                          ).rename(columns={1: 'name', 2: 'ss_scr'}).drop(0, 1)
 
 def get_maxent_score(df, name):
@@ -610,9 +611,9 @@ def get_maxent_score(df, name):
         pass
 
 def get_conservation_scores(con_file, df, cmd="bigWigAverageOverBed"):
-    print()
+    print
     print("Getting conservation from: " + str(con_file))
-    print()
+    print
     BedTool.from_dataframe(df).saveas('conservation_temp.bed')
     composed_command = " ".join([cmd, con_file, 'conservation_temp.bed',
                                  'conservation_result_temp.tab'])
@@ -639,9 +640,9 @@ def get_cpg_islands(bedtool):
     return cpg_counts
 
 def get_var_counts(bedtool, var_file):
-    print()
+    print
     print("Getting variation from: " + str(var_file))
-    print()
+    print
     var = BedTool(var_file)
     source = str(var_file).split('/')[-1]
     var_counts = pd.concat(
@@ -706,7 +707,7 @@ def shuffle_bedtools_no_gtf(number):
     p.communicate()
 
 def get_data(df, name, matrix):
-    print()
+    print
     print("Starting " + name)
 
     bedtool = BedTool.from_dataframe(df).saveas()
@@ -794,7 +795,7 @@ def get_data(df, name, matrix):
 
     z = z.set_index('name').add_suffix('_' + name).reset_index()
     z = filter_columns(z)
-    print()
+    print
     print(name + " finished")
     return matrix.merge(z, on='name').drop_duplicates()    
 
@@ -814,7 +815,7 @@ if args.run_mode == 'exon':
 
     ## Load the GTF file and convert it to a DataFrame
 
-    print()
+    print
     print("Loading GTF file and creating the DataFrame")
 
     gtf = BedTool(args.gtf_file)
@@ -837,7 +838,7 @@ if args.run_mode == 'exon':
     df['start'] = (df['start'] - 1).astype(int)
     df['end'] = df['end'].astype(int)
 
-    print()
+    print
     print("Filtering exons annotations")
 
     df_exons = df[df['feature'] == 'exon'].reset_index().drop('index', 1)
@@ -850,7 +851,7 @@ if args.run_mode == 'exon':
     df_exons['tag'] = df_exons['exon_id'] + "_" + df_exons['transcript_id']
     df_exons['score'] = 0
 
-    print()
+    print
     print(
         "Classifing exons in: single exons, first exons, last exons and middle exons.")
 
@@ -981,7 +982,7 @@ if args.run_mode == 'exon':
     # Now we use a function that, for each transcript, find all the exons of that and run bedtool closest
     # To get it's upstream and downstream neighbours
 
-    print()
+    print
     print(
         "Searching for upstream and downstream exons in each transcript. (WARNING: This may take a while, go grab a cup of cofee... or a movie... or go home and get some sleep, it'll take a few hours to run)")
 
@@ -1001,18 +1002,17 @@ if args.run_mode == 'exon':
     concatFiles('*_middle_exons_dn_temp.table',
                 'downstream_middle_exons_temp.table')
 
-
     ## Find the regions
 
     ## Find up/down exons for Middle exons
 
-    print()
+    print
     print('Finding upstream features for middle exons')
 
     up_middle_exon, up_middle_intron, up_middle_5ss, up_middle_3ss, up_middle_bp = get_upstream_features(
         'upstream_middle_exons_temp.table')
 
-    print()
+    print
     print('Finding downstream features for middle exons')
 
     dn_middle_exon, dn_middle_intron, dn_middle_5ss, dn_middle_3ss, dn_middle_bp = get_downstream_features(
@@ -1020,7 +1020,7 @@ if args.run_mode == 'exon':
 
     ## Find down exons for First exons
 
-    print()
+    print
     print('Finding downstream features for first exons')
 
     dn_first_exon, dn_first_intron, dn_first_5ss, dn_first_3ss, dn_first_bp = get_downstream_features(
@@ -1028,87 +1028,12 @@ if args.run_mode == 'exon':
 
     ## Find up exons for Last exons
 
-    print()
+    print
     print('Finding upstream features for last exons')
 
     up_last_exon, up_last_intron, up_last_5ss, up_last_3ss, up_last_bp = get_upstream_features(
         'upstream_last_exons_temp.table')
 
-
-    ## Save all of them to a .bed file
-
-    if args.keep_bed:
-        print()
-        print("Saving classified exons to bed files")
-        save_bed(single_exons_bed, str(args.prefix) + '.single.exons.bed.gz')
-        save_bed(first_exons_bed, str(args.prefix) + '.first.exons.bed.gz')
-        save_bed(last_exons_bed, str(args.prefix) + '.last.exons.bed.gz')
-        save_bed(middle_exons_bed, str(args.prefix) + '.middle.exons.bed.gz')
-        save_bed(all_exons_bed, str(args.prefix) + '.all.exons.bed.gz')
-
-        print()
-        print("Saving features to bed files")
-
-        # Up middle
-        save_bed(up_middle_exon,
-                 str(args.prefix) + '.upstream_middle_exons.bed.gz')
-        save_bed(up_middle_intron,
-                 str(args.prefix) + '.upstream_middle_introns.bed.gz')
-        save_bed(up_middle_5ss, str(args.prefix) + '.upstream_middle_5ss.bed.gz')
-        save_bed(up_middle_3ss, str(args.prefix) + '.upstream_middle_3ss.bed.gz')
-        save_bed(up_middle_bp, str(args.prefix) + '.upstream_middle_bp.bed.gz')
-
-        # Dn middle
-        save_bed(dn_middle_exon,
-                 str(args.prefix) + '.downstream_middle_exons.bed.gz')
-        save_bed(dn_middle_intron,
-                 str(args.prefix) + '.downstream_middle_introns.bed.gz')
-        save_bed(dn_middle_5ss, str(args.prefix) + '.downstream_middle_5ss.bed.gz')
-        save_bed(dn_middle_3ss, str(args.prefix) + '.downstream_middle_3ss.bed.gz')
-        save_bed(dn_middle_bp, str(args.prefix) + '.downstream_middle_bp.bed.gz')
-
-        # Dn first
-        save_bed(dn_first_exon,
-                 str(args.prefix) + '.downstream_first_exons.bed.gz')
-        save_bed(dn_first_intron,
-                 str(args.prefix) + '.downstream_first_introns.bed.gz')
-        save_bed(dn_first_5ss, str(args.prefix) + '.downstream_first_5ss.bed.gz')
-        save_bed(dn_first_3ss, str(args.prefix) + '.downstream_first_3ss.bed.gz')
-        save_bed(dn_first_bp, str(args.prefix) + '.downstream_first_bp.bed.gz')
-
-        # Up last
-        save_bed(up_last_exon, str(args.prefix) + '.upstream_last_exons.bed.gz')
-        save_bed(up_last_intron,
-                 str(args.prefix) + '.upstream_last_introns.bed.gz')
-        save_bed(up_last_5ss, str(args.prefix) + '.upstream_last_5ss.bed.gz')
-        save_bed(up_last_3ss, str(args.prefix) + '.upstream_last_3ss.bed.gz')
-        save_bed(up_last_bp, str(args.prefix) + '.upstream_last_bp.bed.gz')
-
-        archive = tarfile.open("bed_files.tar.gz", "w|gz")
-        for filename in glob.glob('*.bed.gz'):
-            archive.add(filename)
-        archive.close()
-
-        list(map(os.remove, glob.glob("*.bed.gz")))
-
-    elif not args.keep_bed:
-        print()
-        print("Saving bed file with annotated exons")
-        save_bed(all_exons_bed, str(args.prefix) + '.all.exons.bed.gz')
-
-    if args.keep_temp:
-        print()
-        print("Compressing all temporary files and cleaning up")
-        archive = tarfile.open("temp_tables.tar.gz", "w|gz")
-        for filename in glob.glob('*.table'):
-            archive.add(filename)
-        archive.close()
-        list(map(os.remove, glob.glob("*.table")))
-
-    if not args.keep_temp:
-        print()
-        print("Removing all temporary files")
-        list(map(os.remove, glob.glob("*.table")))
 
     ##Now we will start gathering data of each region and assemble everything into a dataframe which will be passed to 
     ## the classifier in posterior steps. For this we will need to use several functions.
@@ -1186,9 +1111,9 @@ if args.run_mode == 'exon':
 
     matrix_single = pd.DataFrame(single_exons_bed['name'])
 
-    print()
+    print
     print("Starting matrix build.")
-    print()
+    print
     print("Getting data for first exons.")
 
     for i in range(len(frames_first)):
@@ -1197,7 +1122,7 @@ if args.run_mode == 'exon':
     matrix_first.set_index('name').drop_duplicates().to_csv(
         str(args.prefix) + '.first.exons.datamatrix.tsv', sep='\t')
 
-    print()
+    print
     print("First exons DONE. Starting middle exons.")
 
     for i in range(len(frames_middle)):
@@ -1206,7 +1131,7 @@ if args.run_mode == 'exon':
     matrix_middle.set_index('name').drop_duplicates().to_csv(
         str(args.prefix) + '.middle.exons.datamatrix.tsv', sep='\t')
 
-    print()
+    print
     print("Middle exons DONE. Starting last exons.")
 
     for i in range(len(frames_last)):
@@ -1215,15 +1140,98 @@ if args.run_mode == 'exon':
     matrix_last.set_index('name').drop_duplicates().to_csv(
         str(args.prefix) + '.last.exons.datamatrix.tsv', sep='\t')
 
-    print()
+    print
     print("Last exons DONE. Starting single exons.")
 
     matrix_single = get_data(single_exons_bed, 'single_exons', matrix_single)
     matrix_single.set_index('name').drop_duplicates().to_csv(
         str(args.prefix) + '.single.exons.datamatrix.tsv', sep='\t')
 
-    print()
+    print
     print('Single exons DONE.')
+    
+        ## Save all of them to a .bed file
+
+    if args.keep_bed:
+        print
+        print("Saving classified exons to bed files")
+        save_bed(single_exons_bed, str(args.prefix) + '.single.exons.bed.gz')
+        save_bed(first_exons_bed, str(args.prefix) + '.first.exons.bed.gz')
+        save_bed(last_exons_bed, str(args.prefix) + '.last.exons.bed.gz')
+        save_bed(middle_exons_bed, str(args.prefix) + '.middle.exons.bed.gz')
+        save_bed(all_exons_bed, str(args.prefix) + '.all.exons.bed.gz')
+
+        print
+        print("Saving features to bed files")
+
+        # Up middle
+        save_bed(up_middle_exon,
+                 str(args.prefix) + '.upstream_middle_exons.bed.gz')
+        save_bed(up_middle_intron,
+                 str(args.prefix) + '.upstream_middle_introns.bed.gz')
+        save_bed(up_middle_5ss, str(args.prefix) + '.upstream_middle_5ss.bed.gz')
+        save_bed(up_middle_3ss, str(args.prefix) + '.upstream_middle_3ss.bed.gz')
+        save_bed(up_middle_bp, str(args.prefix) + '.upstream_middle_bp.bed.gz')
+
+        # Dn middle
+        save_bed(dn_middle_exon,
+                 str(args.prefix) + '.downstream_middle_exons.bed.gz')
+        save_bed(dn_middle_intron,
+                 str(args.prefix) + '.downstream_middle_introns.bed.gz')
+        save_bed(dn_middle_5ss, str(args.prefix) + '.downstream_middle_5ss.bed.gz')
+        save_bed(dn_middle_3ss, str(args.prefix) + '.downstream_middle_3ss.bed.gz')
+        save_bed(dn_middle_bp, str(args.prefix) + '.downstream_middle_bp.bed.gz')
+
+        # Dn first
+        save_bed(dn_first_exon,
+                 str(args.prefix) + '.downstream_first_exons.bed.gz')
+        save_bed(dn_first_intron,
+                 str(args.prefix) + '.downstream_first_introns.bed.gz')
+        save_bed(dn_first_5ss, str(args.prefix) + '.downstream_first_5ss.bed.gz')
+        save_bed(dn_first_3ss, str(args.prefix) + '.downstream_first_3ss.bed.gz')
+        save_bed(dn_first_bp, str(args.prefix) + '.downstream_first_bp.bed.gz')
+
+        # Up last
+        save_bed(up_last_exon, str(args.prefix) + '.upstream_last_exons.bed.gz')
+        save_bed(up_last_intron,
+                 str(args.prefix) + '.upstream_last_introns.bed.gz')
+        save_bed(up_last_5ss, str(args.prefix) + '.upstream_last_5ss.bed.gz')
+        save_bed(up_last_3ss, str(args.prefix) + '.upstream_last_3ss.bed.gz')
+        save_bed(up_last_bp, str(args.prefix) + '.upstream_last_bp.bed.gz')
+
+        archive = tarfile.open("bed_files.tar.gz", "w|gz")
+        for filename in glob.glob('*.bed.gz'):
+            archive.add(filename)
+        archive.close()
+
+        list(map(os.remove, glob.glob("*.bed.gz")))
+
+    elif not args.keep_bed:
+        print
+        print("Saving bed file with annotated exons")
+        save_bed(all_exons_bed, str(args.prefix) + '.all.exons.bed.gz')
+
+    if args.keep_temp:
+        print
+        print("Compressing all temporary files and cleaning up")
+        archive = tarfile.open("temp_tables.tar.gz", "w|gz")
+        for filename in glob.glob('*.table'):
+            archive.add(filename)
+        archive.close()
+        
+        archive = tarfile.open("temp_fasta.tar.gz", "w|gz")
+        for filename in glob.glob('*.fasta'):
+            archive.add(filename)
+        archive.close()
+        
+        list(map(os.remove, glob.glob("*.table")))
+        list(map(os.remove, glob.glob("*.fasta")))
+
+    if not args.keep_temp:
+        print
+        print("Removing all temporary files")
+        list(map(os.remove, glob.glob("*.table")))
+        list(map(os.remove, glob.glob("*.fasta")))
 
 if args.run_mode == 'intron':
     print
@@ -1280,8 +1288,17 @@ if args.run_mode == 'generic':
                   bed['start'].astype(str) + '_' + \
                   bed['end'].astype(str)
     
-    bed = bed[['chrom','start','end','name','score','strand']
-    bed.set_index('name').drop_duplicates().to_csv(
+    bed = bed[['chrom','start','end','name','score','strand']]
+    
+    if not args.debug:
+        pass
+    else:
+        bed = bed.head(args.debug)
+    
+    matrix_bed = pd.DataFrame(bed['name'])
+    matrix_bed = get_data(bed, 'genomic.ranges', matrix_bed)
+    
+    matrix_bed.set_index('name').drop_duplicates().to_csv(
         str(args.prefix) + '.genomic.ranges.datamatrix.tsv', sep='\t')
 
 print
