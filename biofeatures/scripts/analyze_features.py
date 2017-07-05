@@ -13,6 +13,7 @@ from pybedtools import BedTool
 from scipy import stats
 import matplotlib
 
+import readline
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import FloatVector
 
