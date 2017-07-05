@@ -619,7 +619,7 @@ def get_conservation_scores(con_file, df, cmd="bigWigAverageOverBed"):
                                  'conservation_result_temp.tab'])
     p = Popen(composed_command, shell=True)
     stdout, stderr = p.communicate()
-    source = str(con_file.split('.')[1])
+    source = str(con_file.split('/')[-1])
     result = pd.concat(pd.read_table('conservation_result_temp.tab',
                                      names=('name', 'length', 'covered',
                                             'sum', 'mean_' + source,
@@ -662,19 +662,50 @@ def filter_columns(df):
             pass
     return df
 
-def get_kmer_counts(df):
-    print
-    print "Extracting K-mer counts"
-    bases=['A','T','G','C']
-    kmers = pd.DataFrame()
-    for i in range(len(args.kmer_list)):
-        k = pd.DataFrame([''.join(p) for p in itertools.product(bases, repeat=args.kmer_list[i])])
-        kmers = pd.concat([kmers, k])
-    kmers.reset_index(inplace=True)
-    kmers.drop('index', 1, inplace=True)
-    for i in range(len(kmers[0])):
-        df['kmer_'+str(kmers[0][i])] = df.apply(lambda x: str(x['seq']).upper().count(str(kmers[0][i]).upper()),1)
-    return df
+def run_emboss_wordcount(filename, kmers):
+    composed_command = " ".join(['wordcount -sequence emboss/fastas/'+filename, \
+                                            '-wordsize '+str(kmers), \
+                                            '-mincount 1',\
+                                            '-outfile emboss/wordcount/'+filename+'.'+str(kmers)+'.wc',
+                                            '2>>/dev/null'])
+    p = Popen(composed_command, stdout=PIPE, shell=True)
+    p.communicate()
+
+def get_kmer_counts_func(df, df2, kmer_list):
+    Popen('mkdir -p ./emboss', shell=True)
+    Popen('mkdir -p ./emboss/fastas', shell=True)
+    Popen('mkdir -p ./emboss/wordcount', shell=True)
+    for i in range(len(df)):
+        b = BedTool.from_dataframe(df.iloc[[i]])
+        b.sequence(fi=genome_fasta, s=True,
+                   fo='./emboss/fastas/'+df.iloc[[i]]['name'].to_string().split('range_id_')[1]+'.fa')
+
+    filename = pd.DataFrame(glob.glob('./emboss/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
+    
+    output = df2.copy()
+    
+    for i in range(len(kmer_list)):
+        for j in range(len(filename)):
+            run_emboss_wordcount(filename[j], 
+                                 kmer_list[i])
+       
+    wc_list = glob.glob('./emboss/wordcount/*.wc')
+
+    df_list = []
+
+    for i in range(len(wc_list)):
+        name = wc_list[i].split('/')[-1]
+        name = name.split('.fa')[0]
+        df = pd.read_table(wc_list[i],
+                           index_col=0,
+                           names=['range_id_'+name])
+        df_list.append(df)
+
+    kmer_df = pd.concat(df_list, axis=1, join='outer')
+        
+    kmer_df = kmer_df.T.add_prefix('kmer_count_').reset_index().fillna(0).rename(columns={'index':'name'})
+    output = output.merge(kmer_df, on='name')
+    return output
 
 def get_chromsizes(genome_fasta, cmd="cut -f 1,2"):
     composed_command = " ".join([cmd, genome_fasta+'.fai', '>', genome_fasta+'.chromsizes'])
@@ -711,10 +742,12 @@ def get_data(df, name, matrix):
     print("Starting " + name)
 
     bedtool = BedTool.from_dataframe(df).saveas()
+    #print
+    #print bedtool.head()
     a = nuc_cont(bedtool)
     
     if args.kmer_list:
-        a = get_kmer_counts(a)
+        a = get_kmer_counts(df, a, args.kmer_list)
     elif not args.kmer_list:
         pass
 
@@ -726,7 +759,11 @@ def get_data(df, name, matrix):
         pass
 
     if args.var_files:
-        var_files_list = glob.glob(args.var_files)
+        var_files_list = glob.glob(str(args.var_files))
+        #print
+        #print str(args.var_files)
+        #print
+        #print var_files_list
         for i in range(len(var_files_list)):
             var = get_var_counts(bedtool, var_files_list[i])
             a = a.merge(var, on='name')
@@ -734,7 +771,11 @@ def get_data(df, name, matrix):
         pass
 
     if args.con_files:
-        con_files_list = glob.glob(args.con_files)
+        con_files_list = glob.glob(str(args.con_files))
+        #print
+        #print str(args.con_files)
+        #print
+        #print con_files_list
         for i in range(len(con_files_list)):
             con = get_conservation_scores(con_files_list[i], df)
             a = a.merge(con, on='name')
@@ -791,7 +832,7 @@ def get_data(df, name, matrix):
     if str(args.nuc_info) == 3:
         z = a.drop(['seqname', 'start', 'end', 'score', 'strand', 'seq'], 1)
     else:
-        z = a.drop(['seq'], 1)
+        z = a.drop('seq', 1)
 
     z = z.set_index('name').add_suffix('_' + name).reset_index()
     z = filter_columns(z)
@@ -842,7 +883,7 @@ if args.run_mode == 'exon':
     print("Filtering exons annotations")
 
     df_exons = df[df['feature'] == 'exon'].reset_index().drop('index', 1)
-    df_exons['exon_id'] = 'exon_id_E0' + (df_exons.index + 1).astype(str)
+    df_exons['exon_id'] = 'range_id_E0' + (df_exons.index + 1).astype(str)
     df_exons['transcript_id'] = "transcript_id_" + df_exons['attributes'].apply(
         lambda x: x.split('transcript_id "')[1])
     df_exons['transcript_id'] = df_exons['transcript_id'].apply(
@@ -1283,12 +1324,15 @@ if args.run_mode == 'generic':
         
     
     bed = BedTool('genomic_ranges.bed').to_dataframe()
-    bed['name'] = 'range_id_' + \
-                  bed['chrom'].astype(str) + '_' + \
-                  bed['start'].astype(str) + '_' + \
-                  bed['end'].astype(str)
+    bed['name'] = 'range_id_R' + (bed.index + 1).astype(str) + '_' + \
+                                  bed['chrom'].astype(str) + '_' + \
+                                  bed['start'].astype(str) + '_' + \
+                                  bed['end'].astype(str) + '_' + \
+                                  bed['strand'].astype(str)
     
-    bed = bed[['chrom','start','end','name','score','strand']]
+    bed = bed[['chrom', 'start', 'end', 'name', 'score', 'strand']
+    ].drop_duplicates().sort_values(by=['chrom', 'start']
+                                    )#.rename(columns={'tag': 'name'})
     
     if not args.debug:
         pass
@@ -1301,5 +1345,6 @@ if args.run_mode == 'generic':
     matrix_bed.set_index('name').drop_duplicates().to_csv(
         str(args.prefix) + '.genomic.ranges.datamatrix.tsv', sep='\t')
 
+    bed.to_csv('./genomic_ranges.bed', header=False, index=False, sep='\t')
 print
 print("Data matrices build complete")
