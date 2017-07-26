@@ -671,7 +671,7 @@ def run_emboss_wordcount(filename, kmers):
     p = Popen(composed_command, stdout=PIPE, shell=True)
     p.communicate()
 
-def get_kmer_counts_func(df, df2, kmer_list):
+def get_kmer_counts(df, df2, kmer_list):
     Popen('mkdir -p ./emboss', shell=True)
     Popen('mkdir -p ./emboss/fastas', shell=True)
     Popen('mkdir -p ./emboss/wordcount', shell=True)
@@ -747,6 +747,8 @@ def get_data(df, name, matrix):
     a = nuc_cont(bedtool)
     
     if args.kmer_list:
+        print
+        print ("Starting K-mer counting")
         a = get_kmer_counts(df, a, args.kmer_list)
     elif not args.kmer_list:
         pass

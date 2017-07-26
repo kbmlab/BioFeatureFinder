@@ -702,8 +702,10 @@ def get_kmer_counts_func(df, df2, kmer_list):
         df_list.append(df)
 
     kmer_df = pd.concat(df_list, axis=1, join='outer')
-        
-    kmer_df = kmer_df.T.add_prefix('kmer_count_').reset_index().fillna(0).rename(columns={'index':'name'})
+    
+    
+    kmer_df = kmer_df.T.add_prefix('kmer_count_').reset_index()
+    kmer_df = kmer_df.groupby('index').sum().fillna(0).rename(columns={'index':'name'})
     output = output.merge(kmer_df, on='name')
     return output
 
