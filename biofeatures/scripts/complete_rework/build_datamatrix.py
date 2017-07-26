@@ -19,6 +19,7 @@ import pybedtools
 from pybedtools import BedTool
 import pysam
 import itertools
+import concurrent.futures
 
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -232,7 +233,8 @@ def get_kmer_counts(kmer_list):
                            names=['range_id_'+name])
         df_list.append(df)
 
-    kmer_df = pd.concat(df_list, axis=1, join='outer')
+    with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+        kmer_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()
         
     kmer_df = kmer_df.T.add_prefix('kmer_count_').reset_index()
     kmer_df = kmer_df.groupby('index').sum()
@@ -268,7 +270,9 @@ def get_MFE_scores():
                            names=['range_id_'+name])
         df_list.append(df)
     
-    mfe_df = pd.concat(df_list, axis=1, join='outer')
+    with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+        mfe_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()
+    
     mfe_df = mfe_df.T.rename(columns={0:'MFE'}).reset_index().fillna(0).rename(columns={'index':'name'})
     mfe_df.to_csv(args.outfile+".datamatrix/temp/data_rnafold_results.csv", index=False)
     del mfe_df
@@ -299,7 +303,9 @@ def get_QGRS_scores():
         df = df[['range_id_'+name]]
         df_list.append(df)
 
-    qgrs_df = pd.concat(df_list, axis=1, join='outer')
+    with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+        qgrs_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()    
+    
     qgrs_df = qgrs_df.T.rename(columns={0:'QGRS_score'}).reset_index().fillna(0).rename(columns={'index':'name'})
     qgrs_df.to_csv(args.outfile+".datamatrix/temp/data_qgrs_results.csv", index=False)
     del qgrs_df
