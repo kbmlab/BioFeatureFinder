@@ -218,7 +218,7 @@ def get_kmer_counts(kmer_list):
 
     for i in range(len(args.kmer_list)):
         if __name__ == '__main__':
-            p = Pool((args.ncores))
+            p = Pool(args.ncores)
             p.map(run_emboss_wordcount, itertools.izip(filename, itertools.repeat(args.kmer_list[i])))
        
     wc_list = glob.glob(args.outfile+'.datamatrix/emboss/*.wc')
@@ -256,7 +256,7 @@ def get_MFE_scores():
     fasta_files = pd.DataFrame(glob.glob(args.outfile+'.datamatrix/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
        
     if __name__ == '__main__':
-        p = Pool()
+        p = Pool(args.ncores)
         p.map(run_rnafold, fasta_files)
         
     rf_list = glob.glob(args.outfile+'.datamatrix/rnafold/*.MFE')
@@ -288,7 +288,7 @@ def get_QGRS_scores():
     fasta_files = pd.DataFrame(glob.glob(args.outfile+'.datamatrix/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
        
     if __name__ == '__main__':
-        p = Pool()
+        p = Pool(args.ncores)
         p.map(run_qgrs_mapper, fasta_files)
         
     qgrs_list = glob.glob(args.outfile+'.datamatrix/qgrs/*.qgrs.csv')
@@ -405,7 +405,10 @@ def get_data(df):
             df = pd.read_csv(temp_files[i],
                              index_col=0)
             z_list.append(df)
-        z = pd.concat(z_list, axis=1, join='outer').reset_index().rename(columns={'index':'name'}).fillna(0)
+        
+        with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+            z = executor.submit(pd.concat, z_list, axis=1, join='outer').result()
+        z = z.reset_index().rename(columns={'index':'name'}).fillna(0)
     else:
         pass
 
