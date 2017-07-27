@@ -217,30 +217,34 @@ def get_kmer_counts(kmer_list):
     filename = pd.DataFrame(glob.glob(args.outfile+'.datamatrix/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
 
     for i in range(len(args.kmer_list)):
+        
+        kmer = args.kmer_list[i]
+        
         if __name__ == '__main__':
             p = Pool(args.ncores)
             p.map(run_emboss_wordcount, itertools.izip(filename, itertools.repeat(args.kmer_list[i])))
        
-    wc_list = glob.glob(args.outfile+'.datamatrix/emboss/*.wc')
+        wc_list = glob.glob(args.outfile+'.datamatrix/emboss/*.'+str(kmer)+'.wc')
+        df_list = []
 
-    df_list = []
+        for i in range(len(wc_list)):
+            name = wc_list[i].split('/')[-1]
+            name = name.split('.fa')[0]
+            df = pd.read_table(wc_list[i],
+                               index_col=0,
+                               names=['range_id_'+name])
+            df_list.append(df)
 
-    for i in range(len(wc_list)):
-        name = wc_list[i].split('/')[-1]
-        name = name.split('.fa')[0]
-        df = pd.read_table(wc_list[i],
-                           index_col=0,
-                           names=['range_id_'+name])
-        df_list.append(df)
-
-    with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
-        kmer_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()
+        #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+        #    kmer_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()
         
-    kmer_df = kmer_df.T.add_prefix('kmer_count_').reset_index()
-    kmer_df = kmer_df.groupby('index').sum()
-    kmer_df = kmer_df.reset_index().fillna(0).rename(columns={'index':'name'})
-    kmer_df.to_csv(args.outfile+".datamatrix/temp/data_kmer_results.csv", index=False)
-    del kmer_df
+        kmer_df = pd.concat(df_list, axis=1, join='outer')
+        
+        kmer_df = kmer_df.T.add_prefix('kmer_count_').reset_index()
+        kmer_df = kmer_df.groupby('index').sum()
+        kmer_df = kmer_df.reset_index().fillna(0).rename(columns={'index':'name'})
+        kmer_df.to_csv(args.outfile+".datamatrix/temp/data_kmer_"+str(kmer)+"_results.csv", index=False)
+        del kmer_df
     #df2 = df2.merge(kmer_df, on='name')
     #return df2
 
@@ -270,8 +274,10 @@ def get_MFE_scores():
                            names=['range_id_'+name])
         df_list.append(df)
     
-    with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
-        mfe_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()
+    #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+    #    mfe_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()
+    
+    mfe_df = pd.concat(df_list, axis=1, join='outer')
     
     mfe_df = mfe_df.T.rename(columns={0:'MFE'}).reset_index().fillna(0).rename(columns={'index':'name'})
     mfe_df.to_csv(args.outfile+".datamatrix/temp/data_rnafold_results.csv", index=False)
@@ -303,8 +309,10 @@ def get_QGRS_scores():
         df = df[['range_id_'+name]]
         df_list.append(df)
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
-        qgrs_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()    
+    #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+    #    qgrs_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()    
+    
+    qgrs_df = pd.concat(df_list, axis=1, join='outer')
     
     qgrs_df = qgrs_df.T.rename(columns={0:'QGRS_score'}).reset_index().fillna(0).rename(columns={'index':'name'})
     qgrs_df.to_csv(args.outfile+".datamatrix/temp/data_qgrs_results.csv", index=False)
@@ -394,7 +402,7 @@ def get_data(df):
     else:
         z = a.drop('seq', 1)
     
-    if args.rnafold == True or args.qgrs_mapper == True or args.kmer_list == True:
+    if (args.rnafold == True) or (args.qgrs_mapper == True) or (args.kmer_list is not False):
         z.to_csv(args.outfile+".datamatrix/temp/data_generic_results.csv", index=False)
         
         temp_files = glob.glob(args.outfile+".datamatrix/temp/*.csv")
@@ -406,8 +414,10 @@ def get_data(df):
                              index_col=0)
             z_list.append(df)
         
-        with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
-            z = executor.submit(pd.concat, z_list, axis=1, join='outer').result()
+        #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+        #    z = executor.submit(pd.concat, z_list, axis=1, join='outer').result()
+        
+        z = pd.concat(z_list, axis=1, join='outer')
         z = z.reset_index().rename(columns={'index':'name'}).fillna(0)
     else:
         pass
