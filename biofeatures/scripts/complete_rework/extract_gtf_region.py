@@ -144,7 +144,7 @@ if args.analysis == True:
         print "Counting occurences in: "+str(name_list[i])
         ref = BedTool(gtf_list[i])#.sort()
         inter = input_file.intersect(ref, s=True, c=True, nonamecheck=True).to_dataframe()
-        counts.append(inter[inter.blockSizes > 0].shape[0])
+        counts.append(inter[inter.iloc[:,-1] > 0].shape[0])
 
     df = pd.DataFrame()
     df['Region'] = name_list

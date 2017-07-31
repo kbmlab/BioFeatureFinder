@@ -24,18 +24,57 @@ import concurrent.futures
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 pd.options.mode.chained_assignment = None  # default='warn'
 
+gandalf = """
+    -----------------------       ....
+    | YOU SHALL NOT PARSE |     .'' .'''
+.   -----------------------   .'   :
+\\            \   \         .:    :
+ \\             \ \        _:    :       ..----.._
+  \\              \     .:::.....:::.. .'         ''.
+   \\                 .'  #-. .-######'     #        '.
+    \\                 '.##'/ ' ################       :
+     \\                  #####################         :
+      \\               ..##.-.#### .''''###'.._        :
+       \\             :--:########:            '.    .' :
+        \\..__...--.. :--:#######.'   '.         '.     :
+        :     :  : : '':'-:'':'::        .         '.  .'
+        '---'''..: :    ':    '..'''.      '.        :'
+           \\  :: : :     '      ''''''.     '.      .:
+            \\ ::  : :     '            '.      '      :
+             \\::   : :           ....' ..:       '     '.
+              \\::  : :    .....####\\ .~~.:.             :
+               \\':.:.:.:'#########.===. ~ |.'-.   . '''.. :
+                \\    .'  ########## \ \ _.' '. '-.       '''.
+                :\\  :     ########   \ \      '.  '-.        :
+               :  \\'    '   #### :    \ \      :.    '-.      :
+              :  .'\\   :'  :     :     \ \       :      '-.    :
+             : .'  .\\  '  :      :     :\ \       :        '.   :
+             ::   :  \\'  :.      :     : \ \      :          '. :
+             ::. :    \\  : :      :    ;  \ \     :           '.:
+              : ':    '\\ :  :     :     :  \:\     :        ..'
+                 :    ' \\ :        :     ;  \|      :   .'''
+                 '.   '  \\:                         :.''
+                  .:..... \\:       :            ..''
+                 '._____|'.\\......'''''''.:..'''
+                            \\
+"""
+
 ##Load the parser for arguments
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
         print
+        self.print_help()
+        print
+        print gandalf
+        print    
+        print
         print("The following error ocurred in argument parsing:")
         sys.stderr.write('error: %s\n' % message)
         print
         print(
-            "Check the help below. If the error persists, please contact the corresponding author")
-        print
-        self.print_help()
+            "Check the help and try to fix the arguments. If the error persists, please contact the corresponding author")
+        print   
         sys.exit(2)
 
 
@@ -144,9 +183,9 @@ def nuc_cont(bedtool):
         lambda x: (float(x['%O']) / float(x['length'])), 1).round(5)
 
     if args.nuc_info == 1:
-        nuccont_df = nuccont_df[['name', 'length', '%GC', 'seq']]
+        nuccont_df = nuccont_df[['name', '%GC', 'seq']]
     elif args.nuc_info == 2:
-        nuccont_df = nuccont_df[['name', 'length', '%GC', '%G', '%C', '%A', '%T', 'seq']]
+        nuccont_df = nuccont_df[['name', '%GC', '%G', '%C', '%A', '%T', 'seq']]
     elif args.nuc_info == 3:
         pass
 
@@ -312,9 +351,9 @@ def get_QGRS_scores():
     #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
     #    qgrs_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()    
     
-    qgrs_df = pd.concat(df_list, axis=1, join='outer')
+    qgrs_df = pd.DataFrame(pd.concat(df_list, axis=1, join='outer').max())
     
-    qgrs_df = qgrs_df.T.rename(columns={0:'QGRS_score'}).reset_index().fillna(0).rename(columns={'index':'name'})
+    qgrs_df = qgrs_df.rename(columns={0:'max_QGRS_score'}).reset_index().fillna(0).rename(columns={'index':'name'})
     qgrs_df.to_csv(args.outfile+".datamatrix/temp/data_qgrs_results.csv", index=False)
     del qgrs_df
     #df_input = df_input.merge(qgrs_df, on='name', how='outer')     
@@ -398,7 +437,7 @@ def get_data(df):
         pass        
  
     if str(args.nuc_info) == 3:
-        z = a.drop(['seqname', 'start', 'end', 'score', 'strand', 'seq'], 1)
+        z = a.drop(['length','seqname', 'start', 'end', 'score', 'strand', 'seq'], 1)
     else:
         z = a.drop('seq', 1)
     
@@ -443,8 +482,8 @@ Popen('mkdir '+args.outfile+'.datamatrix', shell=True)
 print
 print "Loading genome, creating FASTA index file and extracting chrom sizes"
 
-#pysam.faidx(args.genome_file)
-#get_chromsizes(args.genome_file)
+pysam.faidx(args.genome_file)
+get_chromsizes(args.genome_file)
 
 ## Load the reference GTF file and convert it to a DataFrame
 
