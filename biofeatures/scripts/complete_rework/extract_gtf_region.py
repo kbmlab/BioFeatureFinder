@@ -58,6 +58,18 @@ parser.add_argument('--split-intron', dest="split_introns", action='store_true',
                     help="Use this option to split intron annotations from the GTF in proximal and distal regions. Requires --intron option. Default: False",
                     required=False, default=False)
 
+parser.add_argument('--splice-sites', dest='do_splice_sites', action='store_true',
+                    help="Use this option to extract 3' and 5' splice site annotations from the GTF. Requires --intron option. Default: False",
+                    required=False, default=False)
+
+parser.add_argument("-w","--window", dest="window", default=200,
+                    help="Window size that will span the splice site in bp. Default: 200",
+                    type=int, metavar='INT')
+
+parser.add_argument("-rt","--ratio", dest="ratio", default=0.5,
+                    help="Ratio of window size that will span inside the intron. Default: 0.5",
+                    type=float, metavar='FLOAT')
+
 parser.add_argument('--analysis', dest="analysis", action='store_true',
                     help="Use this option to perform a preliminary analysis to see in the amount of overlap between a input list of intervals and the regions extracted from the reference GTF. Default: False",
                     required=False, default=False)
@@ -128,7 +140,98 @@ if args.do_introns == True:
         introns_proximal = introns.subtract(introns_distal_bed, s=True, nonamecheck=True
                                             ).saveas('gtf_regions/'+args.outfile+'_proximal_intron.gtf')
     
+if args.do_splice_sites == True:
+    print
+    print "Extracting splice site positions and generating GTF"
+    
+    exons = gtf_ref.filter(lambda x: x[2] == 'exon').saveas()
+    df = pd.concat(exons.to_dataframe(iterator=True, chunksize=10000), 
+               ignore_index=True).dropna().sort_values(by=['seqname', 'start'])
+    df['transcript_id'] = "transcript_id_" + df['attributes'].apply(
+    lambda x: (x.split('transcript_id "')[1]).split('"')[0])
+    df['exon_id'] = 'range_id_E0' + (df.index + 1).astype(str)
+    df['tag'] = df['exon_id'] + "_" + df['transcript_id']
+    
+    exons_grouped = df.groupby('transcript_id')
+    group_size_filter = (exons_grouped.size() == 1)
+    single_exons = df[df['transcript_id'].isin(group_size_filter[group_size_filter].index)]
 
+    wd = args.window
+    rt = args.ratio
+    
+    ##Create a frame for non-single exons:
+
+    df_non_single_exons = df[~df['tag'].isin(single_exons['tag'])]
+
+    ## For first and last exons we need to separate exons by strand
+
+    df_ns_exons_plus = df_non_single_exons[df_non_single_exons['strand'] == '+']
+    df_ns_exons_minus = df_non_single_exons[df_non_single_exons['strand'] == '-']
+
+    # First Exons
+
+    first_exons_plus = df_ns_exons_plus.groupby(['transcript_id']).first().reset_index()
+    p3_ss_first_plus = first_exons_plus.copy()
+    p3_ss_first_plus['start'] = (p3_ss_first_plus['end']-(wd*(1-rt))).astype(int)
+    p3_ss_first_plus['end'] = (p3_ss_first_plus['end']+(wd*rt)).astype(int)
+
+    first_exons_minus = df_ns_exons_minus.groupby(['transcript_id']).last().reset_index()
+    p3_ss_first_minus = first_exons_minus.copy()
+    p3_ss_first_minus['end'] = (p3_ss_first_minus['start']+(wd*(1-rt))).astype(int)
+    p3_ss_first_minus['start'] = (p3_ss_first_minus['start']-(wd*rt)).astype(int)
+
+    p3_ss_first = pd.concat([p3_ss_first_plus, p3_ss_first_minus]).reindex(columns=df.columns)
+
+    # Last Exons
+
+    last_exons_plus = df_ns_exons_plus.groupby(['transcript_id']).last().reset_index()
+    p5_ss_last_plus = last_exons_plus.copy()
+    p5_ss_last_plus['end'] = (p5_ss_last_plus['start']+(wd*(1-rt))).astype(int)
+    p5_ss_last_plus['start'] = (p5_ss_last_plus['start']-(wd*rt)).astype(int)
+
+    last_exons_minus = df_ns_exons_minus.groupby(['transcript_id']).first().reset_index()
+    p5_ss_last_minus = last_exons_minus.copy()
+    p5_ss_last_minus['start'] = (p3_ss_first_plus['end']-(wd*rt)).astype(int)
+    p5_ss_last_minus['end'] = (p3_ss_first_plus['end']+(wd*(1-rt))).astype(int)
+
+    p5_ss_last = pd.concat([p5_ss_last_plus, p5_ss_last_minus]).reindex(columns=df.columns)
+
+    ## Get middle exons by removing the first and last exons from the total found, then create a bed file.
+
+    middle_exons = df_non_single_exons[
+        (~(df_non_single_exons['tag'].isin(p3_ss_first['tag'])) &
+         ~(df_non_single_exons['tag'].isin(p5_ss_last['tag'])) &
+         ~(df_non_single_exons['tag'].isin(single_exons['tag'])))]
+
+    middle_exons_plus = middle_exons[middle_exons['strand'] == '+']
+
+    p3_ss_middle_plus = middle_exons_plus.copy()
+    p3_ss_middle_plus['start'] = (p3_ss_middle_plus['end']-(wd*(1-rt))).astype(int)
+    p3_ss_middle_plus['end'] = (p3_ss_middle_plus['end']+(wd*rt)).astype(int)
+
+    p5_ss_middle_plus = middle_exons_plus.copy()
+    p5_ss_middle_plus['end'] = (p5_ss_middle_plus['start']+(wd*(1-rt))).astype(int)
+    p5_ss_middle_plus['start'] = (p5_ss_middle_plus['start']-(wd*rt)).astype(int)
+
+    middle_exons_minus = middle_exons[middle_exons['strand'] == '-']
+
+    p3_ss_middle_minus = middle_exons_minus.copy()
+    p3_ss_middle_minus['end'] = (p3_ss_middle_minus['start']+(wd*(1-rt))).astype(int)
+    p3_ss_middle_minus['start'] = (p3_ss_middle_minus['start']-(wd*rt)).astype(int)
+
+    p5_ss_middle_minus = middle_exons_minus.copy()
+    p5_ss_middle_minus['start'] = (p5_ss_middle_minus['end']-(wd*(1-rt))).astype(int)
+    p5_ss_middle_minus['end'] = (p5_ss_middle_minus['end']+(wd*rt)).astype(int)
+
+    p3_ss_middle = pd.concat([p3_ss_middle_plus, p3_ss_middle_minus]).reindex(columns=df.columns)
+    p5_ss_middle = pd.concat([p5_ss_middle_plus, p5_ss_middle_minus]).reindex(columns=df.columns)
+    
+    p3_ss = pd.concat([p3_ss_first, p3_ss_middle]).drop(['tag','transcript_id','exon_id'],1)
+    BedTool.from_dataframe(p3_ss).saveas('gtf_regions/'+args.outfile+'_3pSS.gtf')
+
+    p5_ss = pd.concat([p5_ss_last, p5_ss_middle]).drop(['tag','transcript_id','exon_id'],1)
+    BedTool.from_dataframe(p5_ss).saveas('gtf_regions/'+args.outfile+'_5pSS.gtf')
+    
 print
 print "GTF files created for each region"
 

@@ -109,11 +109,6 @@ parser.add_argument('-filter', '--filter_columns', dest="filter_out",
                     help="Text file containing a comma-separated list with names of the columns to be removed from the dataframe in the analysis. Default: False",
                     metavar="filter_out.txt", required=False)
 
-parser.add_argument('-select', '--select_columns', dest="filter_in",
-                    default=False,
-                    help="Text file containing a comma-separated list with names of the columns in dataframe to be used in the analysis. Default: False",
-                    metavar="filter_in.txt", required=False)
-
 parser.add_argument("-padj", '--p_adjust', dest="padj", default='bonferroni',
                     help="Type of p-value correction used after Kolmogorov-Smirnov test, available options are: 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', 'fdr' and 'none'. Default:'bonferroni'",
                     type=str, metavar='padj', required=False)
@@ -148,10 +143,6 @@ parser.add_argument("-params", '--gbcl_parameters', dest="clf_params",
 parser.add_argument("-pf", '--param_file', dest="param_file",
                     help="Input text with with dictionary-like structure with parameter options for GradientBoostClassifier. Ex. {'n_estimators':300,'loss':'deviance',...}",
                     metavar='file', required=False)
-
-parser.add_argument("--no-Stat", dest="skip_stat",
-                    action="store_true", default=False,
-                    help="Use this flag if you want to skip the Kolmogorov-Smirnov statistical analysis and cumulative distribution plotting step. Default: False")
 
 parser.add_argument("--no-plotCDF", dest="dont_plot_cdf",
                     action="store_true", default=False,
@@ -311,15 +302,6 @@ else:
     out_cols = [w.replace('\n', '') for w in out_cols]
     matrix = matrix.drop(out_cols, 1)
 
-if not args.filter_in:
-    pass
-else:
-    print "Selecting columns"
-    print
-    in_cols = open(str(args.filter_in)).read().split(',')
-    in_cols = [w.replace('\n', '') for w in in_cols]
-    matrix = matrix[in_cols]
-
 ##Intersect the exons found in the analysis to get groups 1 (positive) and 0 (negative) in the matrix
 
 print "Finding input exons in the matrix and selecting groups"
@@ -335,38 +317,37 @@ bed_from_matrix['strand'] = matrix['name'].apply(lambda x: x.split('_')[6],1)
 bed_from_matrix = BedTool.from_dataframe(bed_from_matrix).sort()
 
 matrix = group_matrices_one_sample(bed_from_matrix, bed_input, matrix).set_index('name')
+   
+print "Starting statistical analysis"
+print
+print "Calculating Komlogorov-Smirnov test for each feature in the matrix"
+print
 
-if not args.skip_stat:
+features = list(matrix.drop('group',1).columns)
+df_list = []
+
+for i in range(len(features)):
+    sl = matrix[[features[i],'group']]
+    res = stats.ks_2samp(sl[sl['group'] == 0][features[i]].astype(float),
+                         sl[sl['group'] == 1][features[i]].astype(float))
+    d = {'Feature': features[i], 'ks': res[0], 'pval': res[1]}
+    df = pd.DataFrame(data=d, index=np.arange(1))
+    df_list.append(df)
+
+st = pd.concat(df_list, 0).reset_index().drop('index',1)
     
-    print "Starting statistical analysis"
-    print
-    print "Calculating Komlogorov-Smirnov test for each feature in the matrix"
-    print
+print "Adjusting pvalues using "+str(args.padj)+" and saving output"
+print
+    
+statsR = importr('stats')
+st['adj_pval'] = statsR.p_adjust(FloatVector(st['pval']),method=str(args.padj))
+st.to_csv('./' + args.prefix + '.analysis/statistical_analysis_output.tsv',
+          sep='\t', index=False)
+st.to_excel('./' + args.prefix + '.analysis/statistical_analysis_output.xlsx',
+            index=False)
 
-    features = list(matrix.drop('group',1).columns)
-    df_list = []
-
-    for i in range(len(features)):
-        sl = matrix[[features[i],'group']]
-        res = stats.ks_2samp(sl[sl['group'] == 0][features[i]].astype(float),
-                             sl[sl['group'] == 1][features[i]].astype(float))
-        d = {'Feature': features[i], 'ks': res[0], 'pval': res[1]}
-        df = pd.DataFrame(data=d, index=np.arange(1))
-        df_list.append(df)
-
-    st = pd.concat(df_list, 0).reset_index().drop('index',1)
-
-    print "Adjusting pvalues using "+str(args.padj)+" and saving output"
-    print
-
-    statsR = importr('stats')
-    st['adj_pval'] = statsR.p_adjust(FloatVector(st['pval']),method=str(args.padj))
-    st.to_csv('./' + args.prefix + '.analysis/statistical_analysis_output.tsv',
-              sep='\t', index=False)
-    st.to_excel('./' + args.prefix + '.analysis/statistical_analysis_output.xlsx',
-                index=False)
-    print "Finished statistical analysis"
-    print
+print "Finished statistical analysis"
+print
     
 if not args.ks_filter:
     pass
@@ -446,11 +427,7 @@ train_size = args.train_size
 
 Popen('mkdir -p ./' + args.prefix + '.analysis/classifier_plots', shell=True)
 
-if not args.skip_stat:
-    importance = st.copy()
-elif args.skip_stat:
-    importance = pd.DataFrame()
-    importance['Feature'] = matrix.drop('group', 1).columns
+importance = st.copy()
     
 deviance_train = pd.DataFrame()
 deviance_test = pd.DataFrame()
@@ -552,14 +529,14 @@ for run_i in range(len(runs)):
         print
 
         # TODO: parameterize
-        grid = {'n_estimators': [500, 1000, 2000],
-                'max_depth': [6, 8, 10],
-                'min_samples_split': [0.01],
-                'min_samples_leaf': [0.001],
+        grid = {'n_estimators': [250, 500, 1000, 2000],
+                'max_depth': [4, 6, 8, 10],
+                'min_samples_split': [0.01, 0.1],
+                'min_samples_leaf': [0.001, 0.01],
                 'max_features': [best_n_features],
-                'learning_rate': [0.01, 0.05],
+                'learning_rate': [0.01, 0.05, 0.005],
                 'loss': ['deviance'],
-                'subsample': [0.8, 0.6],
+                'subsample': [0.8, 0.6, 1],
                 'random_state': [1]}
 
         gclf = GridSearchCV(estimator=clf, param_grid=grid, n_jobs=args.ncores,
