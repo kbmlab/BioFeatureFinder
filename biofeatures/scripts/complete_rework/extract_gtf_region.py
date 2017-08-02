@@ -171,57 +171,57 @@ if args.do_splice_sites == True:
     # First Exons
 
     first_exons_plus = df_ns_exons_plus.groupby(['transcript_id']).first().reset_index()
-    p3_ss_first_plus = first_exons_plus.copy()
-    p3_ss_first_plus['start'] = (p3_ss_first_plus['end']-(wd*(1-rt))).astype(int)
-    p3_ss_first_plus['end'] = (p3_ss_first_plus['end']+(wd*rt)).astype(int)
+    p5_ss_first_plus = first_exons_plus.copy()
+    p5_ss_first_plus['start'] = (p5_ss_first_plus['end']-(wd*(1-rt))).astype(int)
+    p5_ss_first_plus['end'] = (p5_ss_first_plus['end']+(wd*rt)).astype(int)
 
     first_exons_minus = df_ns_exons_minus.groupby(['transcript_id']).last().reset_index()
-    p3_ss_first_minus = first_exons_minus.copy()
-    p3_ss_first_minus['end'] = (p3_ss_first_minus['start']+(wd*(1-rt))).astype(int)
-    p3_ss_first_minus['start'] = (p3_ss_first_minus['start']-(wd*rt)).astype(int)
+    p5_ss_first_minus = first_exons_minus.copy()
+    p5_ss_first_minus['end'] = (p5_ss_first_minus['start']+(wd*(1-rt))).astype(int)
+    p5_ss_first_minus['start'] = (p5_ss_first_minus['start']-(wd*rt)).astype(int)
 
-    p3_ss_first = pd.concat([p3_ss_first_plus, p3_ss_first_minus]).reindex(columns=df.columns)
+    p5_ss_first = pd.concat([p5_ss_first_plus, p5_ss_first_minus]).reindex(columns=df.columns)
 
     # Last Exons
 
     last_exons_plus = df_ns_exons_plus.groupby(['transcript_id']).last().reset_index()
-    p5_ss_last_plus = last_exons_plus.copy()
-    p5_ss_last_plus['end'] = (p5_ss_last_plus['start']+(wd*(1-rt))).astype(int)
-    p5_ss_last_plus['start'] = (p5_ss_last_plus['start']-(wd*rt)).astype(int)
+    p3_ss_last_plus = last_exons_plus.copy()
+    p3_ss_last_plus['end'] = (p3_ss_last_plus['start']+(wd*(1-rt))).astype(int)
+    p3_ss_last_plus['start'] = (p3_ss_last_plus['start']-(wd*rt)).astype(int)
 
     last_exons_minus = df_ns_exons_minus.groupby(['transcript_id']).first().reset_index()
-    p5_ss_last_minus = last_exons_minus.copy()
-    p5_ss_last_minus['start'] = (p3_ss_first_plus['end']-(wd*rt)).astype(int)
-    p5_ss_last_minus['end'] = (p3_ss_first_plus['end']+(wd*(1-rt))).astype(int)
+    p3_ss_last_minus = last_exons_minus.copy()
+    p3_ss_last_minus['start'] = (p3_ss_first_plus['end']-(wd*rt)).astype(int)
+    p3_ss_last_minus['end'] = (p3_ss_first_plus['end']+(wd*(1-rt))).astype(int)
 
-    p5_ss_last = pd.concat([p5_ss_last_plus, p5_ss_last_minus]).reindex(columns=df.columns)
+    p3_ss_last = pd.concat([p3_ss_last_plus, p3_ss_last_minus]).reindex(columns=df.columns)
 
     ## Get middle exons by removing the first and last exons from the total found, then create a bed file.
 
     middle_exons = df_non_single_exons[
-        (~(df_non_single_exons['tag'].isin(p3_ss_first['tag'])) &
-         ~(df_non_single_exons['tag'].isin(p5_ss_last['tag'])) &
+        (~(df_non_single_exons['tag'].isin(p5_ss_first['tag'])) &
+         ~(df_non_single_exons['tag'].isin(p3_ss_last['tag'])) &
          ~(df_non_single_exons['tag'].isin(single_exons['tag'])))]
 
     middle_exons_plus = middle_exons[middle_exons['strand'] == '+']
 
-    p3_ss_middle_plus = middle_exons_plus.copy()
-    p3_ss_middle_plus['start'] = (p3_ss_middle_plus['end']-(wd*(1-rt))).astype(int)
-    p3_ss_middle_plus['end'] = (p3_ss_middle_plus['end']+(wd*rt)).astype(int)
-
     p5_ss_middle_plus = middle_exons_plus.copy()
-    p5_ss_middle_plus['end'] = (p5_ss_middle_plus['start']+(wd*(1-rt))).astype(int)
-    p5_ss_middle_plus['start'] = (p5_ss_middle_plus['start']-(wd*rt)).astype(int)
+    p5_ss_middle_plus['start'] = (p5_ss_middle_plus['end']-(wd*(1-rt))).astype(int)
+    p5_ss_middle_plus['end'] = (p5_ss_middle_plus['end']+(wd*rt)).astype(int)
+
+    p3_ss_middle_plus = middle_exons_plus.copy()
+    p3_ss_middle_plus['end'] = (p3_ss_middle_plus['start']+(wd*(1-rt))).astype(int)
+    p3_ss_middle_plus['start'] = (p3_ss_middle_plus['start']-(wd*rt)).astype(int)
 
     middle_exons_minus = middle_exons[middle_exons['strand'] == '-']
 
-    p3_ss_middle_minus = middle_exons_minus.copy()
-    p3_ss_middle_minus['end'] = (p3_ss_middle_minus['start']+(wd*(1-rt))).astype(int)
-    p3_ss_middle_minus['start'] = (p3_ss_middle_minus['start']-(wd*rt)).astype(int)
-
     p5_ss_middle_minus = middle_exons_minus.copy()
-    p5_ss_middle_minus['start'] = (p5_ss_middle_minus['end']-(wd*(1-rt))).astype(int)
-    p5_ss_middle_minus['end'] = (p5_ss_middle_minus['end']+(wd*rt)).astype(int)
+    p5_ss_middle_minus['end'] = (p5_ss_middle_minus['start']+(wd*(1-rt))).astype(int)
+    p5_ss_middle_minus['start'] = (p5_ss_middle_minus['start']-(wd*rt)).astype(int)
+
+    p3_ss_middle_minus = middle_exons_minus.copy()
+    p3_ss_middle_minus['start'] = (p3_ss_middle_minus['end']-(wd*(1-rt))).astype(int)
+    p3_ss_middle_minus['end'] = (p3_ss_middle_minus['end']+(wd*rt)).astype(int)
 
     p3_ss_middle = pd.concat([p3_ss_middle_plus, p3_ss_middle_minus]).reindex(columns=df.columns)
     p5_ss_middle = pd.concat([p5_ss_middle_plus, p5_ss_middle_minus]).reindex(columns=df.columns)
