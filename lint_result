@@ -1,630 +1,799 @@
-************* Module biofeatures.scripts.analyze_features
-W:160, 0: TODO: refactor common intersect call (fixme)
-W:175, 0: TODO: refactor common intersect call (fixme)
-W:182, 0: TODO: refactor common intersect call (fixme)
-W:665, 0: TODO: parameterize (fixme)
-W:690, 0: TODO: write to file. (fixme)
-W:707, 0: TODO: parameterize (fixme)
-W:708, 0: TODO: rename (fixme)
-W:739, 0: TODO: rename (fixme)
-C: 50, 0: Line too long (128/100) (line-too-long)
-C: 62, 0: Line too long (258/100) (line-too-long)
-C: 86, 0: Line too long (162/100) (line-too-long)
-C: 91, 0: Line too long (153/100) (line-too-long)
-C: 95, 0: Line too long (208/100) (line-too-long)
-C: 99, 0: Line too long (136/100) (line-too-long)
-C:103, 0: Line too long (136/100) (line-too-long)
-C:108, 0: Line too long (163/100) (line-too-long)
-C:112, 0: Line too long (128/100) (line-too-long)
-C:116, 0: Line too long (395/100) (line-too-long)
-C:120, 0: Line too long (183/100) (line-too-long)
-C:124, 0: Line too long (101/100) (line-too-long)
-C:129, 0: Line too long (144/100) (line-too-long)
-C:133, 0: Line too long (167/100) (line-too-long)
-C:138, 0: Line too long (507/100) (line-too-long)
-C:142, 0: Line too long (173/100) (line-too-long)
-C:147, 0: Line too long (112/100) (line-too-long)
-C:150, 0: Line too long (110/100) (line-too-long)
-C:224, 0: Wrong continued indentation (remove 1 space).
-                 ] = features[
-                |^ (bad-continuation)
-C:225, 0: Wrong hanging indentation (add 9 spaces).
-            'ks_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])].apply(
-            ^        | (bad-continuation)
-C:226, 0: Wrong hanging indentation (add 4 spaces).
-            lambda x: x[:][1])
-            ^   | (bad-continuation)
-C:229, 0: Wrong continued indentation (remove 1 space).
-                 ] = features[
-                |^ (bad-continuation)
-C:230, 0: Wrong hanging indentation (add 9 spaces).
-            'ks_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])].apply(
-            ^        | (bad-continuation)
-C:231, 0: Wrong hanging indentation (add 4 spaces).
-            lambda x: x[:][0])
-            ^   | (bad-continuation)
-C:240, 0: Wrong hanging indentation (add 4 spaces).
-            pairwise[i][0]) + '_vs_' + str(pairwise[i][1])]),
-            ^   | (bad-continuation)
-C:311, 0: Wrong hanging indentation (add 27 spaces).
-            'mean_rel_importance'].head(N)
-            ^                          | (bad-continuation)
-C:315, 0: Wrong hanging indentation (add 27 spaces).
-            'std_rel_importance'].head(N)
-            ^                          | (bad-continuation)
-C:331, 0: Wrong hanging indentation (add 27 spaces).
-            'mean_raw_importance'].head(N)
-            ^                          | (bad-continuation)
-C:335, 0: Wrong hanging indentation (add 27 spaces).
-            'std_raw_importance'].head(N)
-            ^                          | (bad-continuation)
-C:357, 0: Wrong hanging indentation (add 19 spaces).
-    'name').drop_duplicates()  # .reset_index()
-    ^                  | (bad-continuation)
-C:410, 0: Line too long (101/100) (line-too-long)
-C:532, 0: Line too long (106/100) (line-too-long)
-C:533, 0: Trailing whitespace (trailing-whitespace)
-C:533, 0: Line too long (106/100) (line-too-long)
-C:535, 0: Line too long (115/100) (line-too-long)
-C:536, 0: Trailing whitespace (trailing-whitespace)
-C:536, 0: Line too long (113/100) (line-too-long)
-C:537, 0: Line too long (112/100) (line-too-long)
-C:598, 0: Line too long (126/100) (line-too-long)
-C:609, 0: Trailing whitespace (trailing-whitespace)
-C:609, 0: Line too long (123/100) (line-too-long)
-C:610, 0: Line too long (125/100) (line-too-long)
-C:619, 0: Trailing whitespace (trailing-whitespace)
-C:620, 0: Trailing whitespace (trailing-whitespace)
-C:620, 0: Line too long (116/100) (line-too-long)
-C:621, 0: Trailing whitespace (trailing-whitespace)
-C:622, 0: Trailing whitespace (trailing-whitespace)
-C:623, 0: Trailing whitespace (trailing-whitespace)
-C:623, 0: Line too long (111/100) (line-too-long)
-C:627, 0: Trailing whitespace (trailing-whitespace)
-C:627, 0: Line too long (106/100) (line-too-long)
-C:628, 0: Line too long (115/100) (line-too-long)
-C:629, 0: Trailing whitespace (trailing-whitespace)
-C:629, 0: Line too long (111/100) (line-too-long)
-C:635, 0: Line too long (118/100) (line-too-long)
-C:658, 0: Line too long (133/100) (line-too-long)
-C:683, 0: Wrong hanging indentation (remove 52 spaces).
-                                                                './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_best_params.txt',
-            |                                                   ^ (bad-continuation)
-C:683, 0: Line too long (167/100) (line-too-long)
-C:684, 0: Wrong hanging indentation (remove 52 spaces).
-                                                                'w') as fp:
-            |                                                   ^ (bad-continuation)
-C:743, 0: Wrong hanging indentation (add 26 spaces).
-        columns={0: 'run_' + run_id + '_raw_importance',
-        ^                         | (bad-continuation)
-C:746, 0: Wrong hanging indentation.
-    ).sort_values('Index', ascending=False)
-    ^                         |   | (bad-continuation)
-C:772, 0: Line too long (118/100) (line-too-long)
-C:796, 0: Line too long (106/100) (line-too-long)
-C:872, 0: Line too long (107/100) (line-too-long)
-C:877, 0: Line too long (107/100) (line-too-long)
-C:900, 0: Line too long (109/100) (line-too-long)
-C:920, 0: Line too long (109/100) (line-too-long)
-C:926, 0: Line too long (106/100) (line-too-long)
-C:953, 0: Line too long (122/100) (line-too-long)
-C:1161, 0: Line too long (133/100) (line-too-long)
-C:  1, 0: Too many lines in module (1166/1000) (too-many-lines)
-C:  1, 0: Missing module docstring (missing-docstring)
-C: 20, 0: Import "import matplotlib.pyplot as plt" should be placed at the top of the module (wrong-import-position)
-C: 21, 0: Import "from sklearn.ensemble import GradientBoostingClassifier" should be placed at the top of the module (wrong-import-position)
-C: 22, 0: Import "from sklearn.ensemble.partial_dependence import plot_partial_dependence" should be placed at the top of the module (wrong-import-position)
-C: 23, 0: Import "from sklearn.metrics import adjusted_mutual_info_score" should be placed at the top of the module (wrong-import-position)
-C: 24, 0: Import "from sklearn.metrics import confusion_matrix" should be placed at the top of the module (wrong-import-position)
-C: 25, 0: Import "from sklearn.metrics import mean_squared_error" should be placed at the top of the module (wrong-import-position)
-C: 26, 0: Import "from sklearn.metrics import precision_recall_curve" should be placed at the top of the module (wrong-import-position)
-C: 27, 0: Import "from sklearn.metrics import average_precision_score" should be placed at the top of the module (wrong-import-position)
-C: 28, 0: Import "from sklearn.model_selection import GridSearchCV" should be placed at the top of the module (wrong-import-position)
-C: 29, 0: Import "from sklearn.metrics import roc_curve, auc" should be placed at the top of the module (wrong-import-position)
-C: 30, 0: Import "from sklearn.model_selection import train_test_split" should be placed at the top of the module (wrong-import-position)
-C: 31, 0: Import "from sklearn.preprocessing import label_binarize" should be placed at the top of the module (wrong-import-position)
-C: 32, 0: Import "from sklearn.model_selection import StratifiedKFold" should be placed at the top of the module (wrong-import-position)
-C: 33, 0: Import "from sklearn.feature_selection import RFECV" should be placed at the top of the module (wrong-import-position)
-C: 34, 0: Import "import multiprocessing as mp" should be placed at the top of the module (wrong-import-position)
-C: 43, 0: Missing class docstring (missing-docstring)
-C: 58, 0: Invalid constant name "parser" (invalid-name)
-C:153, 0: Invalid constant name "args" (invalid-name)
-C:158, 0: Invalid argument name "bt" (invalid-name)
-C:158, 0: Invalid argument name "F" (invalid-name)
-C:158, 0: Invalid argument name "f" (invalid-name)
-C:158, 0: Invalid argument name "s" (invalid-name)
-C:158, 0: Missing function docstring (missing-docstring)
-W:158,40: Redefining name 'matrix' from outer scope (line 355) (redefined-outer-name)
-R:158, 0: Too many arguments (6/5) (too-many-arguments)
-C:173, 0: Invalid argument name "bt" (invalid-name)
-C:173, 0: Invalid argument name "F" (invalid-name)
-C:173, 0: Invalid argument name "f" (invalid-name)
-C:173, 0: Invalid argument name "s" (invalid-name)
-C:173, 0: Missing function docstring (missing-docstring)
-W:173,47: Redefining name 'matrix' from outer scope (line 355) (redefined-outer-name)
-R:173, 0: Too many arguments (7/5) (too-many-arguments)
-C:202, 0: Invalid function name "get_statistical_data_for_features" (invalid-name)
-C:202, 0: Invalid argument name "df" (invalid-name)
-C:202, 0: Missing function docstring (missing-docstring)
-W:203, 4: Redefining name 'features' from outer scope (line 760) (redefined-outer-name)
-W:212, 8: Redefining name 'i' from outer scope (line 782) (redefined-outer-name)
-C:210, 4: Invalid variable name "statsR" (invalid-name)
-C:212, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-W:220,47: Cell variable i defined in loop (cell-var-from-loop)
-W:221,47: Cell variable i defined in loop (cell-var-from-loop)
-C:249, 0: Missing function docstring (missing-docstring)
-W:260, 8: Redefining name 'i' from outer scope (line 782) (redefined-outer-name)
-W:260,15: Redefining name 'y' from outer scope (line 606) (redefined-outer-name)
-C:255, 4: Invalid variable name "xs" (invalid-name)
-C:256, 4: Invalid variable name "ys" (invalid-name)
-C:259, 4: Invalid variable name "cumSum" (invalid-name)
-C:260,12: Invalid variable name "x" (invalid-name)
-C:260,15: Invalid variable name "y" (invalid-name)
-C:262, 8: Invalid variable name "cumSum" (invalid-name)
-C:267, 0: Invalid argument name "ax" (invalid-name)
-C:267, 0: Missing function docstring (missing-docstring)
-W:270, 7: Redefining name 'y' from outer scope (line 606) (redefined-outer-name)
-C:270, 4: Invalid variable name "x" (invalid-name)
-C:270, 7: Invalid variable name "y" (invalid-name)
-C:274, 0: Invalid argument name "df" (invalid-name)
-C:274, 0: Missing function docstring (missing-docstring)
-W:276, 4: Redefining name 'cols' from outer scope (line 966) (redefined-outer-name)
-W:290, 4: Redefining name 'fig' from outer scope (line 762) (redefined-outer-name)
-C:283, 4: Invalid variable name "N" (invalid-name)
-C:290, 9: Invalid variable name "ax" (invalid-name)
-W:290, 4: Unused variable 'fig' (unused-variable)
-W:291, 4: Unused variable 'rects1' (unused-variable)
-C:301, 0: Invalid argument name "df" (invalid-name)
-C:301, 0: Missing function docstring (missing-docstring)
-W:317, 4: Redefining name 'fig' from outer scope (line 762) (redefined-outer-name)
-C:304, 4: Invalid variable name "N" (invalid-name)
-C:317, 9: Invalid variable name "ax" (invalid-name)
-C:337, 9: Invalid variable name "ax" (invalid-name)
-W:317, 4: Unused variable 'fig' (unused-variable)
-C:355, 0: Invalid constant name "matrix" (invalid-name)
-C:366, 4: Invalid constant name "out_cols" (invalid-name)
-C:367, 4: Invalid constant name "out_cols" (invalid-name)
-C:368, 4: Invalid constant name "matrix" (invalid-name)
-C:375, 4: Invalid constant name "in_cols" (invalid-name)
-C:376, 4: Invalid constant name "in_cols" (invalid-name)
-C:377, 4: Invalid constant name "matrix" (invalid-name)
-C:381, 0: Invalid constant name "matrix" (invalid-name)
-C:386, 0: Invalid constant name "all_exons" (invalid-name)
-C:401, 0: Invalid constant name "sel_exons" (invalid-name)
-C:406, 4: Invalid constant name "sel_exons_2" (invalid-name)
-C:416, 4: Invalid constant name "matrix" (invalid-name)
-C:419, 4: Invalid constant name "matrix" (invalid-name)
-C:431, 4: Invalid constant name "st" (invalid-name)
-C:508,12: Invalid constant name "sig_only" (invalid-name)
-C:511,12: Invalid constant name "matrix" (invalid-name)
-C:516,12: Invalid constant name "sig_only" (invalid-name)
-C:519,12: Invalid constant name "matrix" (invalid-name)
-C:540, 0: Invalid constant name "runs" (invalid-name)
-C:541, 0: Invalid constant name "sample_size" (invalid-name)
-C:542, 0: Invalid constant name "gbclf_params" (invalid-name)
-C:543, 0: Invalid constant name "train_size" (invalid-name)
-C:548, 4: Invalid constant name "importance" (invalid-name)
-C:550, 4: Invalid constant name "importance" (invalid-name)
-C:553, 0: Invalid constant name "deviance_train" (invalid-name)
-C:554, 0: Invalid constant name "deviance_test" (invalid-name)
-C:556, 0: Invalid constant name "msr" (invalid-name)
-C:558, 0: Invalid constant name "mtc" (invalid-name)
-C:561, 0: Invalid constant name "conf_df" (invalid-name)
-C:563, 0: Invalid constant name "roc_tpr_all" (invalid-name)
-C:564, 0: Invalid constant name "roc_fpr_all" (invalid-name)
-C:565, 0: Invalid constant name "roc_auc_all" (invalid-name)
-C:567, 0: Invalid constant name "pre_all" (invalid-name)
-C:568, 0: Invalid constant name "rec_all" (invalid-name)
-C:569, 0: Invalid constant name "av_pre_all" (invalid-name)
-C:572, 4: Invalid constant name "matrix" (invalid-name)
-C:578, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-W:721,13: Use of eval (eval-used)
-E:780,59: Module 'numpy' has no 'float64' member (no-member)
-C:966, 0: Invalid constant name "cols" (invalid-name)
-C:972, 0: Invalid constant name "cols" (invalid-name)
-C:988, 0: Invalid constant name "cols" (invalid-name)
-C:995, 0: Invalid constant name "cols" (invalid-name)
-C:1006, 0: Invalid constant name "train_err" (invalid-name)
-C:1007, 0: Invalid constant name "test_err" (invalid-name)
-C:1038, 0: Invalid constant name "df_list" (invalid-name)
-C:1039, 0: Invalid constant name "title_list" (invalid-name)
-C:1042, 0: Invalid constant name "save_list" (invalid-name)
-C:1046, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-C:1054, 0: Invalid constant name "cols" (invalid-name)
-C:1061, 0: Invalid constant name "cols" (invalid-name)
-C:1068, 0: Invalid constant name "cols" (invalid-name)
-C:1078, 0: Invalid constant name "fpr_err" (invalid-name)
-C:1079, 0: Invalid constant name "tpr_err" (invalid-name)
-C:1080, 0: Invalid constant name "m_auc" (invalid-name)
-C:1081, 0: Invalid constant name "m_auc_std" (invalid-name)
-C:1107, 0: Invalid constant name "cols" (invalid-name)
-C:1113, 0: Invalid constant name "cols" (invalid-name)
-C:1119, 0: Invalid constant name "cols" (invalid-name)
-C:1130, 0: Invalid constant name "pre_err" (invalid-name)
-C:1131, 0: Invalid constant name "rec_err" (invalid-name)
-C:1132, 0: Invalid constant name "m_auc" (invalid-name)
-C:1133, 0: Invalid constant name "m_auc_std" (invalid-name)
-R:882, 4: Redefinition of roc_tpr_all type from pandas.core.frame.DataFrame to pandas.core.sparse.series.SparseSeries (redefined-variable-type)
-R:880, 4: Redefinition of roc_fpr_all type from pandas.core.frame.DataFrame to pandas.core.sparse.series.SparseSeries (redefined-variable-type)
-R:929, 4: Redefinition of pre_all type from pandas.core.frame.DataFrame to pandas.core.sparse.series.SparseSeries (redefined-variable-type)
-R:931, 4: Redefinition of rec_all type from pandas.core.frame.DataFrame to pandas.core.sparse.series.SparseSeries (redefined-variable-type)
-C: 34, 0: standard import "import multiprocessing as mp" comes before "import pandas as pd" (wrong-import-order)
-C: 20, 0: Imports from package matplotlib are not grouped (ungrouped-imports)
 ************* Module biofeatures.scripts.build_datamatrix
-W:367, 0: TODO: refactor common closest call (fixme)
-W:373, 0: TODO: refactor common closest call (fixme)
-W:387, 0: TODO: refactor common closest call (fixme)
-W:397, 0: TODO: refactor common closest call (fixme)
-W:407, 0: TODO: refactor common closest call (fixme)
-W:417, 0: TODO: refactor common closest call (fixme)
+W:209, 0: TODO: refactor common closest call (fixme)
+W:215, 0: TODO: refactor common closest call (fixme)
+W:229, 0: TODO: refactor common closest call (fixme)
+W:239, 0: TODO: refactor common closest call (fixme)
+W:249, 0: TODO: refactor common closest call (fixme)
+W:259, 0: TODO: refactor common closest call (fixme)
+C: 32, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
 C: 36, 0: Line too long (128/100) (line-too-long)
-C: 47, 0: Line too long (131/100) (line-too-long)
-C: 60, 0: Line too long (750/100) (line-too-long)
-C: 64, 0: Line too long (357/100) (line-too-long)
-C: 68, 0: Line too long (378/100) (line-too-long)
-C: 73, 0: Line too long (107/100) (line-too-long)
-C: 78, 0: Line too long (107/100) (line-too-long)
-C: 83, 0: Line too long (109/100) (line-too-long)
-C: 88, 0: Line too long (109/100) (line-too-long)
-C: 93, 0: Line too long (107/100) (line-too-long)
-C: 98, 0: Line too long (109/100) (line-too-long)
-C:103, 0: Line too long (337/100) (line-too-long)
-C:107, 0: Line too long (289/100) (line-too-long)
-C:111, 0: Line too long (124/100) (line-too-long)
-C:115, 0: Line too long (126/100) (line-too-long)
-C:118, 0: Line too long (117/100) (line-too-long)
-C:123, 0: Line too long (174/100) (line-too-long)
-C:127, 0: Line too long (149/100) (line-too-long)
-C:151, 0: Line too long (180/100) (line-too-long)
-C:160, 0: Wrong continued indentation (remove 1 space).
-                                ), ignore_index=True).dropna().sort_values(
-                               |^ (bad-continuation)
-C:161, 0: Wrong hanging indentation (add 32 spaces).
-    by=['seqname', 'start'])
-    ^                               | (bad-continuation)
-C:163, 0: Line too long (106/100) (line-too-long)
-C:166, 0: Trailing whitespace (trailing-whitespace)
-C:166, 0: Line too long (107/100) (line-too-long)
-C:168, 0: Line too long (103/100) (line-too-long)
-C:169, 0: Line too long (107/100) (line-too-long)
-C:201, 0: Line too long (119/100) (line-too-long)
-C:213, 0: Wrong continued indentation (remove 1 space).
-                                ).rename(columns={'tag': 'name'})
-                               |^ (bad-continuation)
-C:237, 0: Wrong continued indentation (remove 1 space).
-                                ).rename(columns={'tag': 'name'})
-                               |^ (bad-continuation)
-C:252, 0: Wrong continued indentation (remove 1 space).
-                                ).rename(columns={'tag': 'name'})
-                               |^ (bad-continuation)
-C:254, 0: Line too long (102/100) (line-too-long)
-C:264, 0: Wrong continued indentation (remove 1 space).
-                                ).rename(columns={'tag': 'name'})
-                               |^ (bad-continuation)
-C:270, 0: Wrong continued indentation (add 24 spaces).
-].drop_duplicates().sort_values(by=['seqname', 'start']
-^                       | (bad-continuation)
-C:271, 0: Wrong continued indentation (remove 1 space).
-                                ).rename(columns={'tag': 'name'})
-                               |^ (bad-continuation)
-C:279, 0: Line too long (106/100) (line-too-long)
-C:280, 0: Line too long (104/100) (line-too-long)
-C:281, 0: Line too long (108/100) (line-too-long)
-C:292, 0: Trailing whitespace (trailing-whitespace)
-C:292, 0: Line too long (104/100) (line-too-long)
-C:293, 0: Trailing whitespace (trailing-whitespace)
-C:293, 0: Line too long (104/100) (line-too-long)
-C:294, 0: Trailing whitespace (trailing-whitespace)
-C:294, 0: Line too long (107/100) (line-too-long)
-C:295, 0: Trailing whitespace (trailing-whitespace)
-C:295, 0: Line too long (106/100) (line-too-long)
-C:296, 0: Trailing whitespace (trailing-whitespace)
-C:296, 0: Line too long (106/100) (line-too-long)
-C:297, 0: Trailing whitespace (trailing-whitespace)
-C:298, 0: Trailing whitespace (trailing-whitespace)
-C:298, 0: Line too long (101/100) (line-too-long)
-C:301, 0: Trailing whitespace (trailing-whitespace)
-C:302, 0: Trailing whitespace (trailing-whitespace)
-C:342, 0: Line too long (101/100) (line-too-long)
-C:490, 0: Line too long (119/100) (line-too-long)
-C:495, 0: Line too long (205/100) (line-too-long)
-C:528, 0: Line too long (225/100) (line-too-long)
-C:563, 0: Wrong continued indentation (remove 1 space).
+C: 47, 0: Line too long (120/100) (line-too-long)
+C: 60, 0: Line too long (203/100) (line-too-long)
+C: 64, 0: Line too long (132/100) (line-too-long)
+C: 69, 0: Line too long (750/100) (line-too-long)
+C: 73, 0: Line too long (357/100) (line-too-long)
+C: 77, 0: Line too long (378/100) (line-too-long)
+C: 82, 0: Line too long (107/100) (line-too-long)
+C: 87, 0: Line too long (107/100) (line-too-long)
+C: 92, 0: Line too long (109/100) (line-too-long)
+C: 97, 0: Line too long (109/100) (line-too-long)
+C:102, 0: Line too long (107/100) (line-too-long)
+C:107, 0: Line too long (109/100) (line-too-long)
+C:115, 0: Line too long (102/100) (line-too-long)
+C:120, 0: Line too long (337/100) (line-too-long)
+C:124, 0: Line too long (290/100) (line-too-long)
+C:128, 0: Line too long (124/100) (line-too-long)
+C:132, 0: Line too long (126/100) (line-too-long)
+C:135, 0: Line too long (117/100) (line-too-long)
+C:140, 0: Line too long (174/100) (line-too-long)
+C:144, 0: Line too long (145/100) (line-too-long)
+C:162, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:168, 0: Line too long (180/100) (line-too-long)
+C:332, 0: Line too long (119/100) (line-too-long)
+C:340, 0: Trailing whitespace (trailing-whitespace)
+C:344, 0: Line too long (225/100) (line-too-long)
+C:379, 0: Wrong continued indentation (remove 1 space).
                          ).reindex(columns=bp_seq_p_200.columns
                         |^ (bad-continuation)
-C:564, 0: Wrong continued indentation (remove 1 space).
+C:380, 0: Wrong continued indentation (remove 1 space).
                                    ).rename(
                                   |^ (bad-continuation)
-C:565, 0: Wrong hanging indentation (add 31 spaces).
+C:381, 0: Wrong hanging indentation (add 31 spaces).
         columns={0: 'chrom', 8: 'start', 1: 'end',
         ^                              | (bad-continuation)
-C:601, 0: Wrong continued indentation (remove 1 space).
+C:417, 0: Wrong continued indentation (remove 1 space).
                          ).reindex(columns=bp_seq_m_200.columns
                         |^ (bad-continuation)
-C:602, 0: Wrong continued indentation (remove 1 space).
+C:418, 0: Wrong continued indentation (remove 1 space).
                                    ).rename(
                                   |^ (bad-continuation)
-C:603, 0: Wrong hanging indentation (add 31 spaces).
+C:419, 0: Wrong hanging indentation (add 31 spaces).
         columns={0: 'chrom', 2: 'start', 7: 'end',
         ^                              | (bad-continuation)
-C:611, 0: Wrong continued indentation (remove 1 space).
+C:427, 0: Wrong continued indentation (remove 1 space).
                            ).drop_duplicates().reindex(
                           |^ (bad-continuation)
-C:612, 0: Wrong hanging indentation (add 23 spaces).
+C:428, 0: Wrong hanging indentation (add 23 spaces).
         columns=df_introns_p.columns).dropna()
         ^                      | (bad-continuation)
-C:615, 0: Wrong continued indentation (remove 1 space).
+C:431, 0: Wrong continued indentation (remove 1 space).
                          ).drop_duplicates().reindex(
                         |^ (bad-continuation)
-C:616, 0: Wrong hanging indentation (add 21 spaces).
+C:432, 0: Wrong hanging indentation (add 21 spaces).
         columns=ss_5p_p.columns).dropna()
         ^                    | (bad-continuation)
-C:619, 0: Wrong continued indentation (remove 1 space).
+C:435, 0: Wrong continued indentation (remove 1 space).
                          ).drop_duplicates().reindex(
                         |^ (bad-continuation)
-C:620, 0: Wrong hanging indentation (add 21 spaces).
+C:436, 0: Wrong hanging indentation (add 21 spaces).
         columns=ss_3p_p.columns).dropna()
         ^                    | (bad-continuation)
-C:623, 0: Wrong continued indentation (remove 1 space).
+C:439, 0: Wrong continued indentation (remove 1 space).
                           ).drop_duplicates().reindex(
                          |^ (bad-continuation)
-C:624, 0: Wrong hanging indentation (add 22 spaces).
+C:440, 0: Wrong hanging indentation (add 22 spaces).
         columns=bp_seq_p.columns).drop('length', 1).dropna()
         ^                     | (bad-continuation)
-C:632, 0: Line too long (225/100) (line-too-long)
-C:671, 0: Wrong continued indentation (remove 1 space).
+C:447, 0: Line too long (225/100) (line-too-long)
+C:486, 0: Wrong continued indentation (remove 1 space).
                          ).reindex(columns=bp_seq_p_200.columns
                         |^ (bad-continuation)
-C:672, 0: Wrong continued indentation (remove 1 space).
+C:487, 0: Wrong continued indentation (remove 1 space).
                                    ).rename(
                                   |^ (bad-continuation)
-C:673, 0: Wrong hanging indentation (add 31 spaces).
+C:488, 0: Wrong hanging indentation (add 31 spaces).
         columns={0: 'chrom', 2: 'start', 7: 'end',
         ^                              | (bad-continuation)
-C:708, 0: Wrong continued indentation (remove 1 space).
+C:523, 0: Wrong continued indentation (remove 1 space).
                          ).reindex(columns=bp_seq_m_200.columns
                         |^ (bad-continuation)
-C:709, 0: Wrong continued indentation (remove 1 space).
+C:524, 0: Wrong continued indentation (remove 1 space).
                                    ).rename(
                                   |^ (bad-continuation)
-C:710, 0: Wrong hanging indentation (add 31 spaces).
+C:525, 0: Wrong hanging indentation (add 31 spaces).
         columns={0: 'chrom', 8: 'start', 1: 'end',
         ^                              | (bad-continuation)
-C:714, 0: Wrong continued indentation (remove 1 space).
+C:529, 0: Wrong continued indentation (remove 1 space).
                            ).drop_duplicates().reindex(
                           |^ (bad-continuation)
-C:715, 0: Wrong hanging indentation (add 23 spaces).
+C:530, 0: Wrong hanging indentation (add 23 spaces).
         columns=df_introns_p.columns).dropna()
         ^                      | (bad-continuation)
-C:718, 0: Wrong continued indentation (remove 1 space).
+C:533, 0: Wrong continued indentation (remove 1 space).
                          ).drop_duplicates().reindex(
                         |^ (bad-continuation)
-C:719, 0: Wrong hanging indentation (add 21 spaces).
+C:534, 0: Wrong hanging indentation (add 21 spaces).
         columns=ss_5p_p.columns).dropna()
         ^                    | (bad-continuation)
-C:722, 0: Wrong continued indentation (remove 1 space).
+C:537, 0: Wrong continued indentation (remove 1 space).
                          ).drop_duplicates().reindex(
                         |^ (bad-continuation)
-C:723, 0: Wrong hanging indentation (add 21 spaces).
+C:538, 0: Wrong hanging indentation (add 21 spaces).
         columns=ss_3p_p.columns).dropna()
         ^                    | (bad-continuation)
-C:726, 0: Wrong continued indentation (remove 1 space).
+C:541, 0: Wrong continued indentation (remove 1 space).
                           ).drop_duplicates().reindex(
                          |^ (bad-continuation)
-C:727, 0: Wrong hanging indentation (add 22 spaces).
+C:542, 0: Wrong hanging indentation (add 22 spaces).
         columns=bp_seq_p.columns).drop('length', 1).dropna()
         ^                     | (bad-continuation)
-C:739, 0: Line too long (101/100) (line-too-long)
-C:745, 0: Line too long (103/100) (line-too-long)
-C:845, 0: Trailing whitespace (trailing-whitespace)
-C:845, 0: Line too long (114/100) (line-too-long)
-C:923, 0: Wrong continued indentation (remove 1 space).
+C:592, 0: Wrong continued indentation (remove 1 space).
                          ).rename(columns={1: 'name', 2: 'ss_scr'}).drop(0, 1)
                         |^ (bad-continuation)
-C:931, 0: Wrong continued indentation (remove 1 space).
+C:599, 0: Wrong continued indentation (remove 1 space).
                          ).rename(columns={1: 'name', 2: 'ss_scr'}).drop(0, 1)
                         |^ (bad-continuation)
-C:962, 0: Wrong continued indentation (remove 1 space).
+C:615, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:628, 0: Wrong continued indentation (remove 1 space).
                                      ), ignore_index=True)
                                     |^ (bad-continuation)
-C:973, 0: Wrong continued indentation (remove 1 space).
+C:638, 0: Wrong continued indentation (remove 1 space).
                                                     ),
                                                    |^ (bad-continuation)
-C:987, 0: Wrong continued indentation (remove 1 space).
+C:644, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:651, 0: Wrong continued indentation (remove 1 space).
                                                             ),
                                                            |^ (bad-continuation)
-C:989, 0: Wrong hanging indentation (add 4 spaces).
+C:653, 0: Wrong hanging indentation (add 4 spaces).
         columns={'thickStart': 'var_count_' + source})
         ^   | (bad-continuation)
-C:1092, 0: Line too long (113/100) (line-too-long)
-C:1098, 0: Line too long (107/100) (line-too-long)
-C:  1, 0: Too many lines in module (1181/1000) (too-many-lines)
+C:669, 0: Line too long (103/100) (line-too-long)
+C:670, 0: Wrong continued indentation (remove 11 spaces).
+                                            '2>>/dev/null'])
+                                 |          ^ (bad-continuation)
+C:681, 0: Line too long (102/100) (line-too-long)
+C:684, 0: Trailing whitespace (trailing-whitespace)
+C:686, 0: Trailing whitespace (trailing-whitespace)
+C:689, 0: Trailing whitespace (trailing-whitespace)
+C:691, 0: Trailing whitespace (trailing-whitespace)
+C:705, 0: Trailing whitespace (trailing-whitespace)
+C:706, 0: Line too long (106/100) (line-too-long)
+C:714, 0: Trailing whitespace (trailing-whitespace)
+C:716, 0: Trailing whitespace (trailing-whitespace)
+C:717, 0: Trailing whitespace (trailing-whitespace)
+C:723, 0: Trailing whitespace (trailing-whitespace)
+C:725, 0: Trailing whitespace (trailing-whitespace)
+C:731, 0: Trailing whitespace (trailing-whitespace)
+C:733, 0: Trailing whitespace (trailing-whitespace)
+C:742, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:748, 0: Trailing whitespace (trailing-whitespace)
+C:751, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:842, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:843, 0: Trailing whitespace (trailing-whitespace)
+C:848, 0: Line too long (113/100) (line-too-long)
+C:857, 0: Trailing whitespace (trailing-whitespace)
+C:862, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:866, 0: Wrong continued indentation (remove 1 space).
+                                    ), ignore_index=True).dropna().sort_values(
+                                   |^ (bad-continuation)
+C:867, 0: Wrong hanging indentation (add 32 spaces).
+        by=['seqname', 'start'])
+        ^                               | (bad-continuation)
+C:869, 0: Line too long (110/100) (line-too-long)
+C:872, 0: Trailing whitespace (trailing-whitespace)
+C:872, 0: Line too long (111/100) (line-too-long)
+C:873, 0: Line too long (103/100) (line-too-long)
+C:874, 0: Line too long (107/100) (line-too-long)
+C:875, 0: Line too long (115/100) (line-too-long)
+C:885, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:901, 0: Line too long (123/100) (line-too-long)
+C:913, 0: Wrong continued indentation (remove 1 space).
+                                    ).rename(columns={'tag': 'name'})
+                                   |^ (bad-continuation)
+C:937, 0: Wrong continued indentation (remove 1 space).
+                                    ).rename(columns={'tag': 'name'})
+                                   |^ (bad-continuation)
+C:952, 0: Wrong continued indentation (remove 1 space).
+                                    ).rename(columns={'tag': 'name'})
+                                   |^ (bad-continuation)
+C:954, 0: Line too long (106/100) (line-too-long)
+C:964, 0: Wrong continued indentation (remove 1 space).
+                                    ).rename(columns={'tag': 'name'})
+                                   |^ (bad-continuation)
+C:970, 0: Wrong continued indentation (add 24 spaces).
+    ].drop_duplicates().sort_values(by=['seqname', 'start']
+    ^                       | (bad-continuation)
+C:971, 0: Wrong continued indentation (remove 1 space).
+                                    ).rename(columns={'tag': 'name'})
+                                   |^ (bad-continuation)
+C:979, 0: Line too long (110/100) (line-too-long)
+C:980, 0: Line too long (108/100) (line-too-long)
+C:981, 0: Line too long (112/100) (line-too-long)
+C:992, 0: Trailing whitespace (trailing-whitespace)
+C:992, 0: Line too long (108/100) (line-too-long)
+C:993, 0: Trailing whitespace (trailing-whitespace)
+C:993, 0: Line too long (108/100) (line-too-long)
+C:994, 0: Trailing whitespace (trailing-whitespace)
+C:994, 0: Line too long (111/100) (line-too-long)
+C:995, 0: Trailing whitespace (trailing-whitespace)
+C:995, 0: Line too long (110/100) (line-too-long)
+C:996, 0: Trailing whitespace (trailing-whitespace)
+C:996, 0: Line too long (110/100) (line-too-long)
+C:997, 0: Trailing whitespace (trailing-whitespace)
+C:997, 0: Line too long (103/100) (line-too-long)
+C:998, 0: Trailing whitespace (trailing-whitespace)
+C:998, 0: Line too long (105/100) (line-too-long)
+C:1001, 0: Trailing whitespace (trailing-whitespace)
+C:1002, 0: Trailing whitespace (trailing-whitespace)
+C:1025, 0: Line too long (105/100) (line-too-long)
+C:1030, 0: Line too long (209/100) (line-too-long)
+C:1053, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1055, 0: Line too long (105/100) (line-too-long)
+C:1059, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1061, 0: Line too long (107/100) (line-too-long)
+C:1067, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1069, 0: Line too long (102/100) (line-too-long)
+C:1075, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1081, 0: Trailing whitespace (trailing-whitespace)
+C:1081, 0: Line too long (118/100) (line-too-long)
+C:1114, 0: Line too long (111/100) (line-too-long)
+C:1158, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1160, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1169, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1178, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1187, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1194, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1195, 0: Trailing whitespace (trailing-whitespace)
+C:1200, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1208, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1254, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1259, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1264, 0: Trailing whitespace (trailing-whitespace)
+C:1269, 0: Trailing whitespace (trailing-whitespace)
+C:1275, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1282, 0: Trailing whitespace (trailing-whitespace)
+C:1288, 0: Trailing whitespace (trailing-whitespace)
+C:1290, 0: Trailing whitespace (trailing-whitespace)
+C:1293, 0: Trailing whitespace (trailing-whitespace)
+C:1295, 0: Trailing whitespace (trailing-whitespace)
+C:1302, 0: Trailing whitespace (trailing-whitespace)
+C:1307, 0: Trailing whitespace (trailing-whitespace)
+C:1312, 0: Trailing whitespace (trailing-whitespace)
+C:1313, 0: Exactly one space required after comma
+        concatFiles('shuffled.entry.*.bed','shuffled.bed')
+                                          ^ (bad-whitespace)
+C:1315, 0: Trailing whitespace (trailing-whitespace)
+C:1319, 0: Trailing whitespace (trailing-whitespace)
+C:1326, 0: Trailing whitespace (trailing-whitespace)
+C:1327, 0: Trailing whitespace (trailing-whitespace)
+C:1334, 0: Trailing whitespace (trailing-whitespace)
+C:1336, 0: Wrong continued indentation (add 9 spaces).
+    ].drop_duplicates().sort_values(by=['chrom', 'start']
+    ^        | (bad-continuation)
+C:1337, 0: Wrong continued indentation (remove 1 space).
+                                    )#.rename(columns={'tag': 'name'})
+                                   |^ (bad-continuation)
+C:1338, 0: Trailing whitespace (trailing-whitespace)
+C:1343, 0: Trailing whitespace (trailing-whitespace)
+C:1346, 0: Trailing whitespace (trailing-whitespace)
+C:1352, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:  1, 0: Too many lines in module (1352/1000) (too-many-lines)
 C:  1, 0: Missing module docstring (missing-docstring)
+E: 17, 0: Unable to import 'pybedtools' (import-error)
+E: 18, 0: Unable to import 'pybedtools' (import-error)
 C: 29, 0: Missing class docstring (missing-docstring)
 C: 44, 0: Invalid constant name "parser" (invalid-name)
-C:129, 0: Invalid constant name "args" (invalid-name)
-C:158, 0: Invalid constant name "gtf" (invalid-name)
-C:159, 0: Invalid constant name "df" (invalid-name)
-C:187, 0: Invalid constant name "df_exons" (invalid-name)
-C:205, 0: Invalid constant name "exons_grouped" (invalid-name)
-C:206, 0: Invalid constant name "group_size_filter" (invalid-name)
-C:207, 0: Invalid constant name "single_exons" (invalid-name)
-C:210, 0: Invalid constant name "single_exons_bed" (invalid-name)
-C:217, 0: Invalid constant name "df_non_single_exons" (invalid-name)
-C:221, 0: Invalid constant name "df_ns_exons_plus" (invalid-name)
-C:222, 0: Invalid constant name "df_ns_exons_minus" (invalid-name)
-C:226, 0: Invalid constant name "first_exons_plus" (invalid-name)
-C:228, 0: Invalid constant name "first_exons_minus" (invalid-name)
-C:231, 0: Invalid constant name "first_exons" (invalid-name)
-C:234, 0: Invalid constant name "first_exons_bed" (invalid-name)
-C:241, 0: Invalid constant name "last_exons_plus" (invalid-name)
-C:243, 0: Invalid constant name "last_exons_minus" (invalid-name)
-C:246, 0: Invalid constant name "last_exons" (invalid-name)
-C:249, 0: Invalid constant name "last_exons_bed" (invalid-name)
-C:256, 0: Invalid constant name "middle_exons" (invalid-name)
-C:261, 0: Invalid constant name "middle_exons_bed" (invalid-name)
-C:269, 0: Invalid constant name "all_exons_bed" (invalid-name)
-C:305, 0: Invalid argument name "df" (invalid-name)
-C:305, 0: Missing function docstring (missing-docstring)
-W:305,22: Redefining name 'df' from outer scope (line 159) (redefined-outer-name)
-C:306, 4: Invalid variable name "a" (invalid-name)
-C:314, 0: Invalid argument name "df" (invalid-name)
-C:314, 0: Missing function docstring (missing-docstring)
-W:314,18: Redefining name 'df' from outer scope (line 159) (redefined-outer-name)
-C:315, 4: Invalid variable name "a" (invalid-name)
-C:316, 4: Invalid variable name "b" (invalid-name)
-C:322, 0: Invalid constant name "all_exons_df" (invalid-name)
-C:323, 0: Invalid constant name "first_exons_df" (invalid-name)
-C:324, 0: Invalid constant name "last_exons_df" (invalid-name)
-C:325, 0: Invalid constant name "middle_exons_df" (invalid-name)
-C:326, 0: Invalid constant name "single_exons_df" (invalid-name)
-C:328, 0: Invalid constant name "all_transcripts" (invalid-name)
-C:329, 0: Invalid constant name "single_transcripts" (invalid-name)
-C:333, 4: Invalid constant name "non_single_transcripts" (invalid-name)
-C:334, 8: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
-C:337, 4: Invalid constant name "non_single_transcripts" (invalid-name)
-C:338, 8: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
-C:345, 0: Invalid function name "get_upstream_and_downstream_exons" (invalid-name)
-C:345, 0: Missing function docstring (missing-docstring)
-C:499, 8: Invalid constant name "p" (invalid-name)
-C:504, 8: Invalid constant name "p" (invalid-name)
-C:508, 0: Invalid function name "concatFiles" (invalid-name)
-C:508, 0: Missing function docstring (missing-docstring)
-C:510,36: Invalid variable name "fo" (invalid-name)
-C:511,12: Invalid variable name "f" (invalid-name)
-C:512,34: Invalid variable name "fi" (invalid-name)
-C:525, 0: Missing function docstring (missing-docstring)
-W:606, 4: Redefining name 'df_exons' from outer scope (line 187) (redefined-outer-name)
-R:525, 0: Too many local variables (21/15) (too-many-locals)
-R:525, 0: Too many statements (52/50) (too-many-statements)
-C:629, 0: Missing function docstring (missing-docstring)
-W:634, 4: Redefining name 'df_exons' from outer scope (line 187) (redefined-outer-name)
-R:629, 0: Too many local variables (21/15) (too-many-locals)
-R:629, 0: Too many statements (52/50) (too-many-statements)
-C:739, 0: Invalid constant name "up_middle_exon" (invalid-name)
-C:739,16: Invalid constant name "up_middle_intron" (invalid-name)
-C:739,34: Invalid constant name "up_middle_5ss" (invalid-name)
-C:739,49: Invalid constant name "up_middle_3ss" (invalid-name)
-C:739,64: Invalid constant name "up_middle_bp" (invalid-name)
-C:745, 0: Invalid constant name "dn_middle_exon" (invalid-name)
-C:745,16: Invalid constant name "dn_middle_intron" (invalid-name)
-C:745,34: Invalid constant name "dn_middle_5ss" (invalid-name)
-C:745,49: Invalid constant name "dn_middle_3ss" (invalid-name)
-C:745,64: Invalid constant name "dn_middle_bp" (invalid-name)
-C:753, 0: Invalid constant name "dn_first_exon" (invalid-name)
-C:753,15: Invalid constant name "dn_first_intron" (invalid-name)
-C:753,32: Invalid constant name "dn_first_5ss" (invalid-name)
-C:753,46: Invalid constant name "dn_first_3ss" (invalid-name)
-C:753,60: Invalid constant name "dn_first_bp" (invalid-name)
-C:761, 0: Invalid constant name "up_last_exon" (invalid-name)
-C:761,14: Invalid constant name "up_last_intron" (invalid-name)
-C:761,30: Invalid constant name "up_last_5ss" (invalid-name)
-C:761,43: Invalid constant name "up_last_3ss" (invalid-name)
-C:761,56: Invalid constant name "up_last_bp" (invalid-name)
-C:767, 0: Invalid argument name "df" (invalid-name)
-C:767, 0: Missing function docstring (missing-docstring)
-W:767,13: Redefining name 'df' from outer scope (line 159) (redefined-outer-name)
-W:767,17: Redefining name 'filename' from outer scope (line 820) (redefined-outer-name)
-C:819, 4: Invalid constant name "archive" (invalid-name)
-C:834, 4: Invalid constant name "archive" (invalid-name)
-C:851, 4: Invalid constant name "ese_list" (invalid-name)
-C:856, 4: Invalid constant name "ess_list" (invalid-name)
-C:861, 4: Invalid constant name "ise_list" (invalid-name)
-C:866, 4: Invalid constant name "iss_list" (invalid-name)
-C:871, 4: Invalid constant name "custom_seq_ex" (invalid-name)
-C:876, 4: Invalid constant name "custom_seq_int" (invalid-name)
-C:879, 0: Missing function docstring (missing-docstring)
-C:912, 0: Invalid argument name "df" (invalid-name)
-C:912, 0: Missing function docstring (missing-docstring)
-W:912,22: Redefining name 'df' from outer scope (line 159) (redefined-outer-name)
-C:913, 4: Invalid variable name "bt" (invalid-name)
-E:914, 4: Unexpected keyword argument 'fi' in method call (unexpected-keyword-arg)
-E:914, 4: Unexpected keyword argument 'fo' in method call (unexpected-keyword-arg)
-E:914, 4: Unexpected keyword argument 'name' in method call (unexpected-keyword-arg)
-E:914, 4: Unexpected keyword argument 's' in method call (unexpected-keyword-arg)
-C:918, 0: Missing function docstring (missing-docstring)
-W:920, 4: Redefining name 'p' from outer scope (line 499) (redefined-outer-name)
-C:920, 4: Invalid variable name "p" (invalid-name)
-E:922,11: Instance of 'TextFileReader' has no 'rename' member (no-member)
-W:921,12: Unused variable 'stderr' (unused-variable)
-C:926, 0: Missing function docstring (missing-docstring)
-W:928, 4: Redefining name 'p' from outer scope (line 499) (redefined-outer-name)
-C:928, 4: Invalid variable name "p" (invalid-name)
-E:930,11: Instance of 'TextFileReader' has no 'rename' member (no-member)
-W:929,12: Unused variable 'stderr' (unused-variable)
-C:934, 0: Invalid argument name "df" (invalid-name)
-C:934, 0: Missing function docstring (missing-docstring)
-W:934,21: Redefining name 'df' from outer scope (line 159) (redefined-outer-name)
-C:947, 0: Invalid argument name "df" (invalid-name)
-C:947, 0: Missing function docstring (missing-docstring)
-W:947,38: Redefining name 'df' from outer scope (line 159) (redefined-outer-name)
-W:954, 4: Redefining name 'p' from outer scope (line 499) (redefined-outer-name)
-C:954, 4: Invalid variable name "p" (invalid-name)
-W:955, 4: Unused variable 'stdout' (unused-variable)
-W:955,12: Unused variable 'stderr' (unused-variable)
-C:968, 0: Missing function docstring (missing-docstring)
-C:978, 0: Missing function docstring (missing-docstring)
-C:993, 0: Invalid argument name "df" (invalid-name)
-C:993, 0: Missing function docstring (missing-docstring)
-W:993,19: Redefining name 'df' from outer scope (line 159) (redefined-outer-name)
-W:995, 8: Redefining name 'i' from outer scope (line 1146) (redefined-outer-name)
-C:995, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-C:1003, 0: Invalid argument name "df" (invalid-name)
-C:1003, 0: Missing function docstring (missing-docstring)
-W:1003,13: Redefining name 'df' from outer scope (line 159) (redefined-outer-name)
-W:1019,12: Redefining name 'i' from outer scope (line 1146) (redefined-outer-name)
-C:1008, 4: Invalid variable name "a" (invalid-name)
-C:1012, 8: Invalid variable name "a" (invalid-name)
-C:1019, 8: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-C:1021,12: Invalid variable name "a" (invalid-name)
-C:1027, 8: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-C:1029,12: Invalid variable name "a" (invalid-name)
-C:1073,12: Invalid variable name "ss" (invalid-name)
-C:1074,12: Invalid variable name "a" (invalid-name)
-C:1081, 8: Invalid variable name "z" (invalid-name)
-C:1083, 8: Invalid variable name "z" (invalid-name)
-C:1085, 4: Invalid variable name "z" (invalid-name)
-C:1086, 4: Invalid variable name "z" (invalid-name)
-R:1003, 0: Too many branches (28/12) (too-many-branches)
-R:1003, 0: Too many statements (64/50) (too-many-statements)
-C:1095, 0: Invalid constant name "genome_fasta" (invalid-name)
-E:1096, 0: Module 'pysam' has no 'faidx' member (no-member)
-C:1102, 4: Invalid constant name "first_exons_bed" (invalid-name)
-C:1104, 4: Invalid constant name "middle_exons_bed" (invalid-name)
-C:1106, 4: Invalid constant name "last_exons_bed" (invalid-name)
-C:1108, 4: Invalid constant name "single_exons_bed" (invalid-name)
-C:1112, 0: Invalid constant name "matrix_first" (invalid-name)
-C:1113, 0: Invalid constant name "frames_first" (invalid-name)
-C:1116, 0: Invalid constant name "names_first" (invalid-name)
-C:1120, 0: Invalid constant name "matrix_middle" (invalid-name)
-C:1121, 0: Invalid constant name "frames_middle" (invalid-name)
-C:1126, 0: Invalid constant name "names_middle" (invalid-name)
-C:1132, 0: Invalid constant name "matrix_last" (invalid-name)
-C:1133, 0: Invalid constant name "frames_last" (invalid-name)
-C:1135, 0: Invalid constant name "names_last" (invalid-name)
-C:1139, 0: Invalid constant name "matrix_single" (invalid-name)
-C:1146, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-C:1155, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-C:1164, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-C:1173, 0: Invalid constant name "matrix_single" (invalid-name)
-R:504, 8: Redefinition of p type from multiprocessing.pool.ThreadPool to multiprocessing.pool.Pool (redefined-variable-type)
-************* Module biofeatures.scripts.accessory_scripts.__init__
-C:  1, 0: Trailing newlines (trailing-newlines)
-************* Module biofeatures.scripts.accessory_scripts.convert_annotations
-C: 22, 0: Line too long (128/100) (line-too-long)
-C: 34, 0: Line too long (106/100) (line-too-long)
-C: 38, 0: Line too long (106/100) (line-too-long)
+C:146, 0: Invalid constant name "args" (invalid-name)
+W:171,22: Redefining name 'df' from outer scope (line 865) (redefined-outer-name)
+C:171, 0: Invalid argument name "df" (invalid-name)
+C:171, 0: Missing function docstring (missing-docstring)
+C:172, 4: Invalid variable name "a" (invalid-name)
+W:180,18: Redefining name 'df' from outer scope (line 865) (redefined-outer-name)
+C:180, 0: Invalid argument name "df" (invalid-name)
+C:180, 0: Missing function docstring (missing-docstring)
+C:181, 4: Invalid variable name "a" (invalid-name)
+C:182, 4: Invalid variable name "b" (invalid-name)
+C:187, 0: Invalid function name "get_upstream_and_downstream_exons" (invalid-name)
+C:187, 0: Missing function docstring (missing-docstring)
+C:334, 0: Invalid function name "concatFiles" (invalid-name)
+C:334, 0: Missing function docstring (missing-docstring)
+C:336,36: Invalid variable name "fo" (invalid-name)
+C:337,12: Invalid variable name "f" (invalid-name)
+C:338,34: Invalid variable name "fi" (invalid-name)
+W:422, 4: Redefining name 'df_exons' from outer scope (line 887) (redefined-outer-name)
+C:341, 0: Missing function docstring (missing-docstring)
+R:341, 0: Too many local variables (21/15) (too-many-locals)
+R:341, 0: Too many statements (52/50) (too-many-statements)
+W:449, 4: Redefining name 'df_exons' from outer scope (line 887) (redefined-outer-name)
+C:444, 0: Missing function docstring (missing-docstring)
+R:444, 0: Too many local variables (21/15) (too-many-locals)
+R:444, 0: Too many statements (52/50) (too-many-statements)
+W:546,13: Redefining name 'df' from outer scope (line 865) (redefined-outer-name)
+W:546,17: Redefining name 'filename' from outer scope (line 1246) (redefined-outer-name)
+C:546, 0: Invalid argument name "df" (invalid-name)
+C:546, 0: Missing function docstring (missing-docstring)
+C:550, 0: Missing function docstring (missing-docstring)
+W:581,22: Redefining name 'df' from outer scope (line 865) (redefined-outer-name)
+C:581, 0: Invalid argument name "df" (invalid-name)
+C:581, 0: Missing function docstring (missing-docstring)
+C:582, 4: Invalid variable name "bt" (invalid-name)
+W:589, 4: Redefining name 'p' from outer scope (line 1034) (redefined-outer-name)
+C:587, 0: Missing function docstring (missing-docstring)
+C:589, 4: Invalid variable name "p" (invalid-name)
+E:591,11: Instance of 'tuple' has no 'rename' member (no-member)
+W:590,12: Unused variable 'stderr' (unused-variable)
+W:596, 4: Redefining name 'p' from outer scope (line 1034) (redefined-outer-name)
+C:594, 0: Missing function docstring (missing-docstring)
+C:596, 4: Invalid variable name "p" (invalid-name)
+E:598,11: Instance of 'tuple' has no 'rename' member (no-member)
+W:597,12: Unused variable 'stderr' (unused-variable)
+W:601,21: Redefining name 'df' from outer scope (line 865) (redefined-outer-name)
+C:601, 0: Invalid argument name "df" (invalid-name)
+C:601, 0: Missing function docstring (missing-docstring)
+W:613,38: Redefining name 'df' from outer scope (line 865) (redefined-outer-name)
+W:620, 4: Redefining name 'p' from outer scope (line 1034) (redefined-outer-name)
+C:613, 0: Invalid argument name "df" (invalid-name)
+C:613, 0: Missing function docstring (missing-docstring)
+C:620, 4: Invalid variable name "p" (invalid-name)
+W:621, 4: Unused variable 'stdout' (unused-variable)
+W:621,12: Unused variable 'stderr' (unused-variable)
+C:633, 0: Missing function docstring (missing-docstring)
+C:642, 0: Missing function docstring (missing-docstring)
+W:656,19: Redefining name 'df' from outer scope (line 865) (redefined-outer-name)
+W:658, 8: Redefining name 'i' from outer scope (line 1162) (redefined-outer-name)
+C:656, 0: Invalid argument name "df" (invalid-name)
+C:656, 0: Missing function docstring (missing-docstring)
+C:658, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+W:671, 4: Redefining name 'p' from outer scope (line 1034) (redefined-outer-name)
+W:665,25: Redefining name 'filename' from outer scope (line 1246) (redefined-outer-name)
+C:665, 0: Missing function docstring (missing-docstring)
+C:671, 4: Invalid variable name "p" (invalid-name)
+W:674,20: Redefining name 'df' from outer scope (line 865) (redefined-outer-name)
+W:683, 4: Redefining name 'filename' from outer scope (line 1246) (redefined-outer-name)
+W:678, 8: Redefining name 'i' from outer scope (line 1162) (redefined-outer-name)
+C:674, 0: Invalid argument name "df" (invalid-name)
+C:674, 0: Missing function docstring (missing-docstring)
+C:679, 8: Invalid variable name "b" (invalid-name)
+C:687, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:688, 8: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:696, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+W:712, 4: Redefining name 'p' from outer scope (line 1034) (redefined-outer-name)
+W:710,19: Redefining name 'genome_fasta' from outer scope (line 854) (redefined-outer-name)
+C:710, 0: Missing function docstring (missing-docstring)
+C:712, 4: Invalid variable name "p" (invalid-name)
+W:721, 4: Redefining name 'p' from outer scope (line 1034) (redefined-outer-name)
+C:715, 0: Missing function docstring (missing-docstring)
+C:721, 4: Invalid variable name "p" (invalid-name)
+W:729, 4: Redefining name 'p' from outer scope (line 1034) (redefined-outer-name)
+C:724, 0: Missing function docstring (missing-docstring)
+C:729, 4: Invalid variable name "p" (invalid-name)
+W:737, 4: Redefining name 'p' from outer scope (line 1034) (redefined-outer-name)
+E:732, 0: function already defined line 724 (function-redefined)
+C:732, 0: Missing function docstring (missing-docstring)
+C:737, 4: Invalid variable name "p" (invalid-name)
+W:740,13: Redefining name 'df' from outer scope (line 865) (redefined-outer-name)
+W:769,12: Redefining name 'i' from outer scope (line 1162) (redefined-outer-name)
+C:740, 0: Invalid argument name "df" (invalid-name)
+C:740, 0: Missing function docstring (missing-docstring)
+C:747, 4: Invalid variable name "a" (invalid-name)
+C:752, 8: Invalid variable name "a" (invalid-name)
+C:758, 8: Invalid variable name "a" (invalid-name)
+C:769, 8: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:771,12: Invalid variable name "a" (invalid-name)
+C:781, 8: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:783,12: Invalid variable name "a" (invalid-name)
+C:827,12: Invalid variable name "ss" (invalid-name)
+C:828,12: Invalid variable name "a" (invalid-name)
+C:835, 8: Invalid variable name "z" (invalid-name)
+C:837, 8: Invalid variable name "z" (invalid-name)
+C:839, 4: Invalid variable name "z" (invalid-name)
+C:840, 4: Invalid variable name "z" (invalid-name)
+R:740, 0: Too many branches (30/12) (too-many-branches)
+R:740, 0: Too many statements (70/50) (too-many-statements)
+C:854, 0: Invalid constant name "genome_fasta" (invalid-name)
+C:864, 4: Invalid constant name "gtf" (invalid-name)
+C:865, 4: Invalid constant name "df" (invalid-name)
+C:887, 4: Invalid constant name "df_exons" (invalid-name)
+C:905, 4: Invalid constant name "exons_grouped" (invalid-name)
+C:906, 4: Invalid constant name "group_size_filter" (invalid-name)
+C:907, 4: Invalid constant name "single_exons" (invalid-name)
+C:910, 4: Invalid constant name "single_exons_bed" (invalid-name)
+C:917, 4: Invalid constant name "df_non_single_exons" (invalid-name)
+C:921, 4: Invalid constant name "df_ns_exons_plus" (invalid-name)
+C:922, 4: Invalid constant name "df_ns_exons_minus" (invalid-name)
+C:926, 4: Invalid constant name "first_exons_plus" (invalid-name)
+C:928, 4: Invalid constant name "first_exons_minus" (invalid-name)
+C:931, 4: Invalid constant name "first_exons" (invalid-name)
+C:934, 4: Invalid constant name "first_exons_bed" (invalid-name)
+C:941, 4: Invalid constant name "last_exons_plus" (invalid-name)
+C:943, 4: Invalid constant name "last_exons_minus" (invalid-name)
+C:946, 4: Invalid constant name "last_exons" (invalid-name)
+C:949, 4: Invalid constant name "last_exons_bed" (invalid-name)
+C:956, 4: Invalid constant name "middle_exons" (invalid-name)
+C:961, 4: Invalid constant name "middle_exons_bed" (invalid-name)
+C:969, 4: Invalid constant name "all_exons_bed" (invalid-name)
+C:1005, 4: Invalid constant name "all_exons_df" (invalid-name)
+C:1006, 4: Invalid constant name "first_exons_df" (invalid-name)
+C:1007, 4: Invalid constant name "last_exons_df" (invalid-name)
+C:1008, 4: Invalid constant name "middle_exons_df" (invalid-name)
+C:1009, 4: Invalid constant name "single_exons_df" (invalid-name)
+C:1011, 4: Invalid constant name "all_transcripts" (invalid-name)
+C:1012, 4: Invalid constant name "single_transcripts" (invalid-name)
+C:1016, 8: Invalid constant name "non_single_transcripts" (invalid-name)
+C:1017,12: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:1020, 8: Invalid constant name "non_single_transcripts" (invalid-name)
+C:1021,12: Comparison to False should be 'not expr' or 'expr is False' (singleton-comparison)
+C:1034,12: Invalid constant name "p" (invalid-name)
+C:1039,12: Invalid constant name "p" (invalid-name)
+C:1055, 4: Invalid constant name "up_middle_exon" (invalid-name)
+C:1055,20: Invalid constant name "up_middle_intron" (invalid-name)
+C:1055,38: Invalid constant name "up_middle_5ss" (invalid-name)
+C:1055,53: Invalid constant name "up_middle_3ss" (invalid-name)
+C:1055,68: Invalid constant name "up_middle_bp" (invalid-name)
+C:1061, 4: Invalid constant name "dn_middle_exon" (invalid-name)
+C:1061,20: Invalid constant name "dn_middle_intron" (invalid-name)
+C:1061,38: Invalid constant name "dn_middle_5ss" (invalid-name)
+C:1061,53: Invalid constant name "dn_middle_3ss" (invalid-name)
+C:1061,68: Invalid constant name "dn_middle_bp" (invalid-name)
+C:1069, 4: Invalid constant name "dn_first_exon" (invalid-name)
+C:1069,19: Invalid constant name "dn_first_intron" (invalid-name)
+C:1069,36: Invalid constant name "dn_first_5ss" (invalid-name)
+C:1069,50: Invalid constant name "dn_first_3ss" (invalid-name)
+C:1069,64: Invalid constant name "dn_first_bp" (invalid-name)
+C:1077, 4: Invalid constant name "up_last_exon" (invalid-name)
+C:1077,18: Invalid constant name "up_last_intron" (invalid-name)
+C:1077,34: Invalid constant name "up_last_5ss" (invalid-name)
+C:1077,47: Invalid constant name "up_last_3ss" (invalid-name)
+C:1077,60: Invalid constant name "up_last_bp" (invalid-name)
+C:1087, 8: Invalid constant name "ese_list" (invalid-name)
+C:1092, 8: Invalid constant name "ess_list" (invalid-name)
+C:1097, 8: Invalid constant name "ise_list" (invalid-name)
+C:1102, 8: Invalid constant name "iss_list" (invalid-name)
+C:1107, 8: Invalid constant name "custom_seq_ex" (invalid-name)
+C:1112, 8: Invalid constant name "custom_seq_int" (invalid-name)
+C:1118, 8: Invalid constant name "first_exons_bed" (invalid-name)
+C:1120, 8: Invalid constant name "middle_exons_bed" (invalid-name)
+C:1122, 8: Invalid constant name "last_exons_bed" (invalid-name)
+C:1124, 8: Invalid constant name "single_exons_bed" (invalid-name)
+C:1128, 4: Invalid constant name "matrix_first" (invalid-name)
+C:1129, 4: Invalid constant name "frames_first" (invalid-name)
+C:1132, 4: Invalid constant name "names_first" (invalid-name)
+C:1136, 4: Invalid constant name "matrix_middle" (invalid-name)
+C:1137, 4: Invalid constant name "frames_middle" (invalid-name)
+C:1142, 4: Invalid constant name "names_middle" (invalid-name)
+C:1148, 4: Invalid constant name "matrix_last" (invalid-name)
+C:1149, 4: Invalid constant name "frames_last" (invalid-name)
+C:1151, 4: Invalid constant name "names_last" (invalid-name)
+C:1155, 4: Invalid constant name "matrix_single" (invalid-name)
+C:1162, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:1171, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:1180, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:1189, 4: Invalid constant name "matrix_single" (invalid-name)
+C:1245, 8: Invalid constant name "archive" (invalid-name)
+W:1250,13: Used builtin function 'map'. Using a list comprehension can be clearer. (bad-builtin)
+C:1260, 8: Invalid constant name "archive" (invalid-name)
+C:1265, 8: Invalid constant name "archive" (invalid-name)
+W:1270,13: Used builtin function 'map'. Using a list comprehension can be clearer. (bad-builtin)
+W:1271,13: Used builtin function 'map'. Using a list comprehension can be clearer. (bad-builtin)
+W:1276,13: Used builtin function 'map'. Using a list comprehension can be clearer. (bad-builtin)
+W:1277,13: Used builtin function 'map'. Using a list comprehension can be clearer. (bad-builtin)
+C:1289, 4: Invalid constant name "input_bed" (invalid-name)
+C:1301, 8: Invalid constant name "n_rand" (invalid-name)
+C:1305,16: Invalid constant name "p" (invalid-name)
+C:1310,16: Invalid constant name "p" (invalid-name)
+W:1314,13: Used builtin function 'map'. Using a list comprehension can be clearer. (bad-builtin)
+C:1316, 8: Invalid constant name "cat_command" (invalid-name)
+C:1317, 8: Invalid constant name "p" (invalid-name)
+C:1323, 8: Invalid constant name "cat_command" (invalid-name)
+C:1324, 8: Invalid constant name "p" (invalid-name)
+C:1328, 4: Invalid constant name "bed" (invalid-name)
+C:1335, 4: Invalid constant name "bed" (invalid-name)
+C:1342, 8: Invalid constant name "bed" (invalid-name)
+C:1344, 4: Invalid constant name "matrix_bed" (invalid-name)
+C:1345, 4: Invalid constant name "matrix_bed" (invalid-name)
+R:1039,12: Redefinition of p type from multiprocessing.pool.ThreadPool to multiprocessing.pool.Pool (redefined-variable-type)
+W: 20, 0: Unused import itertools (unused-import)
+C: 20, 0: standard import "import itertools" comes before "import pandas as pd" (wrong-import-order)
+************* Module biofeatures.scripts.analyze_features
+W:161, 0: TODO: refactor common intersect call (fixme)
+W:176, 0: TODO: refactor common intersect call (fixme)
+W:183, 0: TODO: refactor common intersect call (fixme)
+W:671, 0: TODO: parameterize (fixme)
+W:696, 0: TODO: write to file. (fixme)
+W:713, 0: TODO: parameterize (fixme)
+W:714, 0: TODO: rename (fixme)
+W:745, 0: TODO: rename (fixme)
+C: 47, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C: 51, 0: Line too long (128/100) (line-too-long)
+C: 63, 0: Line too long (258/100) (line-too-long)
+C: 87, 0: Line too long (162/100) (line-too-long)
+C: 92, 0: Line too long (153/100) (line-too-long)
+C: 96, 0: Line too long (208/100) (line-too-long)
+C:100, 0: Line too long (136/100) (line-too-long)
+C:104, 0: Line too long (136/100) (line-too-long)
+C:109, 0: Line too long (163/100) (line-too-long)
+C:113, 0: Line too long (128/100) (line-too-long)
+C:117, 0: Line too long (395/100) (line-too-long)
+C:121, 0: Line too long (183/100) (line-too-long)
+C:125, 0: Line too long (101/100) (line-too-long)
+C:130, 0: Line too long (144/100) (line-too-long)
+C:134, 0: Line too long (167/100) (line-too-long)
+C:139, 0: Line too long (507/100) (line-too-long)
+C:143, 0: Line too long (173/100) (line-too-long)
+C:148, 0: Line too long (112/100) (line-too-long)
+C:151, 0: Line too long (110/100) (line-too-long)
+C:225, 0: Wrong continued indentation (remove 1 space).
+                 ] = features[
+                |^ (bad-continuation)
+C:226, 0: Wrong hanging indentation (add 9 spaces).
+            'ks_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])].apply(
+            ^        | (bad-continuation)
+C:227, 0: Wrong hanging indentation (add 4 spaces).
+            lambda x: x[:][1])
+            ^   | (bad-continuation)
+C:230, 0: Wrong continued indentation (remove 1 space).
+                 ] = features[
+                |^ (bad-continuation)
+C:231, 0: Wrong hanging indentation (add 9 spaces).
+            'ks_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])].apply(
+            ^        | (bad-continuation)
+C:232, 0: Wrong hanging indentation (add 4 spaces).
+            lambda x: x[:][0])
+            ^   | (bad-continuation)
+C:241, 0: Wrong hanging indentation (add 4 spaces).
+            pairwise[i][0]) + '_vs_' + str(pairwise[i][1])]),
+            ^   | (bad-continuation)
+C:312, 0: Wrong hanging indentation (add 27 spaces).
+            'mean_rel_importance'].head(N)
+            ^                          | (bad-continuation)
+C:316, 0: Wrong hanging indentation (add 27 spaces).
+            'std_rel_importance'].head(N)
+            ^                          | (bad-continuation)
+C:332, 0: Wrong hanging indentation (add 27 spaces).
+            'mean_raw_importance'].head(N)
+            ^                          | (bad-continuation)
+C:336, 0: Wrong hanging indentation (add 27 spaces).
+            'std_raw_importance'].head(N)
+            ^                          | (bad-continuation)
+C:353, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:358, 0: Wrong hanging indentation (add 19 spaces).
+    'name').drop_duplicates()  # .reset_index()
+    ^                  | (bad-continuation)
+C:365, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:374, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:384, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:391, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:397, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:399, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:405, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:411, 0: Line too long (101/100) (line-too-long)
+C:413, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:434, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:441, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:446, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:502, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:531, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:538, 0: Line too long (106/100) (line-too-long)
+C:539, 0: Trailing whitespace (trailing-whitespace)
+C:539, 0: Line too long (106/100) (line-too-long)
+C:541, 0: Line too long (115/100) (line-too-long)
+C:542, 0: Trailing whitespace (trailing-whitespace)
+C:542, 0: Line too long (113/100) (line-too-long)
+C:543, 0: Line too long (112/100) (line-too-long)
+C:604, 0: Line too long (126/100) (line-too-long)
+C:609, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:615, 0: Trailing whitespace (trailing-whitespace)
+C:615, 0: Line too long (123/100) (line-too-long)
+C:616, 0: Line too long (125/100) (line-too-long)
+C:618, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:625, 0: Trailing whitespace (trailing-whitespace)
+C:626, 0: Trailing whitespace (trailing-whitespace)
+C:626, 0: Line too long (116/100) (line-too-long)
+C:627, 0: Trailing whitespace (trailing-whitespace)
+C:628, 0: Trailing whitespace (trailing-whitespace)
+C:629, 0: Trailing whitespace (trailing-whitespace)
+C:629, 0: Line too long (111/100) (line-too-long)
+C:633, 0: Trailing whitespace (trailing-whitespace)
+C:633, 0: Line too long (106/100) (line-too-long)
+C:634, 0: Line too long (115/100) (line-too-long)
+C:635, 0: Trailing whitespace (trailing-whitespace)
+C:635, 0: Line too long (111/100) (line-too-long)
+C:641, 0: Line too long (118/100) (line-too-long)
+C:649, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:655, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:664, 0: Line too long (133/100) (line-too-long)
+C:668, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:689, 0: Wrong hanging indentation (remove 52 spaces).
+                                                                './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_best_params.txt',
+            |                                                   ^ (bad-continuation)
+C:689, 0: Line too long (167/100) (line-too-long)
+C:690, 0: Wrong hanging indentation (remove 52 spaces).
+                                                                'w') as fp:
+            |                                                   ^ (bad-continuation)
+C:697, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:698, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:700, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:701, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:703, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:704, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:707, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:710, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:725, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:729, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:749, 0: Wrong hanging indentation (add 26 spaces).
+        columns={0: 'run_' + run_id + '_raw_importance',
+        ^                         | (bad-continuation)
+C:752, 0: Wrong hanging indentation.
+    ).sort_values('Index', ascending=False)
+    ^                         |   | (bad-continuation)
+C:759, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:778, 0: Line too long (118/100) (line-too-long)
+C:802, 0: Line too long (106/100) (line-too-long)
+C:810, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:840, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:841, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:842, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:844, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:845, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:847, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:848, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:849, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:850, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:851, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:855, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:863, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:878, 0: Line too long (107/100) (line-too-long)
+C:883, 0: Line too long (107/100) (line-too-long)
+C:906, 0: Line too long (109/100) (line-too-long)
+C:911, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:926, 0: Line too long (109/100) (line-too-long)
+C:932, 0: Line too long (106/100) (line-too-long)
+C:959, 0: Line too long (122/100) (line-too-long)
+C:964, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:967, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:969, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:987, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:992, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1058, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1111, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1163, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:1167, 0: Line too long (133/100) (line-too-long)
+C:1170, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:  1, 0: Too many lines in module (1172/1000) (too-many-lines)
 C:  1, 0: Missing module docstring (missing-docstring)
-C: 15, 0: Missing class docstring (missing-docstring)
-C: 30, 0: Invalid constant name "parser" (invalid-name)
-C: 46, 0: Invalid constant name "args" (invalid-name)
-C: 50, 4: Invalid constant name "ens" (invalid-name)
-C: 53, 4: Invalid constant name "ens" (invalid-name)
-C: 56, 4: Invalid constant name "columns" (invalid-name)
-C: 63, 4: Invalid constant name "ucsc" (invalid-name)
-C: 69, 4: Invalid constant name "columns" (invalid-name)
+E: 12, 0: Unable to import 'pybedtools' (import-error)
+E: 17, 0: Unable to import 'rpy2.robjects.packages' (import-error)
+E: 18, 0: Unable to import 'rpy2.robjects.vectors' (import-error)
+E: 29, 0: No name 'model_selection' in module 'sklearn' (no-name-in-module)
+E: 29, 0: Unable to import 'sklearn.model_selection' (import-error)
+E: 31, 0: No name 'model_selection' in module 'sklearn' (no-name-in-module)
+E: 31, 0: Unable to import 'sklearn.model_selection' (import-error)
+E: 33, 0: No name 'model_selection' in module 'sklearn' (no-name-in-module)
+E: 33, 0: Unable to import 'sklearn.model_selection' (import-error)
+C: 44, 0: Missing class docstring (missing-docstring)
+C: 59, 0: Invalid constant name "parser" (invalid-name)
+C:154, 0: Invalid constant name "args" (invalid-name)
+W:159,40: Redefining name 'matrix' from outer scope (line 356) (redefined-outer-name)
+C:159, 0: Invalid argument name "bt" (invalid-name)
+C:159, 0: Invalid argument name "F" (invalid-name)
+C:159, 0: Invalid argument name "f" (invalid-name)
+C:159, 0: Invalid argument name "s" (invalid-name)
+C:159, 0: Missing function docstring (missing-docstring)
+R:159, 0: Too many arguments (6/5) (too-many-arguments)
+W:174,47: Redefining name 'matrix' from outer scope (line 356) (redefined-outer-name)
+C:174, 0: Invalid argument name "bt" (invalid-name)
+C:174, 0: Invalid argument name "F" (invalid-name)
+C:174, 0: Invalid argument name "f" (invalid-name)
+C:174, 0: Invalid argument name "s" (invalid-name)
+C:174, 0: Missing function docstring (missing-docstring)
+R:174, 0: Too many arguments (7/5) (too-many-arguments)
+W:213, 8: Redefining name 'i' from outer scope (line 788) (redefined-outer-name)
+W:204, 4: Redefining name 'features' from outer scope (line 766) (redefined-outer-name)
+C:203, 0: Invalid function name "get_statistical_data_for_features" (invalid-name)
+C:203, 0: Invalid argument name "df" (invalid-name)
+C:203, 0: Missing function docstring (missing-docstring)
+C:211, 4: Invalid variable name "statsR" (invalid-name)
+C:213, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+W:221,47: Cell variable i defined in loop (cell-var-from-loop)
+W:222,47: Cell variable i defined in loop (cell-var-from-loop)
+W:261, 8: Redefining name 'i' from outer scope (line 788) (redefined-outer-name)
+W:261,15: Redefining name 'y' from outer scope (line 612) (redefined-outer-name)
+C:250, 0: Missing function docstring (missing-docstring)
+C:256, 4: Invalid variable name "xs" (invalid-name)
+C:257, 4: Invalid variable name "ys" (invalid-name)
+C:260, 4: Invalid variable name "cumSum" (invalid-name)
+C:261,12: Invalid variable name "x" (invalid-name)
+C:261,15: Invalid variable name "y" (invalid-name)
+C:263, 8: Invalid variable name "cumSum" (invalid-name)
+W:271, 7: Redefining name 'y' from outer scope (line 612) (redefined-outer-name)
+C:268, 0: Invalid argument name "ax" (invalid-name)
+C:268, 0: Missing function docstring (missing-docstring)
+C:271, 4: Invalid variable name "x" (invalid-name)
+C:271, 7: Invalid variable name "y" (invalid-name)
+W:277, 4: Redefining name 'cols' from outer scope (line 972) (redefined-outer-name)
+W:291, 4: Redefining name 'fig' from outer scope (line 768) (redefined-outer-name)
+C:275, 0: Invalid argument name "df" (invalid-name)
+C:275, 0: Missing function docstring (missing-docstring)
+C:284, 4: Invalid variable name "N" (invalid-name)
+C:291, 9: Invalid variable name "ax" (invalid-name)
+W:292, 4: Unused variable 'rects1' (unused-variable)
+W:291, 4: Unused variable 'fig' (unused-variable)
+W:318, 4: Redefining name 'fig' from outer scope (line 768) (redefined-outer-name)
+C:302, 0: Invalid argument name "df" (invalid-name)
+C:302, 0: Missing function docstring (missing-docstring)
+C:305, 4: Invalid variable name "N" (invalid-name)
+C:318, 9: Invalid variable name "ax" (invalid-name)
+C:338, 9: Invalid variable name "ax" (invalid-name)
+W:318, 4: Unused variable 'fig' (unused-variable)
+C:356, 0: Invalid constant name "matrix" (invalid-name)
+C:367, 4: Invalid constant name "out_cols" (invalid-name)
+C:368, 4: Invalid constant name "out_cols" (invalid-name)
+C:369, 4: Invalid constant name "matrix" (invalid-name)
+C:376, 4: Invalid constant name "in_cols" (invalid-name)
+C:377, 4: Invalid constant name "in_cols" (invalid-name)
+C:378, 4: Invalid constant name "matrix" (invalid-name)
+C:382, 0: Invalid constant name "matrix" (invalid-name)
+C:387, 0: Invalid constant name "all_exons" (invalid-name)
+C:402, 0: Invalid constant name "sel_exons" (invalid-name)
+C:407, 4: Invalid constant name "sel_exons_2" (invalid-name)
+C:417, 4: Invalid constant name "matrix" (invalid-name)
+C:420, 4: Invalid constant name "matrix" (invalid-name)
+C:437, 4: Invalid constant name "st" (invalid-name)
+C:514,12: Invalid constant name "sig_only" (invalid-name)
+C:517,12: Invalid constant name "matrix" (invalid-name)
+C:522,12: Invalid constant name "sig_only" (invalid-name)
+C:525,12: Invalid constant name "matrix" (invalid-name)
+C:546, 0: Invalid constant name "runs" (invalid-name)
+C:547, 0: Invalid constant name "sample_size" (invalid-name)
+C:548, 0: Invalid constant name "gbclf_params" (invalid-name)
+C:549, 0: Invalid constant name "train_size" (invalid-name)
+C:554, 4: Invalid constant name "importance" (invalid-name)
+C:556, 4: Invalid constant name "importance" (invalid-name)
+C:559, 0: Invalid constant name "deviance_train" (invalid-name)
+C:560, 0: Invalid constant name "deviance_test" (invalid-name)
+C:562, 0: Invalid constant name "msr" (invalid-name)
+C:564, 0: Invalid constant name "mtc" (invalid-name)
+C:567, 0: Invalid constant name "conf_df" (invalid-name)
+C:569, 0: Invalid constant name "roc_tpr_all" (invalid-name)
+C:570, 0: Invalid constant name "roc_fpr_all" (invalid-name)
+C:571, 0: Invalid constant name "roc_auc_all" (invalid-name)
+C:573, 0: Invalid constant name "pre_all" (invalid-name)
+C:574, 0: Invalid constant name "rec_all" (invalid-name)
+C:575, 0: Invalid constant name "av_pre_all" (invalid-name)
+C:578, 4: Invalid constant name "matrix" (invalid-name)
+C:584, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+E:644,16: Unexpected keyword argument 'n_jobs' in constructor call (unexpected-keyword-arg)
+W:727,13: Use of eval (eval-used)
+E:786,59: Module 'numpy' has no 'float64' member (no-member)
+C:972, 0: Invalid constant name "cols" (invalid-name)
+C:978, 0: Invalid constant name "cols" (invalid-name)
+C:994, 0: Invalid constant name "cols" (invalid-name)
+C:1001, 0: Invalid constant name "cols" (invalid-name)
+C:1012, 0: Invalid constant name "train_err" (invalid-name)
+C:1013, 0: Invalid constant name "test_err" (invalid-name)
+C:1044, 0: Invalid constant name "df_list" (invalid-name)
+C:1045, 0: Invalid constant name "title_list" (invalid-name)
+C:1048, 0: Invalid constant name "save_list" (invalid-name)
+C:1052, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+C:1060, 0: Invalid constant name "cols" (invalid-name)
+C:1067, 0: Invalid constant name "cols" (invalid-name)
+C:1074, 0: Invalid constant name "cols" (invalid-name)
+C:1084, 0: Invalid constant name "fpr_err" (invalid-name)
+C:1085, 0: Invalid constant name "tpr_err" (invalid-name)
+C:1086, 0: Invalid constant name "m_auc" (invalid-name)
+C:1087, 0: Invalid constant name "m_auc_std" (invalid-name)
+C:1113, 0: Invalid constant name "cols" (invalid-name)
+C:1119, 0: Invalid constant name "cols" (invalid-name)
+C:1125, 0: Invalid constant name "cols" (invalid-name)
+C:1136, 0: Invalid constant name "pre_err" (invalid-name)
+C:1137, 0: Invalid constant name "rec_err" (invalid-name)
+C:1138, 0: Invalid constant name "m_auc" (invalid-name)
+C:1139, 0: Invalid constant name "m_auc_std" (invalid-name)
+R:888, 4: Redefinition of roc_tpr_all type from pandas.core.frame.DataFrame to pandas.sparse.series.SparseSeries (redefined-variable-type)
+R:937, 4: Redefinition of rec_all type from pandas.core.frame.DataFrame to pandas.sparse.series.SparseSeries (redefined-variable-type)
+R:935, 4: Redefinition of pre_all type from pandas.core.frame.DataFrame to pandas.sparse.series.SparseSeries (redefined-variable-type)
+R:886, 4: Redefinition of roc_fpr_all type from pandas.core.frame.DataFrame to pandas.sparse.series.SparseSeries (redefined-variable-type)
+W: 16, 0: Unused import readline (unused-import)
+C: 16, 0: standard import "import readline" comes before "import pandas as pd" (wrong-import-order)
+C: 35, 0: standard import "import multiprocessing as mp" comes before "import pandas as pd" (wrong-import-order)
+C: 21, 0: Imports from package matplotlib are not grouped (ungrouped-imports)
+C: 30, 0: Imports from package sklearn are not grouped (ungrouped-imports)
+C: 32, 0: Imports from package sklearn are not grouped (ungrouped-imports)
+C: 34, 0: Imports from package sklearn are not grouped (ungrouped-imports)
 ************* Module biofeatures.scripts.accessory_scripts.random_sampling_test
+C: 22, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
 C: 25, 0: Line too long (130/100) (line-too-long)
+C: 25, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
 C: 34, 0: Trailing whitespace (trailing-whitespace)
 C: 35, 0: Wrong continued indentation (add 2 spaces).
                   help="Data frame with features created by 'build_datamatrix.py'.", required=True)
@@ -640,15 +809,18 @@ C: 45, 0: Trailing whitespace (trailing-whitespace)
 C: 46, 0: Wrong continued indentation (add 2 spaces).
                   help="prefix for use on the output files", metavar="prefix", required=True)
                   ^ | (bad-continuation)
+C: 55, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
 C: 57, 0: Line too long (117/100) (line-too-long)
 C: 57, 0: Exactly one space required after comma
 matrix = pd.concat(pd.read_table(str(args.data),iterator=True, chunksize=10000), ignore_index=True).set_index('name')
                                                ^ (bad-whitespace)
 C: 60, 0: Trailing whitespace (trailing-whitespace)
+C: 66, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
 C: 69, 0: Exactly one space required after comma
             matrix.filter(like=str(filter_list[i]), axis=1).columns,1)
                                                                    ^ (bad-whitespace)
 C: 70, 0: Trailing whitespace (trailing-whitespace)
+C: 74, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
 C: 77, 0: Exactly one space required after comma
 f_samp = list((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
                   ^ (bad-whitespace)
@@ -676,6 +848,7 @@ f_samp = list((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
 C: 77, 0: Exactly one space required after comma
 f_samp = list((0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1))
                                                   ^ (bad-whitespace)
+C: 82, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
 C: 86, 0: Trailing whitespace (trailing-whitespace)
 C: 87, 0: Line too long (158/100) (line-too-long)
 C: 96, 0: Wrong hanging indentation (add 48 spaces).
@@ -703,6 +876,8 @@ C:109, 0: Exactly one space required after comma
                dpi=300,bbox_inches='tight')
                       ^ (bad-whitespace)
 C:111, 0: Trailing whitespace (trailing-whitespace)
+C:114, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C:121, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
 C:122, 0: Trailing whitespace (trailing-whitespace)
 C:128, 0: Trailing whitespace (trailing-whitespace)
 C:129, 0: Exactly one space required after comma
@@ -730,6 +905,7 @@ C:145, 0: Exactly one space required after comma
                    ^ (bad-whitespace)
 C:149, 0: Trailing whitespace (trailing-whitespace)
 C:150, 0: Final newline missing (missing-final-newline)
+C:150, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
 C:  1, 0: Missing module docstring (missing-docstring)
 C: 19, 0: Missing class docstring (missing-docstring)
 C: 32, 0: Invalid constant name "parser" (invalid-name)
@@ -740,35 +916,54 @@ C: 64, 4: Invalid constant name "filter_list" (invalid-name)
 C: 67, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
 C: 76, 0: Invalid constant name "reps" (invalid-name)
 C: 77, 0: Invalid constant name "f_samp" (invalid-name)
-C: 89, 0: Missing function docstring (missing-docstring)
 W: 89,28: Redefining name 'features' from outer scope (line 111) (redefined-outer-name)
+C: 89, 0: Missing function docstring (missing-docstring)
 C: 93, 4: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
 W: 97,42: Cell variable j defined in loop (cell-var-from-loop)
 C: 99, 4: Invalid variable name "Tr" (invalid-name)
 W:100,28: Lambda may not be necessary (unnecessary-lambda)
+E:100,38: Module 'numpy' has no 'median' member (no-member)
 W:101,25: Lambda may not be necessary (unnecessary-lambda)
 C:111, 0: Invalid constant name "features" (invalid-name)
 C:117, 4: Invalid constant name "p" (invalid-name)
 C:123, 0: Invalid constant name "files" (invalid-name)
 C:124, 0: Invalid constant name "cycol" (invalid-name)
+E:124, 8: Instance of 'cycle' has no '__next__' member (no-member)
 C:126, 0: Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
-E:127, 9: Instance of 'TextFileReader' has no 'T' member (no-member)
+E:127, 9: Instance of 'tuple' has no 'T' member (no-member)
+E:129,19: Module 'numpy' has no 'polyfit' member (no-member)
 E:129,30: Module 'numpy' has no 'log' member (no-member)
+E:130,10: Module 'numpy' has no 'poly1d' member (no-member)
 E:134,24: Module 'numpy' has no 'log' member (no-member)
 C:147, 0: Invalid constant name "t1" (invalid-name)
-R:  1, 0: Similar lines in 3 files
-==biofeatures.scripts.accessory_scripts.convert_annotations:14
-==biofeatures.scripts.analyze_features:42
+************* Module biofeatures.scripts.accessory_scripts.convert_annotations
+C: 18, 0: Unnecessary parens after 'print' keyword (superfluous-parens)
+C: 22, 0: Line too long (128/100) (line-too-long)
+C: 34, 0: Line too long (106/100) (line-too-long)
+C: 38, 0: Line too long (106/100) (line-too-long)
+C:  1, 0: Missing module docstring (missing-docstring)
+E:  9, 0: Unable to import 'pybedtools' (import-error)
+C: 15, 0: Missing class docstring (missing-docstring)
+C: 30, 0: Invalid constant name "parser" (invalid-name)
+C: 46, 0: Invalid constant name "args" (invalid-name)
+C: 50, 4: Invalid constant name "ens" (invalid-name)
+C: 53, 4: Invalid constant name "ens" (invalid-name)
+C: 56, 4: Invalid constant name "columns" (invalid-name)
+C: 63, 4: Invalid constant name "ucsc" (invalid-name)
+C: 69, 4: Invalid constant name "columns" (invalid-name)
+************* Module biofeatures.scripts.accessory_scripts.__init__
+R:  1, 0: Similar lines in 2 files
+==biofeatures.scripts.analyze_features:43
 ==biofeatures.scripts.build_datamatrix:28
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
-        print()
+        print
         print("The following error ocurred in argument parsing:")
         sys.stderr.write('error: %s\n' % message)
-        print()
+        print
         print(
             "Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author")
-        print()
+        print
         self.print_help()
         sys.exit(2)
 
@@ -777,11 +972,9 @@ class MyParser(argparse.ArgumentParser):
 
 parser = MyParser(description='')
  (duplicate-code)
-R:  1, 0: Similar lines in 4 files
+R:  1, 0: Similar lines in 2 files
 ==biofeatures.scripts.accessory_scripts.convert_annotations:14
 ==biofeatures.scripts.accessory_scripts.random_sampling_test:18
-==biofeatures.scripts.analyze_features:42
-==biofeatures.scripts.build_datamatrix:28
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
         print()
@@ -792,7 +985,7 @@ class MyParser(argparse.ArgumentParser):
 
 Report
 ======
-1270 statements analysed.
+1388 statements analysed.
 
 Statistics by type
 ------------------
@@ -800,13 +993,13 @@ Statistics by type
 +---------+-------+-----------+-----------+------------+---------+
 |type     |number |old number |difference |%documented |%badname |
 +=========+=======+===========+===========+============+=========+
-|module   |7      |7          |=          |42.86       |0.00     |
+|module   |7      |NC         |NC         |42.86       |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|class    |4      |4          |=          |0.00        |0.00     |
+|class    |4      |NC         |NC         |0.00        |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|method   |4      |4          |=          |100.00      |0.00     |
+|method   |4      |NC         |NC         |100.00      |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|function |25     |25         |=          |0.00        |12.00    |
+|function |31     |NC         |NC         |0.00        |9.68     |
 +---------+-------+-----------+-----------+------------+---------+
 
 
@@ -816,24 +1009,17 @@ External dependencies
 ::
 
     matplotlib (biofeatures.scripts.analyze_features)
-      \-pyplot (biofeatures.scripts.accessory_scripts.random_sampling_test,biofeatures.scripts.analyze_features)
-    numpy (biofeatures.scripts.accessory_scripts.random_sampling_test,biofeatures.scripts.accessory_scripts.convert_annotations,biofeatures.scripts.analyze_features,biofeatures.scripts.build_datamatrix)
-    pandas (biofeatures.scripts.accessory_scripts.random_sampling_test,biofeatures.scripts.accessory_scripts.convert_annotations,biofeatures.scripts.analyze_features,biofeatures.scripts.build_datamatrix)
-    pybedtools (biofeatures.scripts.build_datamatrix)
-      \-BedTool (biofeatures.scripts.accessory_scripts.convert_annotations,biofeatures.scripts.analyze_features,biofeatures.scripts.build_datamatrix)
+      \-pyplot (biofeatures.scripts.analyze_features,biofeatures.scripts.accessory_scripts.random_sampling_test)
+    numpy (biofeatures.scripts.accessory_scripts.convert_annotations,biofeatures.scripts.analyze_features,biofeatures.scripts.build_datamatrix,biofeatures.scripts.accessory_scripts.random_sampling_test)
+    pandas (biofeatures.scripts.accessory_scripts.convert_annotations,biofeatures.scripts.analyze_features,biofeatures.scripts.build_datamatrix,biofeatures.scripts.accessory_scripts.random_sampling_test)
     pysam (biofeatures.scripts.build_datamatrix)
-    rpy2 
-      \-robjects 
-        \-packages (biofeatures.scripts.analyze_features)
-        \-vectors (biofeatures.scripts.analyze_features)
     scipy 
-      \-stats (biofeatures.scripts.accessory_scripts.random_sampling_test,biofeatures.scripts.analyze_features)
+      \-stats (biofeatures.scripts.analyze_features,biofeatures.scripts.accessory_scripts.random_sampling_test)
     sklearn 
       \-ensemble (biofeatures.scripts.analyze_features)
       | \-partial_dependence (biofeatures.scripts.analyze_features)
       \-feature_selection (biofeatures.scripts.analyze_features)
       \-metrics (biofeatures.scripts.analyze_features)
-      \-model_selection (biofeatures.scripts.analyze_features)
       \-preprocessing (biofeatures.scripts.analyze_features)
 
 
@@ -844,13 +1030,13 @@ Raw metrics
 +----------+-------+------+---------+-----------+
 |type      |number |%     |previous |difference |
 +==========+=======+======+=========+===========+
-|code      |1770   |68.39 |1770     |=          |
+|code      |1901   |68.93 |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|docstring |100    |3.86  |100      |=          |
+|docstring |114    |4.13  |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|comment   |165    |6.38  |156      |+9.00      |
+|comment   |168    |6.09  |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|empty     |553    |21.37 |553      |=          |
+|empty     |575    |20.85 |NC       |NC         |
 +----------+-------+------+---------+-----------+
 
 
@@ -861,9 +1047,9 @@ Duplication
 +-------------------------+------+---------+-----------+
 |                         |now   |previous |difference |
 +=========================+======+=========+===========+
-|nb duplicated lines      |52    |52       |=          |
+|nb duplicated lines      |23    |NC       |NC         |
 +-------------------------+------+---------+-----------+
-|percent duplicated lines |2.020 |2.027    |-0.01      |
+|percent duplicated lines |0.836 |NC       |NC         |
 +-------------------------+------+---------+-----------+
 
 
@@ -874,13 +1060,13 @@ Messages by category
 +-----------+-------+---------+-----------+
 |type       |number |previous |difference |
 +===========+=======+=========+===========+
-|convention |503    |503      |=          |
+|convention |660    |NC       |NC         |
 +-----------+-------+---------+-----------+
-|refactor   |15     |15       |=          |
+|refactor   |15     |NC       |NC         |
 +-----------+-------+---------+-----------+
-|warning    |54     |45       |+9.00      |
+|warning    |72     |NC       |NC         |
 +-----------+-------+---------+-----------+
-|error      |11     |11       |=          |
+|error      |24     |NC       |NC         |
 +-----------+-------+---------+-----------+
 
 
@@ -891,15 +1077,15 @@ Messages by category
 +-----------------------------------------------------------+------+--------+---------+-----------+
 |module                                                     |error |warning |refactor |convention |
 +===========================================================+======+========+=========+===========+
-|biofeatures.scripts.build_datamatrix                       |63.64 |48.15   |46.67    |46.32      |
+|biofeatures.scripts.analyze_features                       |45.83 |34.72   |40.00    |35.00      |
 +-----------------------------------------------------------+------+--------+---------+-----------+
-|biofeatures.scripts.accessory_scripts.random_sampling_test |27.27 |7.41    |13.33    |13.72      |
+|biofeatures.scripts.accessory_scripts.random_sampling_test |29.17 |5.56    |0.00     |11.82      |
 +-----------------------------------------------------------+------+--------+---------+-----------+
-|biofeatures.scripts.analyze_features                       |9.09  |44.44   |40.00    |37.38      |
+|biofeatures.scripts.build_datamatrix                       |20.83 |59.72   |46.67    |51.21      |
 +-----------------------------------------------------------+------+--------+---------+-----------+
-|biofeatures.scripts.accessory_scripts.convert_annotations  |0.00  |0.00    |0.00     |2.39       |
+|biofeatures.scripts.accessory_scripts.convert_annotations  |4.17  |0.00    |0.00     |1.97       |
 +-----------------------------------------------------------+------+--------+---------+-----------+
-|biofeatures.scripts.accessory_scripts.__init__             |0.00  |0.00    |0.00     |0.20       |
+|biofeatures.scripts.accessory_scripts.__init__             |0.00  |0.00    |13.33    |0.00       |
 +-----------------------------------------------------------+------+--------+---------+-----------+
 
 
@@ -910,37 +1096,47 @@ Messages
 +-------------------------+------------+
 |message id               |occurrences |
 +=========================+============+
-|invalid-name             |216         |
+|invalid-name             |238         |
 +-------------------------+------------+
-|line-too-long            |100         |
+|line-too-long            |109         |
 +-------------------------+------------+
-|bad-continuation         |64          |
+|superfluous-parens       |89          |
 +-------------------------+------------+
-|trailing-whitespace      |33          |
+|trailing-whitespace      |68          |
 +-------------------------+------------+
-|missing-docstring        |33          |
+|bad-continuation         |67          |
 +-------------------------+------------+
-|redefined-outer-name     |27          |
+|missing-docstring        |39          |
 +-------------------------+------------+
-|bad-whitespace           |22          |
+|redefined-outer-name     |37          |
 +-------------------------+------------+
-|wrong-import-position    |15          |
+|bad-whitespace           |23          |
++-------------------------+------------+
+|consider-using-enumerate |15          |
 +-------------------------+------------+
 |fixme                    |14          |
 +-------------------------+------------+
-|consider-using-enumerate |12          |
+|no-member                |10          |
++-------------------------+------------+
+|import-error             |9           |
 +-------------------------+------------+
 |unused-variable          |7           |
 +-------------------------+------------+
-|no-member                |7           |
+|bad-builtin              |6           |
 +-------------------------+------------+
 |redefined-variable-type  |5           |
 +-------------------------+------------+
-|unexpected-keyword-arg   |4           |
+|ungrouped-imports        |4           |
++-------------------------+------------+
+|wrong-import-order       |3           |
 +-------------------------+------------+
 |too-many-statements      |3           |
 +-------------------------+------------+
+|no-name-in-module        |3           |
++-------------------------+------------+
 |cell-var-from-loop       |3           |
++-------------------------+------------+
+|unused-import            |2           |
 +-------------------------+------------+
 |unnecessary-lambda       |2           |
 +-------------------------+------------+
@@ -954,15 +1150,13 @@ Messages
 +-------------------------+------------+
 |duplicate-code           |2           |
 +-------------------------+------------+
-|wrong-import-order       |1           |
-+-------------------------+------------+
-|ungrouped-imports        |1           |
-+-------------------------+------------+
-|trailing-newlines        |1           |
+|unexpected-keyword-arg   |1           |
 +-------------------------+------------+
 |too-many-branches        |1           |
 +-------------------------+------------+
 |missing-final-newline    |1           |
++-------------------------+------------+
+|function-redefined       |1           |
 +-------------------------+------------+
 |eval-used                |1           |
 +-------------------------+------------+
@@ -971,5 +1165,5 @@ Messages
 
 Global evaluation
 -----------------
-Your code has been rated at 5.06/10 (previous run: 5.13/10, -0.07)
+Your code has been rated at 3.75/10
 
