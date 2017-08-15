@@ -1,23 +1,19 @@
-#!/usr/python
-
+#!/usr/bin/env python
 #### Load the required packages
 
 import sys
 import argparse
 from subprocess import Popen
 import itertools
-
 import pandas as pd
 import numpy as np
 from pybedtools import BedTool
 from scipy import stats
 import matplotlib
-
+matplotlib.use('Agg')
 import readline
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import FloatVector
-
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble.partial_dependence import plot_partial_dependence
@@ -38,19 +34,57 @@ pd.options.mode.chained_assignment = None  # default='warn'
 
 plt.ioff()
 
+gandalf = """
+    -----------------------       ....
+    | YOU SHALL NOT PARSE |     .'' .'''
+.   -----------------------   .'   :
+\\            \   \         .:    :
+ \\             \ \        _:    :       ..----.._
+  \\              \     .:::.....:::.. .'         ''.
+   \\                 .'  #-. .-######'     #        '.
+    \\                 '.##'/ ' ################       :
+     \\                  #####################         :
+      \\               ..##.-.#### .''''###'.._        :
+       \\             :--:########:            '.    .' :
+        \\..__...--.. :--:#######.'   '.         '.     :
+        :     :  : : '':'-:'':'::        .         '.  .'
+        '---'''..: :    ':    '..'''.      '.        :'
+           \\  :: : :     '      ''''''.     '.      .:
+            \\ ::  : :     '            '.      '      :
+             \\::   : :           ....' ..:       '     '.
+              \\::  : :    .....####\\ .~~.:.             :
+               \\':.:.:.:'#########.===. ~ |.'-.   . '''.. :
+                \\    .'  ########## \ \ _.' '. '-.       '''.
+                :\\  :     ########   \ \      '.  '-.        :
+               :  \\'    '   #### :    \ \      :.    '-.      :
+              :  .'\\   :'  :     :     \ \       :      '-.    :
+             : .'  .\\  '  :      :     :\ \       :        '.   :
+             ::   :  \\'  :.      :     : \ \      :          '. :
+             ::. :    \\  : :      :    ;  \ \     :           '.:
+              : ':    '\\ :  :     :     :  \:\     :        ..'
+                 :    ' \\ :        :     ;  \|      :   .'''
+                 '.   '  \\:                         :.''
+                  .:..... \\:       :            ..''
+                 '._____|'.\\......'''''''.:..'''
+                            \\
+"""
 
 ##Load the parser for arguments
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
         print
+        self.print_help()
+        print
+        print gandalf
+        print    
+        print
         print("The following error ocurred in argument parsing:")
         sys.stderr.write('error: %s\n' % message)
         print
         print(
-            "Check the help below and try to fix the arguments. If the error persists, please contact the corresponding author")
-        print
-        self.print_help()
+            "Check the help and try to fix the arguments. If the error persists, please contact the corresponding author")
+        print   
         sys.exit(2)
 
 
@@ -58,20 +92,8 @@ class MyParser(argparse.ArgumentParser):
 
 parser = MyParser(description='')
 
-parser.add_argument('-ts', "--twoSamp", dest="twoSamp",
-                    action="store_true", default=False,
-                    help="Use this flag if you want to compare two sets of samples against each other, requires the usage of -b2. In this case, the second bed file will be considered as 'negative' (or background) for the classification step. Default: False")
-
 parser.add_argument('-b', '--bed', dest="bed_file",
                     help="BED file with exons/regions of interest.",
-                    required=True)
-
-parser.add_argument('-b2', '--bed2', dest="bed_file_2",
-                    help="Second BED file with exons/regions of interest.",
-                    required=False)
-
-parser.add_argument('-ref', '--refference_bed', dest="refference_bed",
-                    help="BED file with annotated exons created by 'build_datamatrix.py'",
                     required=True)
 
 parser.add_argument('-m', '--matrix', dest="matrix",
@@ -87,39 +109,18 @@ parser.add_argument('-filter', '--filter_columns', dest="filter_out",
                     help="Text file containing a comma-separated list with names of the columns to be removed from the dataframe in the analysis. Default: False",
                     metavar="filter_out.txt", required=False)
 
-parser.add_argument('-select', '--select_columns', dest="filter_in",
-                    default=False,
-                    help="Text file containing a comma-separated list with names of the columns in dataframe to be used in the analysis. Default: False",
-                    metavar="filter_in.txt", required=False)
-
 parser.add_argument("-padj", '--p_adjust', dest="padj", default='bonferroni',
                     help="Type of p-value correction used after Kolmogorov-Smirnov test, available options are: 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', 'fdr' and 'none'. Default:'bonferroni'",
                     type=str, metavar='padj', required=False)
 
-parser.add_argument('-F', '--F_bedtools', dest="F_bedtools", default=1, type=float,
-                    help="-F options passed to BedTools for intersection of reference BED (-ref, A) with input BED (-b, B). Default: 1",
-                    metavar='F', required=False)
-
-parser.add_argument('-f', '--f_bedtools', dest="f_bedtools", default=1, type=float,
-                    help="-f options passed to BedTools for intersection of reference BED (-ref, A) with input BED (-b, B). Default: 1",
-                    metavar='f', required=False)
-
-parser.add_argument("--skipStat", dest="skip_stat",
-                    action="store_true", default=False,
-                    help="Use this flag if you want to skip the Kolmogorov-Smirnov statistical analysis and cumulative distribution plotting step. Default: False")
-
-parser.add_argument("--no-plotCDF", dest="dont_plot_cdf",
-                    action="store_true", default=False,
-                    help="Use this flag if you want to skip plotting CDF graphs for each feature in the matrix. Default: False")
-
-parser.add_argument('--sig-only-CLF', dest="ks_filter", action="store_true",
-                    default=False,
-                    help="Use only the statistically significant features (found by KS test) in the classification step. Useful for filtering large data matrices to reduce noise error and increase accuracy, however it may require some manual parameter tunning (with -params 'file' option). Can use the '-pth' option to select the threshold of significante for feature selection. Default: False",
-                    required=False)
-
 parser.add_argument("-pth", '--p_adjust_threshold', dest="p_th", default=0.05,
-                    help="Threshold of adjusted p-value for significance. Only significantly different features are passed down to the classifier for group separation. Default: 0.05",
+                    help="Threshold of adjusted p-value for significance. If using --sig-only-CLF, only significantly different features are passed down to the classifier for group separation. Default: 0.05",
                     type=float, required=False)
+
+parser.add_argument('--sig-only', dest="ks_filter", action="store_true",
+                    default=False,
+                    help="Use only the statistically significant features (found by KS test) in the plotting classification step. Useful for filtering large data matrices to reduce computational time. Can use the '-pth' option to select the threshold of significante for feature selection. Default: False",
+                    required=False)
 
 parser.add_argument("-runs", '--number_of_runs', dest="runs", default=500,
                     help="Number of times (repetitions) to run the classification step. Default:500",
@@ -136,14 +137,18 @@ parser.add_argument("-tsize", '--train_size', dest="train_size",
 
 parser.add_argument("-params", '--gbcl_parameters', dest="clf_params",
                     default='preset',
-                    help="Type of parameter selection to be used by the classifier. Available options are: 'optimize' (runs an optimization step with GridSearchCV before every run), 'default' (uses default parameters from GradientBoostClassifier), 'preset' (uses the preset parameters which were used for the analysis of the human dataset shown in the article) and 'file' (take in input txt file with a dictionary-like struture with classifier parameters, requires the use of -pf option). Default:'preset'",
+                    help="Type of parameter selection to be used by the classifier. Available options are: 'optimize' (runs an optimization step with GridSearchCV before every run), 'default' (uses default parameters from GradientBoostClassifier), 'preset' (uses the preset parameters which were used for the analysis of the human dataset shown in the article) and 'file' (take in input txt file with a dictionary-like struture with classifier parameters, requires the use of -pf option). Options: 'default', 'preset' and 'file'. Default:'preset'",
                     type=str, metavar='params', required=False)
 
 parser.add_argument("-pf", '--param_file', dest="param_file",
                     help="Input text with with dictionary-like structure with parameter options for GradientBoostClassifier. Ex. {'n_estimators':300,'loss':'deviance',...}",
                     metavar='file', required=False)
 
-parser.add_argument("--noCLF", dest="dont_run_clf",
+parser.add_argument("--no-plotCDF", dest="dont_plot_cdf",
+                    action="store_true", default=False,
+                    help="Use this flag if you want to skip plotting CDF graphs for each feature in the matrix. Default: False")
+
+parser.add_argument("--no-CLF", dest="dont_run_clf",
                     action="store_true", default=False,
                     help="Use this flag if you want to skip the classifying with GradientBoost. Default: False")
 
@@ -153,99 +158,18 @@ parser.add_argument("--ncores", dest="ncores", default=(mp.cpu_count() - 1),
 
 args = parser.parse_args()
 
-
 ##Define the functions which will be used during the analysis
 
-def group_matrices_one_sample(bt, bt_a, matrix, F=args.F_bedtools,
-                              f=args.f_bedtools, s=True):
+def group_matrices_one_sample(bt, bt_a, matrix):
     # TODO: refactor common intersect call
     int_a = bt.intersect(bt_a,
-                         s=s,
-                         F=F,
-                         f=f,
+                         s=True,
                          sorted=True).to_dataframe().drop_duplicates()
 
     matrix['group'] = 0
     matrix['group'][matrix['name'].isin(int_a['name'])] = 1
 
     return matrix
-
-
-def group_matrices_two_samples(bt, bt_a, bt_b, matrix, F=args.F_bedtools,
-                               f=args.f_bedtools, s=True):
-    # TODO: refactor common intersect call
-    int_a = bt.intersect(bt_a,
-                         s=s,
-                         F=F,
-                         f=f,
-                         sorted=True).to_dataframe().drop_duplicates()
-
-    # TODO: refactor common intersect call
-    int_b = bt.intersect(bt_b,
-                         s=s,
-                         F=F,
-                         f=f,
-                         sorted=True).to_dataframe().drop_duplicates()
-
-    matrix['group'] = 0
-    matrix['group'][(matrix['name'].isin(int_a['name'])) &
-                    ~(matrix['name'].isin(int_b['name']))] = 1
-
-    matrix['group'][(matrix['name'].isin(int_b['name'])) &
-                    ~(matrix['name'].isin(int_a['name']))] = 2
-
-    matrix['group'][(matrix['name'].isin(int_b['name'])) &
-                    (matrix['name'].isin(int_a['name']))] = 3
-
-    return matrix
-
-
-def get_statistical_data_for_features(df, correction_type=args.padj):
-    features = pd.DataFrame()
-    features['Feature'] = df.drop('group', 1).columns
-
-    pairwise = list(
-        itertools.combinations(df.sort_values('group').group.drop_duplicates(),
-                               2))
-
-    statsR = importr('stats')
-
-    for i in range(len(pairwise)):
-        print("Calculating Kolmogorov-Smirnov test for: Group " + str(
-            pairwise[i][0]) + " vs Group " + str(pairwise[i][1]))
-        print
-
-        features['ks_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])] = \
-            features['Feature'].apply(
-                lambda x: stats.ks_2samp(
-                    df[df['group'] == pairwise[i][0]][x].astype(float),
-                    df[df['group'] == pairwise[i][1]][x].astype(float)))
-
-        features['pval_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])
-                 ] = features[
-            'ks_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])].apply(
-            lambda x: x[:][1])
-
-        features['ks_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])
-                 ] = features[
-            'ks_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])].apply(
-            lambda x: x[:][0])
-
-        print("Adjusting P-value scores with " + str(
-            correction_type) + " method")
-        print
-
-        features[
-            'adj_pval_' + str(pairwise[i][0]) + '_vs_' + str(pairwise[i][1])
-            ] = statsR.p_adjust(FloatVector(features['pval_' + str(
-            pairwise[i][0]) + '_vs_' + str(pairwise[i][1])]),
-                                method=correction_type)
-
-        print("Done with KS test for: Group " + str(
-            pairwise[i][0]) + " vs Group " + str(pairwise[i][1]))
-        print
-    return features
-
 
 def cdf(data, bins=50):
     # data = np.ma.masked_array(data, np.isnan(data))
@@ -279,7 +203,7 @@ def plot_barcharts(df, title, save):
     df_t['mean'] = df_t.apply(lambda x: np.mean(x[cols]), 1)
     df_t['std'] = df_t.apply(lambda x: np.std(x[cols]), 1)
 
-    df_t.to_csv('./' + args.prefix + '_results/' + save + '.tsv', sep='\t')
+    df_t.to_csv('./' + args.prefix + '.analysis/' + save + '.tsv', sep='\t')
 
     N = df_t.shape[0]
     means = df_t['mean']
@@ -322,7 +246,7 @@ def plot_barchart_importance(df):
     ax.set_xticks(ind + width / 2)
     ax.set_xticklabels(rel.index, rotation='vertical', fontsize=14)
     plt.savefig(
-        './' + args.prefix + '_results/classifier_plots/mean_relative_importance.pdf',
+        './' + args.prefix + '.analysis/classifier_plots/mean_relative_importance.pdf',
         dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -342,193 +266,146 @@ def plot_barchart_importance(df):
     ax.set_xticks(ind + width / 2)
     ax.set_xticklabels(raw.index, rotation='vertical', fontsize=14)
     plt.savefig(
-        './' + args.prefix + '_results/classifier_plots/mean_importance.pdf',
+        './' + args.prefix + '.analysis/classifier_plots/mean_importance.pdf',
         dpi=300, bbox_inches='tight')
     plt.close()
 
 
-##Load the datamatrix generatade by "buildadatamatrix.py"
+##Create directory for output
+
+Popen('mkdir -p ./' + args.prefix + '.analysis', shell=True)
+    
+##Load the bed file created with all exons
 
 print
-print("Loading datamatrix")
+print "Loading bed file with regions of interest"
+print
+
+bed_input = BedTool(args.bed_file).sort()
+    
+##Load the datamatrix generatade by "buildadatamatrix.py"
+
+print "Loading datamatrix"
 print
 
 matrix = pd.concat(pd.read_table(args.matrix, iterator=True, chunksize=10000),
-                   ignore_index=True).set_index(
-    'name').drop_duplicates()  # .reset_index()
+                   ignore_index=True).set_index('name').drop_duplicates().reset_index()
 
 # Filter in/out columns in the dataframe
 
 if not args.filter_out:
     pass
 else:
-    print("Filtering out columns")
+    print "Filtering out columns"
     print
     out_cols = open(str(args.filter_out)).read().split(',')
     out_cols = [w.replace('\n', '') for w in out_cols]
     matrix = matrix.drop(out_cols, 1)
 
-if not args.filter_in:
-    pass
-else:
-    print("Selecting columns")
-    print
-    in_cols = open(str(args.filter_in)).read().split(',')
-    in_cols = [w.replace('\n', '') for w in in_cols]
-    matrix = matrix[in_cols]
-
-##Load the bed file created with all exons
-
-matrix = matrix.reset_index()
-
-print("Loading annotated exons in refference file")
-print
-
-all_exons = BedTool(args.refference_bed).sort()
-
-##Load the dataset of interest to be analyzed (needs to be a SORTED BED)
-
-print("Load selected exons for biological feature analysis")
-print
-
-if not args.twoSamp:
-    pass
-elif args.twoSamp:
-    print("Running in two sample mode")
-    print
-    print("Loading bed file for sample 1")
-    print
-
-sel_exons = BedTool(args.bed_file).sort()
-
-if args.twoSamp:
-    print("Loading bed file for sample 2")
-    print
-    sel_exons_2 = BedTool(args.bed_file_2).sort()
-else:
-    pass
-
 ##Intersect the exons found in the analysis to get groups 1 (positive) and 0 (negative) in the matrix
 
-print("Finding input exons in the matrix and selecting groups")
+print "Finding input exons in the matrix and selecting groups"
 print
 
-if not args.twoSamp:
-    matrix = group_matrices_one_sample(all_exons, sel_exons, matrix).set_index(
-        'name')
-elif args.twoSamp:
-    matrix = group_matrices_two_samples(all_exons, sel_exons, sel_exons_2,
-                                        matrix).set_index('name')
+bed_from_matrix = pd.DataFrame()
+bed_from_matrix['chr'] = matrix['name'].apply(lambda x: x.split('_')[3],1)
+bed_from_matrix['start'] = matrix['name'].apply(lambda x: x.split('_')[4],1)
+bed_from_matrix['end'] = matrix['name'].apply(lambda x: x.split('_')[5],1)
+bed_from_matrix['name'] = matrix['name']
+bed_from_matrix['score'] = 0
+bed_from_matrix['strand'] = matrix['name'].apply(lambda x: x.split('_')[6],1)
+bed_from_matrix = BedTool.from_dataframe(bed_from_matrix).sort()
 
+matrix = group_matrices_one_sample(bed_from_matrix, bed_input, matrix).set_index('name')
+   
+print "Starting statistical analysis"
 print
-print "Number of exons in each class"
+print "Calculating Komlogorov-Smirnov test for each feature in the matrix"
 print
-print matrix.group.value_counts()
 
-##Run statistical analysis on the dataset with the "get_statistical_data_for_features" function:
+features = list(matrix.drop('group',1).columns)
+df_list = []
 
-Popen('mkdir -p ./' + args.prefix + '_results', shell=True)
+for i in range(len(features)):
+    sl = matrix[[features[i],'group']]
+    res = stats.ks_2samp(sl[sl['group'] == 0][features[i]].astype(float),
+                         sl[sl['group'] == 1][features[i]].astype(float))
+    d = {'Feature': features[i], 'ks': res[0], 'pval': res[1]}
+    df = pd.DataFrame(data=d, index=np.arange(1))
+    df_list.append(df)
 
-if not args.skip_stat:
+st = pd.concat(df_list, 0).reset_index().drop('index',1)
+    
+print "Adjusting pvalues using "+str(args.padj)+" and saving output"
+print
+    
+statsR = importr('stats')
+st['adj_pval'] = statsR.p_adjust(FloatVector(st['pval']),method=str(args.padj))
+st.to_csv('./' + args.prefix + '.analysis/statistical_analysis_output.tsv',
+          sep='\t', index=False)
+st.to_excel('./' + args.prefix + '.analysis/statistical_analysis_output.xlsx',
+            index=False)
+
+print "Finished statistical analysis"
+print
+    
+if not args.ks_filter:
+    pass
+elif args.ks_filter:
+    print "Filtering statistically significantly features for plotting CDF and classification steps"
     print
-    print("Starting statistical analysis")
+    sig_only = st[st['adj_pval'] <= float(args.p_th)]['Feature'].tolist()
+    sig_only.append('group')
+    matrix = matrix[sig_only]
+    
+    
+if not args.dont_plot_cdf:
+    print("Output CDF plots for each features in matrix")
     print
+    Popen('mkdir -p ./' + args.prefix + '.analysis/CDF_plots', shell=True)
+    features = list(matrix.drop('group',1).columns)
+    
+    for i in range(len(features)):
+        name = (features[i]).split("/")[-1]
+        sl = matrix[[features[i],'group']]
+        
+        plt.figure(figsize=(8, 8))
+        plot_cdf(sl[sl['group'] == 0][features[i]].values,
+                 bins=100,
+                 label='Background regions', c='black', linewidth=1.5,
+                 linestyle='solid')
+        plot_cdf(sl[sl['group'] == 1][features[i]].values,
+                 bins=100,
+                 label='Input regions', c='black', linewidth=1.5,
+                 linestyle='dashed')
 
-    st = get_statistical_data_for_features(matrix, correction_type=args.padj)
-    st.to_csv('./' + args.prefix + '_results/statistical_analysis_output.tsv',
-              sep='\t', index=False)
+        plt.legend(loc=0)
+        plt.ylim(0, 1)
+        
+        if name.find("%") != -1:
+            plt.xlim(0, 1)
+        elif name.find("phastCon") != -1:
+            plt.xlim(0, 1)
+        elif name.find("CpG") != -1:
+            plt.xlim()
+        else:
+            plt.xscale('symlog')
+       
+        plt.xlabel(str(name), fontsize=14)
+        plt.ylabel('Cumulative distribution of samples', fontsize=14)
+        plt.rc('xtick', labelsize=14)
+        plt.rc('ytick', labelsize=14)
+        plt.savefig('./' + args.prefix + '.analysis/CDF_plots/' + name + '.pdf',
+                    dpi=300, bbox_inches='tight')
+        plt.close()
 
-    print("Finished statistical analysis")
+    print "Finished CDF plots for features in matrix" 
     print
-    ##########################################
-    ## Plot CDF for the features
-    if not args.dont_plot_cdf:
-        print("Output CDF plots for each features in matrix")
-        print
-        Popen('mkdir -p ./' + args.prefix + '_results/CDF_plots', shell=True)
-
-        for run_i in range(len(st)):
-            feature = st['Feature'][run_i]
-            name = (st['Feature'][run_i]).split("/")[-1]
-            plt.figure(figsize=(8, 8))
-            plot_cdf(matrix[matrix['group'] == 0][str(feature)].values,
-                     bins=100,
-                     label='Exons in 0', c='black', linewidth=1.5,
-                     linestyle='solid')
-            plot_cdf(matrix[matrix['group'] == 1][str(feature)].values,
-                     bins=100,
-                     label='Exons in 1', c='black', linewidth=1.5,
-                     linestyle='dashed')
-
-            if not args.twoSamp:
-                pass
-            elif args.twoSamp:
-                plot_cdf(matrix[matrix['group'] == 2][str(feature)].values,
-                         bins=100,
-                         label='Exons in 2', c='black', linewidth=1.5,
-                         linestyle='dotted')
-
-                plot_cdf(matrix[matrix['group'] == 3][str(feature)].values,
-                         bins=100,
-                         label='Exons in both 1 and 2', c='black',
-                         linewidth=1.5, linestyle='-.')
-
-            plt.legend(loc=0)
-            plt.ylim(0, 1)
-
-            if feature.find("%") != -1:
-                plt.xlim(0, 1)
-            elif feature.find("phastCon") != -1:
-                plt.xlim(0, 1)
-            elif feature.find("CpG") != -1:
-                plt.xlim()
-            else:
-                plt.xscale('symlog')
-
-            plt.xlabel(str(name), fontsize=14)
-            plt.ylabel('Cumulative distribution of samples', fontsize=14)
-            plt.title(
-                'KS adj. p-val: ' + str(
-                    round(st['adj_pval_0_vs_1'][run_i], 4)),
-                y=1.01, fontsize=14)
-            plt.rc('xtick', labelsize=14)
-            plt.rc('ytick', labelsize=14)
-
-            plt.savefig(
-                './' + args.prefix + '_results/CDF_plots/' + name + '.pdf',
-                dpi=300, bbox_inches='tight')
-            plt.close()
-
-        print("Finished CDF plots for features in matrix")
-        print
-    elif args.dont_plot_cdf:
-        pass
-
-    if not args.ks_filter:
-        pass
-    elif args.ks_filter:
-        if not args.twoSamp:
-            print(
-                "Filtering statistically significantly features for classification step")
-            print
-            sig_only = st[st['adj_pval_0_vs_1'] <= float(args.p_th)][
-                'Feature'].tolist()
-            sig_only.append('group')
-            matrix = matrix[sig_only]
-        elif args.twoSamp:
-            print(
-                "Filtering statistically significantly features for classification step")
-            print
-            sig_only = st[st['adj_pval_1_vs_2'] <= float(args.p_th)][
-                'Feature'].tolist()
-            sig_only.append('group')
-            matrix = matrix[sig_only]
-
-elif args.skip_stat:
+elif args.dont_plot_cdf:
     pass
 
 if args.dont_run_clf:
-    print("Analysis complete. Thanks for using biofeatures.")
+    print "Analysis complete. Thank you for using biofeatures."
     print
     sys.exit()
 else:
@@ -548,14 +425,10 @@ sample_size = args.nsample
 gbclf_params = str(args.clf_params)
 train_size = args.train_size
 
-Popen('mkdir -p ./' + args.prefix + '_results/classifier_plots', shell=True)
+Popen('mkdir -p ./' + args.prefix + '.analysis/classifier_plots', shell=True)
 
-if not args.skip_stat:
-    importance = st.copy()
-elif args.skip_stat:
-    importance = pd.DataFrame()
-    importance['Feature'] = matrix.drop('group', 1).columns
-
+importance = st.copy()
+    
 deviance_train = pd.DataFrame()
 deviance_test = pd.DataFrame()
 
@@ -574,27 +447,14 @@ pre_all = pd.DataFrame()
 rec_all = pd.DataFrame()
 av_pre_all = pd.DataFrame()
 
-if args.twoSamp:
-    matrix = matrix[(matrix['group'] == 2) | (matrix['group'] == 1)]
-    matrix['group'] = matrix['group'].apply(
-        lambda x: int(str(x).replace('2', '0')))
-else:
-    pass
-
 for run_i in range(len(runs)):
     run_id = str(runs[run_i] + 1)
-    if args.twoSamp:
-        df_cl = matrix[matrix['group'] != 0]
-        df_zero = matrix[matrix['group'] == 0]  # .sample(df_cl.shape[0]*4)
-        Z = pd.concat([df_cl, df_zero]).drop_duplicates()
-    else:
-        df_cl = matrix[matrix['group'] != 0]
-        df_zero = matrix[matrix['group'] == 0].sample(
-            df_cl.shape[0] * sample_size)
-        Z = pd.concat([df_cl, df_zero]).drop_duplicates()
+    df_cl = matrix[matrix['group'] != 0]
+    df_zero = matrix[matrix['group'] == 0].sample(df_cl.shape[0] * sample_size)
+    Z = pd.concat([df_cl, df_zero]).drop_duplicates()
 
     Popen(
-        'mkdir -p ./' + args.prefix + '_results/classifier_plots/run_' + run_id,
+        'mkdir -p ./' + args.prefix + '.analysis/classifier_plots/run_' + run_id,
         shell=True)
 
     print("Run ID: " + str(run_id) + ', Input size: ' + str(
@@ -661,7 +521,7 @@ for run_i in range(len(runs)):
         plt.plot(list(range(1, len(rfecv.grid_scores_) + 1)),
                  rfecv.grid_scores_, lw=2)
         plt.savefig(
-            './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_feature_recursive_elimination.pdf',
+            './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_feature_recursive_elimination.pdf',
             dpi=300, bbox_inches='tight')
         plt.close()
 
@@ -669,14 +529,14 @@ for run_i in range(len(runs)):
         print
 
         # TODO: parameterize
-        grid = {'n_estimators': [500, 1000, 2000],
-                'max_depth': [6, 8, 10],
-                'min_samples_split': [0.01],
-                'min_samples_leaf': [0.001],
+        grid = {'n_estimators': [250, 500, 1000, 2000],
+                'max_depth': [4, 6, 8, 10],
+                'min_samples_split': [0.01, 0.1],
+                'min_samples_leaf': [0.001, 0.01],
                 'max_features': [best_n_features],
-                'learning_rate': [0.01, 0.05],
+                'learning_rate': [0.01, 0.05, 0.005],
                 'loss': ['deviance'],
-                'subsample': [0.8, 0.6],
+                'subsample': [0.8, 0.6, 1],
                 'random_state': [1]}
 
         gclf = GridSearchCV(estimator=clf, param_grid=grid, n_jobs=args.ncores,
@@ -685,9 +545,10 @@ for run_i in range(len(runs)):
         gclf.fit(X_train, y_train)
         bp = gclf.best_params_
 
-        with open(
-                                                                './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_best_params.txt',
-                                                                'w') as fp:
+        with open('./' + args.prefix \
+                  + '_results/classifier_plots/run_' + \
+                  run_id + '/run_' + run_id + \
+                  '_best_params.txt','w') as fp:
             fp.write('{')
             for p in list(bp.items()):
                 fp.write("'%s':%s,\n" % p)
@@ -775,7 +636,7 @@ for run_i in range(len(runs)):
 
     plt.tight_layout()
     plt.savefig(
-        './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_partial_dependance.pdf',
+        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_partial_dependance.pdf',
         dpi=600,
         bbox_inches='tight')
     plt.close()
@@ -799,7 +660,7 @@ for run_i in range(len(runs)):
     plt.xlabel('Boosting Iterations')
     plt.ylabel('Deviance')
     plt.savefig(
-        '' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_deviance.pdf',
+        '' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_deviance.pdf',
         dpi=600,
         bbox_inches='tight')
     plt.close()
@@ -875,12 +736,12 @@ for run_i in range(len(runs)):
 
     fpr_r = pd.DataFrame(data=fpr["micro_run_" + run_id], columns=['F.P.R.'])
     fpr_r.to_csv(
-        './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_roc_fpr.tsv',
+        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_roc_fpr.tsv',
         sep='\t')
 
     tpr_r = pd.DataFrame(data=tpr["micro_run_" + run_id], columns=['T.P.R.'])
     tpr_r.to_csv(
-        './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_roc_tpr.tsv',
+        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_roc_tpr.tsv',
         sep='\t')
 
     roc_fpr_all = pd.concat([roc_fpr_all, fpr_r], ignore_index=True,
@@ -903,7 +764,7 @@ for run_i in range(len(runs)):
     plt.title('Receiver operating characteristic', size=20)
     plt.legend(loc="lower right", fontsize=18)
     plt.savefig(
-        './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_roc_curve.pdf',
+        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_roc_curve.pdf',
         dpi=300,
         bbox_inches='tight')
     plt.close()
@@ -923,13 +784,13 @@ for run_i in range(len(runs)):
     pre_r = pd.DataFrame(data=precision["micro_run_" + run_id],
                          columns=['Precision'])
     pre_r.to_csv(
-        './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_precision.tsv',
+        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_precision.tsv',
         sep='\t')
 
     rec_r = pd.DataFrame(data=recall["micro_run_" + run_id],
                          columns=['Recall'])
     rec_r.to_csv(
-        './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_recall.tsv',
+        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_recall.tsv',
         sep='\t')
 
     pre_all = pd.concat([pre_all, pre_r], ignore_index=True,
@@ -956,7 +817,7 @@ for run_i in range(len(runs)):
     plt.ylim(ymax=1.05)
     plt.legend(loc="lower left", fontsize=18)
     plt.savefig(
-        './' + args.prefix + '_results/classifier_plots/run_' + run_id + '/run_' + run_id + '_precision_recall_curve.pdf',
+        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_precision_recall_curve.pdf',
         dpi=300,
         bbox_inches='tight')
     plt.close()
@@ -980,9 +841,12 @@ importance['mean_rel_importance'] = importance.apply(
     lambda x: np.mean(x[cols]), 1)
 importance['std_rel_importance'] = importance.apply(lambda x: np.std(x[cols]),
                                                     1)
+importance = importance[importance.columns.drop(list(importance.filter(regex='run_')))]
 
-importance.to_csv('./' + args.prefix + '_results/classifier_importance.tsv',
+importance.to_csv('./' + args.prefix + '.analysis/classifier_importance.tsv',
                   sep='\t')
+
+importance.to_excel('./' + args.prefix + '.analysis/classifier_importance.xlsx')
 
 print("Plotting raw importance and relative importance barcharts")
 print
@@ -996,14 +860,14 @@ deviance_test['mean'] = deviance_test.apply(lambda x: np.mean(x[cols]), 1)
 deviance_test['std'] = deviance_test.apply(lambda x: np.std(x[cols]), 1)
 
 deviance_test.to_csv(
-    './' + args.prefix + '_results/classifier_test_deviance.tsv', sep='\t')
+    './' + args.prefix + '.analysis/classifier_test_deviance.tsv', sep='\t')
 
 cols = deviance_train.columns
 deviance_train['mean'] = deviance_train.apply(lambda x: np.mean(x[cols]), 1)
 deviance_train['std'] = deviance_train.apply(lambda x: np.std(x[cols]), 1)
 
 deviance_train.to_csv(
-    './' + args.prefix + '_results/classifier_train_deviance.tsv', sep='\t')
+    './' + args.prefix + '.analysis/classifier_train_deviance.tsv', sep='\t')
 
 plt.figure(figsize=(6, 6))
 plt.subplot(1, 1, 1)
@@ -1033,7 +897,7 @@ plt.fill_between(np.arange(len(deviance_test)) + 1,
 plt.legend(loc='upper right')
 plt.xlabel('Boosting Iterations', fontsize=14)
 plt.ylabel('Deviance', fontsize=14)
-plt.savefig('./' + args.prefix + '_results/classifier_plots/mean_deviance.pdf',
+plt.savefig('./' + args.prefix + '.analysis/classifier_plots/mean_deviance.pdf',
             dpi=300, bbox_inches='tight')
 plt.close()
 
@@ -1051,7 +915,7 @@ save_list = ['mean_confusion_matri_classes',
 
 for run_i in range(len(df_list)):
     plot_barcharts(df_list[run_i], title_list[run_i], save_list[run_i])
-    plt.savefig('./' + args.prefix + '_results/classifier_plots/' + save_list[
+    plt.savefig('./' + args.prefix + '.analysis/classifier_plots/' + save_list[
         run_i] + '.pdf', dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -1061,21 +925,21 @@ cols = roc_fpr_all.columns
 roc_fpr_all['mean'] = roc_fpr_all.apply(lambda x: np.mean(x[cols]), 1)
 roc_fpr_all['std'] = roc_fpr_all.apply(lambda x: np.std(x[cols]), 1)
 
-roc_fpr_all.to_csv('./' + args.prefix + '_results/roc_false_positive_rate.tsv',
+roc_fpr_all.to_csv('./' + args.prefix + '.analysis/roc_false_positive_rate.tsv',
                    sep='\t')
 
 cols = roc_tpr_all.columns
 roc_tpr_all['mean'] = roc_tpr_all.apply(lambda x: np.mean(x[cols]), 1)
 roc_tpr_all['std'] = roc_tpr_all.apply(lambda x: np.std(x[cols]), 1)
 
-roc_tpr_all.to_csv('./' + args.prefix + '_results/roc_true_positive_rate.tsv',
+roc_tpr_all.to_csv('./' + args.prefix + '.analysis/roc_true_positive_rate.tsv',
                    sep='\t')
 
 cols = roc_auc_all.columns
 roc_auc_all['mean'] = roc_auc_all.apply(lambda x: np.mean(x[cols]), 1)
 roc_auc_all['std'] = roc_auc_all.apply(lambda x: np.std(x[cols]), 1)
 
-roc_auc_all.to_csv('./' + args.prefix + '_results/roc_area_under_curve.tsv',
+roc_auc_all.to_csv('./' + args.prefix + '.analysis/roc_area_under_curve.tsv',
                    sep='\t')
 
 plt.figure(figsize=(6, 6))
@@ -1104,7 +968,7 @@ plt.xlabel('False Positive Rate', fontsize=14)
 plt.ylabel('True Positive Rate', fontsize=14)
 plt.title('Mean receiver operating characteristic', fontsize=14)
 plt.legend(loc="lower right")
-plt.savefig('./' + args.prefix + '_results/classifier_plots/mean_roc.pdf',
+plt.savefig('./' + args.prefix + '.analysis/classifier_plots/mean_roc.pdf',
             dpi=300, bbox_inches='tight')
 plt.close()
 
@@ -1114,20 +978,20 @@ cols = pre_all.columns
 pre_all['mean'] = pre_all.apply(lambda x: np.mean(x[cols]), 1)
 pre_all['std'] = pre_all.apply(lambda x: np.std(x[cols]), 1)
 
-pre_all.to_csv('./' + args.prefix + '_results/precision.tsv', sep='\t')
+pre_all.to_csv('./' + args.prefix + '.analysis/precision.tsv', sep='\t')
 
 cols = rec_all.columns
 rec_all['mean'] = rec_all.apply(lambda x: np.mean(x[cols]), 1)
 rec_all['std'] = rec_all.apply(lambda x: np.std(x[cols]), 1)
 
-rec_all.to_csv('./' + args.prefix + '_results/recall.tsv', sep='\t')
+rec_all.to_csv('./' + args.prefix + '.analysis/recall.tsv', sep='\t')
 
 cols = roc_auc_all.columns
 av_pre_all['mean'] = av_pre_all.apply(lambda x: np.mean(x[cols]), 1)
 av_pre_all['std'] = av_pre_all.apply(lambda x: np.std(x[cols]), 1)
 
 av_pre_all.to_csv(
-    './' + args.prefix + '_results/precision_recall_area_under_curve.tsv',
+    './' + args.prefix + '.analysis/precision_recall_area_under_curve.tsv',
     sep='\t')
 
 plt.figure(figsize=(6, 6))
@@ -1156,7 +1020,7 @@ plt.ylabel('Precision', fontsize=14)
 plt.title('Precision-Recall', fontsize=14)
 plt.legend(loc="lower left")
 plt.savefig(
-    './' + args.prefix + '_results/classifier_plots/mean_precision_recall.pdf',
+    './' + args.prefix + '.analysis/classifier_plots/mean_precision_recall.pdf',
     dpi=300, bbox_inches='tight')
 plt.close()
 
@@ -1164,7 +1028,7 @@ print("Zipping folders from every run in a single file")
 print
 
 Popen(
-    'tar -zcf ./' + args.prefix + '_results/classifier_plots/run_files.tar.gz ./' + args.prefix + '_results/classifier_plots/run_*/',
+    'tar -zcf ./' + args.prefix + '.analysis/classifier_plots/run_files.tar.gz ./' + args.prefix + '.analysis/classifier_plots/run_*/',
     shell=True)
 
 print("Analysis complete. Thanks for using biofeatures.")
