@@ -215,7 +215,7 @@ def get_var_counts(bedtool, var_file):
     print
     print("Getting variation from: " + str(var_file))
     print
-    var = BedTool(var_file).sort().saveas()
+    var = BedTool(var_file).sort().saveas('varfile.bed')
     source = str(var_file).split('/')[-1]
     var_counts = pd.concat(
         bedtool.intersect(var, s=True, c=True, sorted=True).to_dataframe(iterator=True,
@@ -396,7 +396,7 @@ def get_data(df):
 
     Popen('mkdir -p ./'+args.outfile+".datamatrix/temp/", shell=True)
     
-    bedtool = BedTool.from_dataframe(df).sort().saveas()
+    bedtool = BedTool.from_dataframe(df).sort().saveas('bedtool_df.bed')
     a = nuc_cont(bedtool)   
     
     if args.var_files:
@@ -576,10 +576,14 @@ print "Cleaning up pybedtools temporary files"
 pybedtools.helpers.cleanup(verbose=False, remove_all=False)
 
 if args.keep_bed == True:
-    pass
+    Popen('rm '+args.outfile+'.datamatrix/varfile.bed '+\
+                args.outfile+'.datamatrix/bedtool_df.bed', 
+          shell=True)
 else:
     Popen('rm '+args.outfile+'.datamatrix/shuffled.bed '+\
-                args.outfile+'.datamatrix/input_list.bed', 
+                args.outfile+'.datamatrix/input_list.bed '+\
+                args.outfile+'.datamatrix/varfile.bed '+\
+                args.outfile+'.datamatrix/bedtool_df.bed', 
           shell=True)
     
 if args.keep_temp == True:

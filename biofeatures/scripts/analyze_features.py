@@ -281,6 +281,7 @@ print
 print "Loading bed file with regions of interest"
 print
 
+
 bed_input = BedTool(args.bed_file).sort()
     
 ##Load the datamatrix generatade by "buildadatamatrix.py"
