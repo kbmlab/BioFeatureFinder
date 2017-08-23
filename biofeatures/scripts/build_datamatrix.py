@@ -396,7 +396,7 @@ def get_data(df):
 
     Popen('mkdir -p ./'+args.outfile+".datamatrix/temp/", shell=True)
     
-    bedtool = BedTool.from_dataframe(df).sort().saveas('bedtool_df.bed')
+    bedtool = BedTool.from_dataframe(df).sort().saveas(args.outfile+'.datamatrix/bedtool_df.bed')
     a = nuc_cont(bedtool)   
     
     if args.var_files:
@@ -449,8 +449,7 @@ def get_data(df):
         z_list = []
         
         for i in range(len(temp_files)):
-            df = pd.read_csv(temp_files[i],
-                             index_col=0)
+            df = pd.read_csv(temp_files[i], index_col=0);
             z_list.append(df)
         
         #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
@@ -576,14 +575,12 @@ print "Cleaning up pybedtools temporary files"
 pybedtools.helpers.cleanup(verbose=False, remove_all=False)
 
 if args.keep_bed == True:
-    Popen('rm '+args.outfile+'.datamatrix/varfile.bed '+\
-                args.outfile+'.datamatrix/bedtool_df.bed', 
+    Popen('rm '+args.outfile+'.datamatrix/varfile.bed ', 
           shell=True)
 else:
     Popen('rm '+args.outfile+'.datamatrix/shuffled.bed '+\
                 args.outfile+'.datamatrix/input_list.bed '+\
-                args.outfile+'.datamatrix/varfile.bed '+\
-                args.outfile+'.datamatrix/bedtool_df.bed', 
+                args.outfile+'.datamatrix/varfile.bed ',
           shell=True)
     
 if args.keep_temp == True:
