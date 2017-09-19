@@ -15,6 +15,7 @@ import readline
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import FloatVector
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble.partial_dependence import plot_partial_dependence
 from sklearn.metrics import adjusted_mutual_info_score
