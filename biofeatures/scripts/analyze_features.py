@@ -366,6 +366,10 @@ if not args.dont_plot_cdf:
     Popen('mkdir -p ./' + args.prefix + '.analysis/feature_plots', shell=True)
     features = list(matrix.drop('group',1).columns)
     
+    title_size=16
+    tick_size=14
+    axis_size=14
+    
     for i in range(len(features)):
         name = (features[i]).split("/")[-1]
         sl = matrix[[features[i],'group']]
