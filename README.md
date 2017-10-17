@@ -32,6 +32,12 @@ Script used for creating the data matrix for biological features associated with
 ### With anaconda (recommended):
 
     conda install -c bioconda pysam pybedtools matplotlib pandas pybedtools scikit-learn matplotlib scipy rpy2
+    
+### External dependencies (must be available on PATH)
+    
+    * EMBOSS - http://emboss.sourceforge.net/download/
+    * ViennaRNA - https://www.tbi.univie.ac.at/RNA/
+    * QGRS Mapper - https://github.com/freezer333/qgrs-cpp
 
 ## Scripts installation
 
