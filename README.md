@@ -8,18 +8,9 @@
 
 ## Scripts:
 
-
-./biofeatures/scripts/accessory_scripts/convert_annotations.py
-
-./biofeatures/scripts/accessory_scripts/random_sampling_test.py
-
-./biofeatures/scripts/accessory_scripts/reduce_matrix.sh
-
-A script for selecting random lines from the data_matrix.
-It's supposed to be used if a computer doesn't have enough RAM
-to load the entire matrix as a DataFrame in python.
-
 ./biofeatures/scripts/analyze_features.py
+
+
 
 Main script used for analyzing biological features associated with groups of exons. Uses .bed files of exon coordinates to compare with annotated exons in the data matrix (created by build_datamatrix.py), runs KS statistic to filter non-significant differences and then uses GradientBoost classifier to determine wich features are more “important” in group separation (input vs background).
 

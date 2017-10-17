@@ -15,6 +15,7 @@ import readline
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import FloatVector
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble.partial_dependence import plot_partial_dependence
 from sklearn.metrics import adjusted_mutual_info_score
@@ -281,6 +282,7 @@ print
 print "Loading bed file with regions of interest"
 print
 
+
 bed_input = BedTool(args.bed_file).sort()
     
 ##Load the datamatrix generatade by "buildadatamatrix.py"
@@ -362,14 +364,25 @@ elif args.ks_filter:
 if not args.dont_plot_cdf:
     print("Output CDF plots for each features in matrix")
     print
-    Popen('mkdir -p ./' + args.prefix + '.analysis/CDF_plots', shell=True)
+    Popen('mkdir -p ./' + args.prefix + '.analysis/feature_plots', shell=True)
     features = list(matrix.drop('group',1).columns)
+    
+    title_size=16
+    tick_size=14
+    axis_size=14
     
     for i in range(len(features)):
         name = (features[i]).split("/")[-1]
         sl = matrix[[features[i],'group']]
-        
-        plt.figure(figsize=(8, 8))
+
+        plt.figure(1, figsize=(18,6))
+        plt.suptitle("Cumulative distribution and kernel density for "+str(name), 
+                     fontsize=title_size, y=1.01)
+        plt.subplot(121)
+
+        sns.set(font_scale = 1.5)
+        sns.set_style("whitegrid", {'axes.grid' : False})
+    #     plt.figure(figsize=(8, 8))
         plot_cdf(sl[sl['group'] == 0][features[i]].values,
                  bins=100,
                  label='Background regions', c='black', linewidth=1.5,
@@ -381,21 +394,75 @@ if not args.dont_plot_cdf:
 
         plt.legend(loc=0)
         plt.ylim(0, 1)
-        
+
         if name.find("%") != -1:
             plt.xlim(0, 1)
         elif name.find("phastCon") != -1:
             plt.xlim(0, 1)
-        elif name.find("CpG") != -1:
-            plt.xlim()
-        else:
+        elif name.find("_count_") != -1:
             plt.xscale('symlog')
-       
-        plt.xlabel(str(name), fontsize=14)
-        plt.ylabel('Cumulative distribution of samples', fontsize=14)
-        plt.rc('xtick', labelsize=14)
-        plt.rc('ytick', labelsize=14)
-        plt.savefig('./' + args.prefix + '.analysis/CDF_plots/' + name + '.pdf',
+        else:
+            plt.xlim()
+
+        plt.xlabel(str(name), fontsize=axis_size)
+        plt.ylabel('Cumulative distribution of samples', fontsize=axis_size)
+        plt.rc('xtick', labelsize=tick_size)
+        plt.rc('ytick', labelsize=tick_size)
+
+        plt.subplot(122)
+        #sns.set(font_scale = 1.5)
+        sns.set_style("whitegrid", {'axes.grid' : False})
+
+        shade = False
+        label0='Background regions'
+        label1='Input regions'
+
+        if name.find('_count_') != -1 or \
+           name.find('QGRS') != -1 or \
+            name.find('MFE') != -1:
+                sns.kdeplot(sl[sl['group'] == 0][features[i]], 
+                            color='k', 
+                            cut=0, 
+                            shade=shade,
+                            bw=1,
+                            label=label0)
+
+                sns.kdeplot(sl[sl['group'] == 1][features[i]], 
+                            color='k', 
+                            cut=0, 
+                            shade=shade,
+                            bw=1,
+                            label=label1,
+                            ls='--')
+        else:
+            sns.kdeplot(sl[sl['group'] == 0][features[i]], 
+                        color='k', 
+                        cut=0, 
+                        shade=shade,
+                        label=label0)
+
+            sns.kdeplot(sl[sl['group'] == 1][features[i]], 
+                        color='k', 
+                        cut=0, 
+                        shade=shade,
+                        label=label1,
+                        ls='--')
+
+
+        plt.xlabel(str(name), fontsize=axis_size)
+        plt.ylabel('Density', fontsize=axis_size)
+        plt.rc('xtick', labelsize=tick_size)
+        plt.rc('ytick', labelsize=tick_size)
+
+        if name.find("%") != -1:
+            plt.xlim(0, 1)
+        elif name.find("phastCon") != -1:
+            plt.xlim(0, 1)
+        elif name.find("_count_") != -1:
+            plt.xscale('symlog')
+        else:
+            plt.xlim()
+        plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.pdf',
                     dpi=300, bbox_inches='tight')
         plt.close()
 
