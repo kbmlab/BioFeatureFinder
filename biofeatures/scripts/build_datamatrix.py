@@ -215,7 +215,7 @@ def get_var_counts(bedtool, var_file):
     print
     print("Getting variation from: " + str(var_file))
     print
-    var = BedTool(var_file).saveas(args.outfile+'.datamatrix/varfile')#.sort()
+    var = BedTool(var_file).sort().remove_invalid().saveas(args.outfile+'.datamatrix/varfile')#.sort()
     source = str(var_file).split('/')[-1]
     var_counts = pd.concat(
         bedtool.intersect(var, s=True, c=True, sorted=False).to_dataframe(iterator=True,
