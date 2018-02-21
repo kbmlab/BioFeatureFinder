@@ -196,6 +196,12 @@ def plot_cdf(data, bins=50, ax=None, **plotting_args):
     x, y = cdf(data, bins=bins)
     ax.plot(x, y, **plotting_args)
 
+def get_mean_and_std(df):
+    df2 = df.T
+    cols = df2.columns
+    df2['mean'] = df2.apply(lambda x: np.mean(x[cols]), 1)
+    df2['std'] = df2.apply(lambda x: np.std(x[cols]), 1)
+    return df2
 
 def plot_barcharts(df, title, save):
     df_t = df.T
@@ -204,7 +210,7 @@ def plot_barcharts(df, title, save):
     df_t['mean'] = df_t.apply(lambda x: np.mean(x[cols]), 1)
     df_t['std'] = df_t.apply(lambda x: np.std(x[cols]), 1)
 
-    df_t.to_csv('./' + args.prefix + '.analysis/' + save + '.tsv', sep='\t')
+    df_t.to_csv('./' + args.prefix + '.analysis/classifier_metrics/' + save + '.tsv', sep='\t')
 
     N = df_t.shape[0]
     means = df_t['mean']
@@ -1090,7 +1096,7 @@ df_list = [conf_df, msr, mtc]
 title_list = ['Identified classes from confusion matrix',
               'MSE and aMI scores from classifier',
               'Metrics estimated from confusion matrix']
-save_list = ['mean_confusion_matri_classes',
+save_list = ['mean_confusion_matrix_classes',
              'mse_ami_scores_from_classifier',
              'classifier_metrics_from_confusion_matrix']
 
@@ -1100,8 +1106,11 @@ for run_i in range(len(df_list)):
         run_i] + '.pdf', dpi=300, bbox_inches='tight')
     plt.close()
 
-
-df_cat = pd.concat([mtc[['mean','std']],msr[['mean','std']],
+mtc_ms = get_mean_and_std(mtc)
+msr_ms = get_mean_and_std(msr)
+    
+df_cat = pd.concat([mtc_ms[['mean','std']],
+                    msr_ms[['mean','std']],
                     roc_auc_all[['mean','std']],
                     pre_all[['mean','std']]])
 
