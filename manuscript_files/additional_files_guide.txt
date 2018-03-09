@@ -1,0 +1,19 @@
+Additional Files list:
+
+
+AF1: Figure - Deviance, ROC and PR curves for RBFOX2
+
+AF2: Table - Classifier Metrics and Results for all 110 RBPs
+
+AF3: Table - Kmer enrichment scores and percentages
+
+AF4: Table - Overlap percentages
+
+AF5: Table - Structure percentages
+
+AF6: Figure - Heatmap with Z-score for binding region prefference
+
+AF7: Table - RBP classification for Kmer/Struct/Overlap and combinations
+
+AF8: Table - List of accession numbers for RBPs from ENCODE
+
