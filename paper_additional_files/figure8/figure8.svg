@@ -13,7 +13,7 @@
    viewBox="0 0 602.3622 466.88591"
    height="131.76558mm"
    width="170mm"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="figure8.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -24,15 +24,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
      id="namedview31"
      showgrid="true"
-     inkscape:zoom="0.5"
-     inkscape:cx="281.99406"
-     inkscape:cy="95.550337"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="137.84749"
+     inkscape:cy="327.03689"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg19417">
     <inkscape:grid
@@ -182,7 +182,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -197,13 +197,14 @@
      style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000" />
   <text
      id="text16589"
-     style="font-variant:normal;font-weight:bold;font-size:15.79862881px;font-family:Arial;-inkscape-font-specification:Arial-BoldMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
-     x="-3.2891847e-08"
+     style="font-variant:normal;font-weight:bold;font-size:15.79862881px;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial-BoldMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     x="-3.2891847e-008"
      y="11.308979">
     <tspan
        id="tspan16591"
-       x="-3.2891847e-08"
-       y="11.308979">A</tspan>
+       x="-3.2891847e-008"
+       y="11.308979"
+       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">A</tspan>
   </text>
   <image
      id="image16673"
@@ -215,44 +216,47 @@
      y="239.46465" />
   <text
      id="text16677"
-     style="font-variant:normal;font-weight:bold;font-size:15.79862881px;font-family:Arial;-inkscape-font-specification:Arial-BoldMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     style="font-variant:normal;font-weight:bold;font-size:15.79862881px;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial-BoldMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      x="300.05545"
      y="11.308979">
     <tspan
        id="tspan16679"
        x="300.05545"
-       y="11.308979">B</tspan>
+       y="11.308979"
+       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">B</tspan>
   </text>
   <text
      id="text16683"
-     style="font-variant:normal;font-weight:bold;font-size:15.79862881px;font-family:Arial;-inkscape-font-specification:Arial-BoldMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
-     x="-3.2891847e-08"
+     style="font-variant:normal;font-weight:bold;font-size:15.79862881px;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial-BoldMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     x="-3.2891847e-008"
      y="244.18076">
     <tspan
        id="tspan16685"
-       x="-3.2891847e-08"
-       y="244.18076">C</tspan>
+       x="-3.2891847e-008"
+       y="244.18076"
+       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">C</tspan>
   </text>
   <text
      id="text16689"
-     style="font-variant:normal;font-weight:bold;font-size:15.79862881px;font-family:Arial;-inkscape-font-specification:Arial-BoldMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     style="font-variant:normal;font-weight:bold;font-size:15.79862881px;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial-BoldMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      x="301.16135"
      y="246.43205">
     <tspan
        id="tspan16691"
        y="246.43205"
-       x="301.16135">D</tspan>
+       x="301.16135"
+       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">D</tspan>
   </text>
   <text
-     sodipodi:linespacing="125%"
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="font-style:normal;font-weight:normal;font-size:40px;line-height:0%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:100000;stroke-opacity:1"
      x="215.74602"
      y="21.394829"
      id="text20278"><tspan
        id="tspan20280"
        x="215.74602"
-       y="21.394829" /></text>
+       y="21.394829"
+       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000" /></text>
   <g
      id="patch_9"
      style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
@@ -369,7 +373,7 @@
   </g>
   <g
      id="text_1"
-     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
      transform="matrix(2.226087,0,0,2.226087,-123.98657,-117.94018)">
     <!-- 1 -->
     <defs
@@ -383,11 +387,11 @@
     <g
        id="g6705"
        transform="matrix(0.1,0,0,-0.1,83.609863,85.622895)"
-       style="fill:#262626;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
+       style="fill:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
       <use
          id="use6707"
          xlink:href="#ArialMT-31"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
          x="0"
          y="0"
          width="100%"
@@ -396,7 +400,7 @@
   </g>
   <g
      id="text_2"
-     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
      transform="matrix(2.1889696,0,0,2.1889696,-288.74728,-114.90586)">
     <!-- 0 -->
     <defs
@@ -410,11 +414,11 @@
     <g
        id="g6713"
        transform="matrix(0.1,0,0,-0.1,226.61968,85.622895)"
-       style="fill:#262626;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
+       style="fill:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
       <use
          id="use6715"
          xlink:href="#ArialMT-30"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
          x="0"
          y="0"
          width="100%"
@@ -423,7 +427,7 @@
   </g>
   <g
      id="text_3"
-     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
      transform="matrix(2.226087,0,0,2.226087,-212.03292,-110.94088)">
     <!-- 2 -->
     <defs
@@ -437,47 +441,12 @@
     <g
        id="g6721"
        transform="matrix(0.1,0,0,-0.1,155.11477,76.582986)"
-       style="fill:#262626;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
+       style="fill:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
       <use
          id="use6723"
          xlink:href="#ArialMT-32"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
          x="0"
-         y="0"
-         width="100%"
-         height="100%" />
-    </g>
-  </g>
-  <g
-     id="text_4"
-     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
-     transform="matrix(2.1889696,0,0,2.1889696,-204.98432,-265.00341)">
-    <!-- 29 -->
-    <defs
-       id="defs6726">
-      <path
-         id="ArialMT-39"
-         d="m 5.46875,16.546875 8.453125,0.78125 Q 14.984375,11.375 18.015625,8.6875 21.046875,6 25.78125,6 q 4.046875,0 7.09375,1.859375 3.0625,1.859375 5.015625,4.953125 1.953125,3.109375 3.265625,8.375 1.328125,5.28125 1.328125,10.75 0,0.578125 -0.04687,1.75 Q 39.79688,29.5 35.23438,26.875 q -4.5625,-2.609375 -9.890625,-2.609375 -8.890625,0 -15.046875,6.4375 -6.140625,6.453125 -6.140625,17 0,10.890625 6.421875,17.53125 Q 17,71.875 26.65625,71.875 q 6.984375,0 12.765625,-3.765625 5.796875,-3.75 8.796875,-10.71875 3,-6.953125 3,-20.140625 0,-13.71875 -2.984375,-21.84375 -2.96875,-8.125 -8.859375,-12.375 -5.875,-4.25 -13.78125,-4.25 -8.40625,0 -13.734375,4.65625 -5.3125,4.671875 -6.390625,13.109375 m 35.984375,31.59375 q 0,7.578125 -4.03125,12.015625 -4.015625,4.4375 -9.6875,4.4375 -5.859375,0 -10.203125,-4.78125 -4.34375,-4.78125 -4.34375,-12.40625 0,-6.828125 4.125,-11.109375 4.125,-4.265625 10.171875,-4.265625 6.109375,0 10.03125,4.265625 3.9375,4.28125 3.9375,11.84375"
-         inkscape:connector-curvature="0"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000" />
-    </defs>
-    <g
-       id="g6729"
-       transform="matrix(0.1,0,0,-0.1,152.3343,209.47303)"
-       style="fill:#262626;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
-      <use
-         id="use6731"
-         xlink:href="#ArialMT-32"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
-         x="0"
-         y="0"
-         width="100%"
-         height="100%" />
-      <use
-         id="use6733"
-         xlink:href="#ArialMT-39"
-         x="55.615234"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
          y="0"
          width="100%"
          height="100%" />
@@ -485,7 +454,7 @@
   </g>
   <g
      id="text_5"
-     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
      transform="matrix(2.1889696,0,0,2.1889696,-154.97511,-193.28652)">
     <!-- 8 -->
     <defs
@@ -499,11 +468,11 @@
     <g
        id="g6739"
        transform="matrix(0.1,0,0,-0.1,111.53353,152.06792)"
-       style="fill:#262626;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
+       style="fill:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
       <use
          id="use6741"
          xlink:href="#ArialMT-38"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
          x="0"
          y="0"
          width="100%"
@@ -512,26 +481,23 @@
   </g>
   <g
      id="text_6"
-     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
      transform="matrix(2.1889696,0,0,2.1889696,-255.80765,-193.28652)">
     <!-- 9 -->
     <g
        id="g6744"
        transform="matrix(0.1,0,0,-0.1,198.69602,152.06792)"
-       style="fill:#262626;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
-      <use
-         id="use6746"
-         xlink:href="#ArialMT-39"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
-         x="0"
-         y="0"
-         width="100%"
-         height="100%" />
+       style="fill:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
+      <path
+         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
+         inkscape:connector-curvature="0"
+         d="m 5.46875,16.546875 8.453125,0.78125 Q 14.984375,11.375 18.015625,8.6875 21.046875,6 25.78125,6 q 4.046875,0 7.09375,1.859375 3.0625,1.859375 5.015625,4.953125 1.953125,3.109375 3.265625,8.375 1.328125,5.28125 1.328125,10.75 0,0.578125 -0.04687,1.75 Q 39.79688,29.5 35.23438,26.875 q -4.5625,-2.609375 -9.890625,-2.609375 -8.890625,0 -15.046875,6.4375 -6.140625,6.453125 -6.140625,17 0,10.890625 6.421875,17.53125 Q 17,71.875 26.65625,71.875 q 6.984375,0 12.765625,-3.765625 5.796875,-3.75 8.796875,-10.71875 3,-6.953125 3,-20.140625 0,-13.71875 -2.984375,-21.84375 -2.96875,-8.125 -8.859375,-12.375 -5.875,-4.25 -13.78125,-4.25 -8.40625,0 -13.734375,4.65625 -5.3125,4.671875 -6.390625,13.109375 m 35.984375,31.59375 q 0,7.578125 -4.03125,12.015625 -4.015625,4.4375 -9.6875,4.4375 -5.859375,0 -10.203125,-4.78125 -4.34375,-4.78125 -4.34375,-12.40625 0,-6.828125 4.125,-11.109375 4.125,-4.265625 10.171875,-4.265625 6.109375,0 10.03125,4.265625 3.9375,4.28125 3.9375,11.84375"
+         id="use6746" />
     </g>
   </g>
   <g
      id="text_7"
-     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
      transform="matrix(2.1875668,0,0,2.1875668,-205.56469,-162.49301)">
     <!-- 63 -->
     <defs
@@ -550,11 +516,11 @@
     <g
        id="g6753"
        transform="matrix(0.1,0,0,-0.1,152.3343,126.90627)"
-       style="fill:#262626;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
+       style="fill:#000000;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000">
       <use
          id="use6755"
          xlink:href="#ArialMT-36"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
          x="0"
          y="0"
          width="100%"
@@ -563,7 +529,7 @@
          id="use6757"
          xlink:href="#ArialMT-33"
          x="55.615234"
-         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+         style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000"
          y="0"
          width="100%"
          height="100%" />
@@ -571,47 +537,44 @@
   </g>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:32.29881287px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:100000;stroke-opacity:1"
+     style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:100000;stroke-opacity:1"
      x="34.174717"
      y="17.328197"
-     id="text7988"
-     sodipodi:linespacing="125%"><tspan
+     id="text7988"><tspan
        sodipodi:role="line"
        id="tspan7990"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
        x="34.174717"
        y="17.328197">Kmer</tspan><tspan
        sodipodi:role="line"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
        x="34.174717"
-       y="32.36636"
+       y="32.468266"
        id="tspan7992">enrichment</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:32.29881287px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:100000;stroke-opacity:1"
+     style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:100000;stroke-opacity:1"
      x="140.63077"
      y="230.16022"
-     id="text7988-7"
-     sodipodi:linespacing="125%"><tspan
+     id="text7988-7"><tspan
        sodipodi:role="line"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
        x="140.63077"
        y="230.16022"
        id="tspan8136">Overlap with other RBPs</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:32.29881287px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:100000;stroke-opacity:1"
+     style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:100000;stroke-opacity:1"
      x="242.91885"
      y="16.534941"
-     id="text7988-7-3"
-     sodipodi:linespacing="125%"><tspan
+     id="text7988-7-3"><tspan
        sodipodi:role="line"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
        x="242.91885"
        y="16.534941"
        id="tspan8480">Secondary RNA</tspan><tspan
        sodipodi:role="line"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.11205482px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-opacity:1"
        x="242.91885"
        y="31.675009"
        id="tspan8484">structure</tspan></text>
@@ -771,12 +734,12 @@
      style="fill:none;stroke:#262626;stroke-width:0.21005268;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;stroke-dasharray:none;stroke-opacity:1"
      d="m 528.7882,137.59782 0,1.26031" />
   <text
-     style="font-variant:normal;font-weight:normal;font-size:11.52657032px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="font-variant:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      id="text10932"
      x="449.93942"
      y="153.3019">
     <tspan
-       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+       style="font-size:11.52657032px;line-height:1.25;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
        x="449.93942"
        y="153.3019"
        sodipodi:role="line"
@@ -873,88 +836,99 @@
      style="fill:#262626;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      d="m 330.49847,11.069339 c 0,-0.973524 0.10021,-1.7571608 0.29978,-2.3497895 0.19869,-0.5931888 0.49624,-1.0525039 0.89052,-1.3723442 0.39602,-0.3215206 0.8923,-0.4834012 1.49008,-0.4834012 0.44173,0 0.82884,0.089622 1.16162,0.267187 0.33496,0.1770044 0.60826,0.4329886 0.82509,0.7701932 0.2184,0.3321633 0.3893,0.741626 0.51202,1.2227867 0.1243,0.4794802 0.18597,1.127003 0.18597,1.945368 0,0.965122 -0.10082,1.743717 -0.29973,2.336906 -0.19717,0.590948 -0.49231,1.050263 -0.88839,1.374025 -0.39383,0.323761 -0.89291,0.485641 -1.49658,0.485641 -0.79209,0 -1.41391,-0.284551 -1.86644,-0.853094 -0.54283,-0.685051 -0.81394,-1.798611 -0.81394,-3.343478 m 1.03693,0 c 0,1.349938 0.15953,2.249524 0.47477,2.697636 0.31492,0.446432 0.70701,0.669928 1.16868,0.669928 0.46581,0 0.85528,-0.225736 1.17277,-0.673849 0.31485,-0.448672 0.4722,-1.348258 0.4722,-2.693715 0,-1.3566604 -0.15735,-2.2556859 -0.4722,-2.6998773 -0.31749,-0.4464319 -0.71132,-0.6676874 -1.18414,-0.6676874 -0.4615,0 -0.83343,0.1949289 -1.11132,0.5887076 -0.34549,0.5013257 -0.52076,1.4266778 -0.52076,2.7788571" />
   <text
-     transform="matrix(0,-1,1,0,0,0)"
-     style="font-variant:normal;font-weight:normal;font-size:11.20280933px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     transform="rotate(-90)"
+     style="font-variant:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      id="text10978"
      x="-161.4637"
      y="313.36911">
     <tspan
-       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+       style="font-size:11.20280933px;line-height:1.25;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
        x="-161.4637 -153.37527 -147.14651 -137.81458 -131.5858 -129.06509 -122.83632 -119.72194 -117.23492 -111.63351 -105.40475 -102.29037 -96.061615 -93.574585 -87.973183 -84.858795 -81.128265 -78.641243 -72.378784 -66.150024 -63.035641 -60.548615 -54.319847"
        y="313.36911"
        sodipodi:role="line"
        id="tspan10980">Cumulative distribution</tspan>
   </text>
   <text
-     style="font-variant:normal;font-weight:normal;font-size:11.20280933px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="font-variant:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      id="text10982"
      x="405.32932"
      y="223.98827">
     <tspan
-       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+       style="font-size:11.20280933px;line-height:1.25;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
        x="405.32932"
        sodipodi:role="line"
        id="tspan10984"
-       y="223.98827" />
+       y="223.98827"> </tspan>
   </text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:100000;stroke-opacity:1"
+     style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:100000;stroke-opacity:1"
      x="469"
      y="224.88589"
-     id="text11296"
-     sodipodi:linespacing="125%"><tspan
+     id="text11296"><tspan
        sodipodi:role="line"
        id="tspan11298"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.14999962px;font-family:Arial;-inkscape-font-specification:Arial;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.14999962px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
        x="469"
        y="224.88589">Number of binding site overlaps</tspan></text>
   <text
-     style="font-variant:normal;font-weight:normal;font-size:11.52657032px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="font-variant:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      id="text10932-4"
      x="449.43942"
      y="170.30191">
     <tspan
-       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+       style="font-size:11.52657032px;line-height:1.25;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
        x="449.43942"
        y="170.30191"
        sodipodi:role="line"
        id="tspan10938-7">FXR1-FXR2</tspan>
   </text>
   <text
-     style="font-variant:normal;font-weight:normal;font-size:11.52657032px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="font-variant:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      id="text10932-4-8"
      x="449.43942"
      y="188.30191">
     <tspan
-       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+       style="font-size:11.52657032px;line-height:1.25;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
        x="449.43942"
        y="188.30191"
        sodipodi:role="line"
        id="tspan10938-7-4">FXR1-FMR1</tspan>
   </text>
   <text
-     style="font-variant:normal;font-weight:normal;font-size:11.52657032px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="font-variant:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      id="text10932-5"
      x="514.93945"
      y="170.3019">
     <tspan
-       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+       style="font-size:11.52657032px;line-height:1.25;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
        x="514.93945"
        y="170.3019"
        sodipodi:role="line"
        id="tspan10938-0">Overlap</tspan>
   </text>
   <text
-     style="font-variant:normal;font-weight:normal;font-size:11.52657032px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+     style="font-variant:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
      id="text10932-5-3"
      x="516.93945"
      y="187.3019">
     <tspan
-       style="stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
+       style="font-size:11.52657032px;line-height:1.25;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000"
        x="516.93945"
        y="187.3019"
        sodipodi:role="line"
        id="tspan10938-0-6">Overlap</tspan>
   </text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.39217567px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.14600945;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;"
+     x="135.07277"
+     y="184.8913"
+     id="text4706"
+     transform="scale(0.95537875,1.0467053)"><tspan
+       sodipodi:role="line"
+       id="tspan4704"
+       style="stroke-width:1.14600945;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;fill:#000000;"
+       x="135.07277"
+       y="184.8913">27</tspan></text>
 </svg>
