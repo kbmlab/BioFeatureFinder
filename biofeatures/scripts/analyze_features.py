@@ -196,6 +196,12 @@ def plot_cdf(data, bins=50, ax=None, **plotting_args):
     x, y = cdf(data, bins=bins)
     ax.plot(x, y, **plotting_args)
 
+def get_mean_and_std(df):
+    df2 = df.T
+    cols = df2.columns
+    df2['mean'] = df2.apply(lambda x: np.mean(x[cols]), 1)
+    df2['std'] = df2.apply(lambda x: np.std(x[cols]), 1)
+    return df2
 
 def plot_barcharts(df, title, save):
     df_t = df.T
@@ -204,7 +210,7 @@ def plot_barcharts(df, title, save):
     df_t['mean'] = df_t.apply(lambda x: np.mean(x[cols]), 1)
     df_t['std'] = df_t.apply(lambda x: np.std(x[cols]), 1)
 
-    df_t.to_csv('./' + args.prefix + '.analysis/' + save + '.tsv', sep='\t')
+    df_t.to_csv('./' + args.prefix + '.analysis/classifier_metrics/' + save + '.tsv', sep='\t')
 
     N = df_t.shape[0]
     means = df_t['mean']
@@ -247,7 +253,7 @@ def plot_barchart_importance(df):
     ax.set_xticks(ind + width / 2)
     ax.set_xticklabels(rel.index, rotation='vertical', fontsize=14)
     plt.savefig(
-        './' + args.prefix + '.analysis/classifier_plots/mean_relative_importance.pdf',
+        './' + args.prefix + '.analysis/classifier_metrics/mean_relative_importance.pdf',
         dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -267,7 +273,7 @@ def plot_barchart_importance(df):
     ax.set_xticks(ind + width / 2)
     ax.set_xticklabels(raw.index, rotation='vertical', fontsize=14)
     plt.savefig(
-        './' + args.prefix + '.analysis/classifier_plots/mean_importance.pdf',
+        './' + args.prefix + '.analysis/classifier_metrics/mean_importance.pdf',
         dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -275,6 +281,10 @@ def plot_barchart_importance(df):
 ##Create directory for output
 
 Popen('mkdir -p ./' + args.prefix + '.analysis', shell=True)
+Popen('mkdir -p ./' + args.prefix + '.analysis/feature_plots', shell=True)
+Popen('mkdir -p ./' + args.prefix + '.analysis/classifier_metrics', shell=True)
+Popen('mkdir -p ./' + args.prefix + '.analysis/statistical_analysis', shell=True)
+
     
 ##Load the bed file created with all exons
 
@@ -343,9 +353,9 @@ print
     
 statsR = importr('stats')
 st['adj_pval'] = statsR.p_adjust(FloatVector(st['pval']),method=str(args.padj))
-st.to_csv('./' + args.prefix + '.analysis/statistical_analysis_output.tsv',
+st.to_csv('./' + args.prefix + '.analysis/statistical_analysis/statistical_analysis_output.tsv',
           sep='\t', index=False)
-st.to_excel('./' + args.prefix + '.analysis/statistical_analysis_output.xlsx',
+st.to_excel('./' + args.prefix + '.analysis/statistical_analysis/statistical_analysis_output.xlsx',
             index=False)
 
 print "Finished statistical analysis"
@@ -364,7 +374,6 @@ elif args.ks_filter:
 if not args.dont_plot_cdf:
     print("Output CDF plots for each features in matrix")
     print
-    Popen('mkdir -p ./' + args.prefix + '.analysis/feature_plots', shell=True)
     features = list(matrix.drop('group',1).columns)
     
     title_size=16
@@ -492,7 +501,7 @@ sample_size = args.nsample
 gbclf_params = str(args.clf_params)
 train_size = args.train_size
 
-Popen('mkdir -p ./' + args.prefix + '.analysis/classifier_plots', shell=True)
+##Popen('mkdir -p ./' + args.prefix + '.analysis/classifier_metrics', shell=True)
 
 importance = st.copy()
     
@@ -521,7 +530,7 @@ for run_i in range(len(runs)):
     Z = pd.concat([df_cl, df_zero]).drop_duplicates()
 
     Popen(
-        'mkdir -p ./' + args.prefix + '.analysis/classifier_plots/run_' + run_id,
+        'mkdir -p ./' + args.prefix + '.analysis/classifier_metrics/run_' + run_id,
         shell=True)
 
     print("Run ID: " + str(run_id) + ', Input size: ' + str(
@@ -588,7 +597,7 @@ for run_i in range(len(runs)):
         plt.plot(list(range(1, len(rfecv.grid_scores_) + 1)),
                  rfecv.grid_scores_, lw=2)
         plt.savefig(
-            './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_feature_recursive_elimination.pdf',
+            './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_feature_recursive_elimination.pdf',
             dpi=300, bbox_inches='tight')
         plt.close()
 
@@ -613,7 +622,7 @@ for run_i in range(len(runs)):
         bp = gclf.best_params_
 
         with open('./' + args.prefix \
-                  + '_results/classifier_plots/run_' + \
+                  + '_results/classifier_metrics/run_' + \
                   run_id + '/run_' + run_id + \
                   '_best_params.txt','w') as fp:
             fp.write('{')
@@ -703,7 +712,7 @@ for run_i in range(len(runs)):
 
     plt.tight_layout()
     plt.savefig(
-        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_partial_dependance.pdf',
+        './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_partial_dependance.pdf',
         dpi=600,
         bbox_inches='tight')
     plt.close()
@@ -727,7 +736,7 @@ for run_i in range(len(runs)):
     plt.xlabel('Boosting Iterations')
     plt.ylabel('Deviance')
     plt.savefig(
-        '' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_deviance.pdf',
+        '' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_deviance.pdf',
         dpi=600,
         bbox_inches='tight')
     plt.close()
@@ -741,12 +750,12 @@ for run_i in range(len(runs)):
     mse = mean_squared_error(y_test, predicted_values)
     ami = adjusted_mutual_info_score(y_test, predicted_values)
     conf = confusion_matrix(y_test, predicted_values)
-    spe = round((float(conf[0, 0]) / (conf[1, 0] + conf[0, 0])) * 100, 2)
-    sen = round((float(conf[1, 1]) / (conf[0, 1] + conf[1, 1])) * 100, 2)
-    npv = round((float(conf[0, 0]) / (conf[0, 0] + conf[0, 1])) * 100, 2)
-    ppv = round((float(conf[1, 1]) / (conf[1, 0] + conf[1, 1])) * 100, 2)
+    spe = round((float(conf[0, 0]) / (conf[1, 0] + conf[0, 0])), 2)
+    sen = round((float(conf[1, 1]) / (conf[0, 1] + conf[1, 1])), 2)
+    npv = round((float(conf[0, 0]) / (conf[0, 0] + conf[0, 1])), 2)
+    ppv = round((float(conf[1, 1]) / (conf[1, 0] + conf[1, 1])), 2)
     acc = round((float(conf[0, 0] + conf[1, 1]) / (
-        conf[0, 0] + conf[1, 0] + conf[0, 1] + conf[1, 1])) * 100, 2)
+        conf[0, 0] + conf[1, 0] + conf[0, 1] + conf[1, 1])), 2)
 
     msr_r = pd.DataFrame(data=[[ami, mse]], columns=['aMI', 'MSE'])
 
@@ -803,12 +812,12 @@ for run_i in range(len(runs)):
 
     fpr_r = pd.DataFrame(data=fpr["micro_run_" + run_id], columns=['F.P.R.'])
     fpr_r.to_csv(
-        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_roc_fpr.tsv',
+        './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_roc_fpr.tsv',
         sep='\t')
 
     tpr_r = pd.DataFrame(data=tpr["micro_run_" + run_id], columns=['T.P.R.'])
     tpr_r.to_csv(
-        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_roc_tpr.tsv',
+        './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_roc_tpr.tsv',
         sep='\t')
 
     roc_fpr_all = pd.concat([roc_fpr_all, fpr_r], ignore_index=True,
@@ -831,7 +840,7 @@ for run_i in range(len(runs)):
     plt.title('Receiver operating characteristic', size=20)
     plt.legend(loc="lower right", fontsize=18)
     plt.savefig(
-        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_roc_curve.pdf',
+        './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_roc_curve.pdf',
         dpi=300,
         bbox_inches='tight')
     plt.close()
@@ -851,13 +860,13 @@ for run_i in range(len(runs)):
     pre_r = pd.DataFrame(data=precision["micro_run_" + run_id],
                          columns=['Precision'])
     pre_r.to_csv(
-        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_precision.tsv',
+        './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_precision.tsv',
         sep='\t')
 
     rec_r = pd.DataFrame(data=recall["micro_run_" + run_id],
                          columns=['Recall'])
     rec_r.to_csv(
-        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_recall.tsv',
+        './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_recall.tsv',
         sep='\t')
 
     pre_all = pd.concat([pre_all, pre_r], ignore_index=True,
@@ -884,7 +893,7 @@ for run_i in range(len(runs)):
     plt.ylim(ymax=1.05)
     plt.legend(loc="lower left", fontsize=18)
     plt.savefig(
-        './' + args.prefix + '.analysis/classifier_plots/run_' + run_id + '/run_' + run_id + '_precision_recall_curve.pdf',
+        './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_precision_recall_curve.pdf',
         dpi=300,
         bbox_inches='tight')
     plt.close()
@@ -927,14 +936,14 @@ deviance_test['mean'] = deviance_test.apply(lambda x: np.mean(x[cols]), 1)
 deviance_test['std'] = deviance_test.apply(lambda x: np.std(x[cols]), 1)
 
 deviance_test.to_csv(
-    './' + args.prefix + '.analysis/classifier_test_deviance.tsv', sep='\t')
+    './' + args.prefix + '.analysis/classifier_metrics/classifier_test_deviance.tsv', sep='\t')
 
 cols = deviance_train.columns
 deviance_train['mean'] = deviance_train.apply(lambda x: np.mean(x[cols]), 1)
 deviance_train['std'] = deviance_train.apply(lambda x: np.std(x[cols]), 1)
 
 deviance_train.to_csv(
-    './' + args.prefix + '.analysis/classifier_train_deviance.tsv', sep='\t')
+    './' + args.prefix + '.analysis/classifier_metrics/classifier_train_deviance.tsv', sep='\t')
 
 plt.figure(figsize=(6, 6))
 plt.subplot(1, 1, 1)
@@ -964,27 +973,9 @@ plt.fill_between(np.arange(len(deviance_test)) + 1,
 plt.legend(loc='upper right')
 plt.xlabel('Boosting Iterations', fontsize=14)
 plt.ylabel('Deviance', fontsize=14)
-plt.savefig('./' + args.prefix + '.analysis/classifier_plots/mean_deviance.pdf',
+plt.savefig('./' + args.prefix + '.analysis/mean_deviance.pdf',
             dpi=300, bbox_inches='tight')
 plt.close()
-
-print(
-    "Plotting barcharts for mean classifier scores, confusion matrix values and associated metrics")
-print
-
-df_list = [conf_df, msr, mtc]
-title_list = ['Identified classes from confusion matrix',
-              'MSE and aMI scores from classifier',
-              'Metrics estimated from confusion matrix']
-save_list = ['mean_confusion_matri_classes',
-             'mse_ami_scores_from_classifier',
-             'classifier_metrics_from_confusion_matrix']
-
-for run_i in range(len(df_list)):
-    plot_barcharts(df_list[run_i], title_list[run_i], save_list[run_i])
-    plt.savefig('./' + args.prefix + '.analysis/classifier_plots/' + save_list[
-        run_i] + '.pdf', dpi=300, bbox_inches='tight')
-    plt.close()
 
 print("Plotting mean ROC curve and error region")
 print
@@ -992,21 +983,24 @@ cols = roc_fpr_all.columns
 roc_fpr_all['mean'] = roc_fpr_all.apply(lambda x: np.mean(x[cols]), 1)
 roc_fpr_all['std'] = roc_fpr_all.apply(lambda x: np.std(x[cols]), 1)
 
-roc_fpr_all.to_csv('./' + args.prefix + '.analysis/roc_false_positive_rate.tsv',
+roc_fpr_all.to_csv('./' + args.prefix + '.analysis/classifier_metrics/roc_false_positive_rate.tsv',
                    sep='\t')
 
 cols = roc_tpr_all.columns
 roc_tpr_all['mean'] = roc_tpr_all.apply(lambda x: np.mean(x[cols]), 1)
 roc_tpr_all['std'] = roc_tpr_all.apply(lambda x: np.std(x[cols]), 1)
 
-roc_tpr_all.to_csv('./' + args.prefix + '.analysis/roc_true_positive_rate.tsv',
+roc_tpr_all.to_csv('./' + args.prefix + '.analysis/classifier_metrics/roc_true_positive_rate.tsv',
                    sep='\t')
 
 cols = roc_auc_all.columns
 roc_auc_all['mean'] = roc_auc_all.apply(lambda x: np.mean(x[cols]), 1)
 roc_auc_all['std'] = roc_auc_all.apply(lambda x: np.std(x[cols]), 1)
+roc_auc_all = roc_auc_all.reset_index()
+roc_auc_all['index'] = 'ROC AUC'
+roc_auc_all = roc_auc_all.set_index('index')
 
-roc_auc_all.to_csv('./' + args.prefix + '.analysis/roc_area_under_curve.tsv',
+roc_auc_all.to_csv('./' + args.prefix + '.analysis/classifier_metrics/roc_area_under_curve.tsv',
                    sep='\t')
 
 plt.figure(figsize=(6, 6))
@@ -1035,7 +1029,7 @@ plt.xlabel('False Positive Rate', fontsize=14)
 plt.ylabel('True Positive Rate', fontsize=14)
 plt.title('Mean receiver operating characteristic', fontsize=14)
 plt.legend(loc="lower right")
-plt.savefig('./' + args.prefix + '.analysis/classifier_plots/mean_roc.pdf',
+plt.savefig('./' + args.prefix + '.analysis/classifier_metrics/mean_roc.pdf',
             dpi=300, bbox_inches='tight')
 plt.close()
 
@@ -1045,20 +1039,23 @@ cols = pre_all.columns
 pre_all['mean'] = pre_all.apply(lambda x: np.mean(x[cols]), 1)
 pre_all['std'] = pre_all.apply(lambda x: np.std(x[cols]), 1)
 
-pre_all.to_csv('./' + args.prefix + '.analysis/precision.tsv', sep='\t')
+pre_all.to_csv('./' + args.prefix + '.analysis/classifier_metrics/precision.tsv', sep='\t')
 
 cols = rec_all.columns
 rec_all['mean'] = rec_all.apply(lambda x: np.mean(x[cols]), 1)
 rec_all['std'] = rec_all.apply(lambda x: np.std(x[cols]), 1)
 
-rec_all.to_csv('./' + args.prefix + '.analysis/recall.tsv', sep='\t')
+rec_all.to_csv('./' + args.prefix + '.analysis/classifier_metrics/recall.tsv', sep='\t')
 
 cols = roc_auc_all.columns
 av_pre_all['mean'] = av_pre_all.apply(lambda x: np.mean(x[cols]), 1)
 av_pre_all['std'] = av_pre_all.apply(lambda x: np.std(x[cols]), 1)
+av_pre_all = av_pre_all.reset_index()
+av_pre_all['index'] = 'P-R AUC'
+av_pre_all = av_pre_all.set_index('index')
 
 av_pre_all.to_csv(
-    './' + args.prefix + '.analysis/precision_recall_area_under_curve.tsv',
+    './' + args.prefix + '.analysis/classifier_metrics/precision_recall_area_under_curve.tsv',
     sep='\t')
 
 plt.figure(figsize=(6, 6))
@@ -1087,15 +1084,134 @@ plt.ylabel('Precision', fontsize=14)
 plt.title('Precision-Recall', fontsize=14)
 plt.legend(loc="lower left")
 plt.savefig(
-    './' + args.prefix + '.analysis/classifier_plots/mean_precision_recall.pdf',
+    './' + args.prefix + '.analysis/classifier_metrics/mean_precision_recall.pdf',
     dpi=300, bbox_inches='tight')
 plt.close()
 
+print(
+    "Plotting barcharts for mean classifier scores, confusion matrix values and associated metrics")
+print
+
+df_list = [conf_df, msr, mtc]
+title_list = ['Identified classes from confusion matrix',
+              'MSE and aMI scores from classifier',
+              'Metrics estimated from confusion matrix']
+save_list = ['mean_confusion_matrix_classes',
+             'mse_ami_scores_from_classifier',
+             'classifier_metrics_from_confusion_matrix']
+
+for run_i in range(len(df_list)):
+    plot_barcharts(df_list[run_i], title_list[run_i], save_list[run_i])
+    plt.savefig('./' + args.prefix + '.analysis/classifier_metrics/' + save_list[
+        run_i] + '.pdf', dpi=300, bbox_inches='tight')
+    plt.close()
+
+mtc_ms = get_mean_and_std(mtc)
+msr_ms = get_mean_and_std(msr)
+    
+df_cat = pd.concat([mtc_ms[['mean','std']],
+                    msr_ms[['mean','std']],
+                    roc_auc_all[['mean','std']],
+                    pre_all[['mean','std']]])
+
+df_cat.to_csv('./' + args.prefix + '.analysis/overall_classifier_metrics.tsv', sep='\t')
+df_cat.to_excel('./' + args.prefix + '.analysis/overall_classifier_metrics.xlsx')
+
+N = df_cat.shape[0]
+means = df_cat['mean'].round(2)
+std = df_cat['std']
+
+ind = np.arange(N)  # the x locations for the groups
+width = 0.75  # the width of the bars
+
+sns.set_style('ticks')
+
+fig, ax = plt.subplots()
+rects1 = ax.bar(ind, means, width, 
+                edgecolor='black', linewidth=0.5, color='white', 
+                yerr=std, ecolor='black')
+
+# add some text for labels, title and axes ticks
+ax.set_ylabel('Value', fontsize=14)
+ax.set_yticklabels([0.0,0.2,0.4,0.6,0.8,1.0], fontsize=12)
+ax.set_xticks(ind)
+ax.set_xticklabels(df_cat.index, rotation=45, fontsize=12)
+ax.grid(False)
+
+rects = ax.patches
+
+# Now make some labels
+labels = ["%.2f" % i for i in means]
+
+for rect, label in zip(rects, labels):
+    height = rect.get_height()
+    ax.text(rect.get_x() + rect.get_width()/2, height+0.01, label, ha='center', va='bottom')
+    
+
+sns.despine(top=True, right=True, left=False, bottom=False, offset=None, trim=False)
+    
+plt.savefig(
+    './' + args.prefix + '.analysis/overall_classifier_metrics.pdf',
+    dpi=300, bbox_inches='tight')
+
+print ("Plotting overall feature importance and KS-statistics data")
+print
+
+sns.set_style('ticks')
+
+if importance.shape[0] >= 10:
+    N = 10
+else:
+    N = importance.shape[0]
+
+importance_ind = importance.set_index("Feature").head(N)
+
+ind = np.arange(N)  # the x locations for the groups
+width = 0.25   
+
+rel = importance_ind.sort_values(by=['mean_rel_importance'], ascending=False)['mean_rel_importance'].head(N)
+rel_err = importance_ind.sort_values(by=['mean_rel_importance'], ascending=False)['std_rel_importance'].head(N)
+names = (str(rel.index)).split("/")[-1]
+
+#    importance_ind['-log10(q-value)'] = importance_ind['adj_pval_0_vs_1'].apply(lambda x: (np.log10(x))*-1, 1)
+ks = importance_ind.sort_values(by=['mean_rel_importance'], ascending=False)['ks'].head(N)
+
+fig = plt.figure(figsize=(6,6)) # Create matplotlib figure
+ax = fig.add_subplot(111) # Create matplotlib axes
+ax2 = ax.twiny() # Create another axes that shares the same x-axis as ax.
+
+rel.plot(kind='barh', edgecolor='black', linewidth=0.5, color='white', 
+         label='Relative importance', ax=ax, width=width, position=1,
+         xerr=rel_err, ecolor='black')
+
+ks.plot(kind='barh', edgecolor='black', linewidth=0.5, color='lightgrey', 
+        label='KS test', ax=ax2, width=width, position=0)
+
+ax.legend(loc='center left', bbox_to_anchor=(0, -0.175), fontsize=12)
+ax.tick_params(axis='both', which='major', labelsize=14)
+ax.grid(b=False)
+ax.patch.set_visible(False)
+ax.set_xlabel('Relative importance', size=14)
+ax.set_yticks(ind)
+ax.set_yticklabels(rel.index, fontsize=14)
+
+ax2.legend(loc='center left', bbox_to_anchor=(0.5, -0.175), fontsize=12)
+ax2.set_xlabel('KS test', size=14)
+ax2.tick_params(axis='both', which='major', labelsize=14)
+ax2.grid(b=False)
+ax2.patch.set_visible(False)
+
+plt.tick_params(axis='both', which='major', labelsize=14)
+
+plt.savefig(
+    './' + args.prefix + '.analysis/classifier_results.pdf',
+    dpi=300, bbox_inches='tight')
+    
 print("Zipping folders from every run in a single file")
 print
 
 Popen(
-    'tar -zcf ./' + args.prefix + '.analysis/classifier_plots/run_files.tar.gz ./' + args.prefix + '.analysis/classifier_plots/run_*/',
+    'tar -zcf ./' + args.prefix + '.analysis/classifier_metrics/run_files.tar.gz ./' + args.prefix + '.analysis/classifier_metrics/run_*/',
     shell=True)
 
 print("Analysis complete. Thanks for using biofeatures.")
