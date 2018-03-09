@@ -29,6 +29,7 @@ Script used for creating the data matrix for biological features associated with
     * EMBOSS - http://emboss.sourceforge.net/download/
     * ViennaRNA - https://www.tbi.univie.ac.at/RNA/
     * QGRS Mapper - https://github.com/freezer333/qgrs-cpp
+    * BEDTools - http://bedtools.readthedocs.io/en/latest/
 
 ## Scripts installation
 
