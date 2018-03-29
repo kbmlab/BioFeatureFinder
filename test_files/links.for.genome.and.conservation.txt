@@ -1,0 +1,25 @@
+Genome (GRCh37.p13):
+ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/GRCh37.p13.genome.fa.gz
+
+Annotation (Gencode V19 Comprehensive set):
+ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz
+
+bigWig phastCons:
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/hg19.100way.phastCons.bw
+
+wigFix folders:
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/vertebrate/
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/placentalMammals/
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/primates/
+
+How to merge and convert multiple wigFix files to bigwig?
+
+1. Download alll wigFix file from ucsc
+	-You can get a list of names from the md5sum.txt and then use something like:
+	#cut -f 2 md5sum.txt | xargs -P 1 -L 1 -I % wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/primates/%
+
+2. Convert wig to bigWig (wigtoBigwig utility)
+
+3. Merge bigWig files and output as bedGraph (bigWigMerge utility)
+
+4. Convert the bedGraph back to bigWig (bedGraphtobigWig utility)
