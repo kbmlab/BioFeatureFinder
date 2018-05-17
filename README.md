@@ -6,15 +6,15 @@ BioFeatureFinder is an algorithm desiged with the goal of uncovering latent biol
 
 ## Scripts:
 
-./biofeatures/scripts/analyze_features.py
+* ./biofeatures/scripts/analyze_features.py
 
 Main script used for analyzing biological features associated with groups of exons. Uses .bed files of exon coordinates to compare with annotated exons in the data matrix (created by build_datamatrix.py), runs KS statistic to filter non-significant differences and then uses GradientBoost classifier to determine wich features are more “important” in group separation (input vs background).
 
-./biofeatures/scripts/build_datamatrix.py
+* ./biofeatures/scripts/build_datamatrix.py
 
 Script used for creating the data matrix for biological features associated with exons and their neighouring regions. Uses a .GTF annotation, genome FASTA, .BW and .BED files as input for BioFeatures. Can be modified to include other functions on demand.
 
-./biofeatures/extract_gtf_regions.py
+* ./biofeatures/extract_gtf_regions.py
 
 Script used to extract each region (CDS, UTR, Splice Site, Exon, Intron and etc...) from the refference annotation file. By default, it uses the 3rd column of the GTF (Feature) to identify which regions are present in the annotation and extract them. For extracting intronic annotation, it requires the existence of both "gene" and "exon" features in the annotation.
 
