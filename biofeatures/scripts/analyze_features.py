@@ -1112,7 +1112,7 @@ msr_ms = get_mean_and_std(msr)
 df_cat = pd.concat([mtc_ms[['mean','std']],
                     msr_ms[['mean','std']],
                     roc_auc_all[['mean','std']],
-                    pre_all[['mean','std']]])
+                    av_pre_all[['mean','std']]])
 
 df_cat.to_csv('./' + args.prefix + '.analysis/overall_classifier_metrics.tsv', sep='\t')
 df_cat.to_excel('./' + args.prefix + '.analysis/overall_classifier_metrics.xlsx')
