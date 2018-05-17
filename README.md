@@ -54,6 +54,11 @@ BioFeatureFinder was funded by the São Paulo Research Foundation (FAPESP grants
     
 ## Testing dataset
 
-For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-binding protein eCLIP dataset (approx. 10% of the raw dataset). After installing BioFeatureFinder with "pip", please use the following commands:
-    
-* 
+For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-binding protein eCLIP dataset (approx. 10% of the raw dataset). After installing BioFeatureFinder with "pip install -e ." and any dependencies, please also install the following binaries from UCSC utilities directory (http://hgdownload.soe.ucsc.edu/admin/exe/):
+
+    wigToBigWig 
+    bigWigMerge 
+    bedGraphToBigWig 
+
+Input files for BioFeatureFinder test dataset include the human genome sequence (hg19 assembly) and bigWig files with phastCon scores for conservation. Both of these files are too large to be included in GitHub, so we need to download and process these files to be used by BFF. This can either be done manually (following the steps below) ou using the "get_genome_and_conversation.sh" script located in the "test_data/hg19_data/" folder (WARNING: This step can take a long time. Alternatively, you can download only the genome sequence directly (ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/GRCh37.p13.genome.fa.gz) and phastCons scores for multiple alignments of 99 vertebrate genomes (100way) to the human genome already in bigWig format available at: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/hg19.100way.phastCons.bw).
+
