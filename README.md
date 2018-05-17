@@ -50,10 +50,10 @@ Script used to extract each region (CDS, UTR, Splice Site, Exon, Intron and etc.
 
 ## Funding
 
-    BioFeatureFinder was funded by the São Paulo Research Foundation (FAPESP grants 12/00195-3, 13/50724-5, 14/25758-6, 15/25134-5, 16/25521-1).
+BioFeatureFinder was funded by the São Paulo Research Foundation (FAPESP grants 12/00195-3, 13/50724-5, 14/25758-6, 15/25134-5, 16/25521-1).
     
 ## Testing dataset
 
-    For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-binding protein eCLIP dataset (approx. 10% of the raw dataset). After installing BioFeatureFinder with "pip", please use the following commands:
+For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-binding protein eCLIP dataset (approx. 10% of the raw dataset). After installing BioFeatureFinder with "pip", please use the following commands:
     
-    * 
+* 
