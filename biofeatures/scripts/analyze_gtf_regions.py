@@ -67,7 +67,7 @@ name_list = [i.split('/', -1)[-1] for i in args.input_list]
 
 df_list = []
 
-for j in range(len(input_list)):
+for j in range(len(args.input_list)):
     print
     print("Starting analysis for: "+args.input_list[j])
     input_file  = BedTool(args.input_list[j])#.sort().saveas('sorted.bed')
