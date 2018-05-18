@@ -22,6 +22,7 @@ setup(
     scripts=[
         'biofeatures/scripts/analyze_features.py',
         'biofeatures/scripts/build_datamatrix.py',
-	'biofeatures/scripts/extract_gtf_regions.py'
+	'biofeatures/scripts/extract_gtf_regions.py',
+	'biofeatures/scripts/analyze_gtf_regions.py'
     ]
 )

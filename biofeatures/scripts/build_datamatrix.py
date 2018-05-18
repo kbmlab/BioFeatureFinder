@@ -66,7 +66,7 @@ class MyParser(argparse.ArgumentParser):
         print
         self.print_help()
         print
-        print gandalf
+        print(gandalf)
         print    
         print
         print("The following error ocurred in argument parsing:")
@@ -193,7 +193,7 @@ def nuc_cont(bedtool):
 
 def get_conservation_scores(con_file, df, cmd="bigWigAverageOverBed"):
     print
-    print("Getting conservation from: " + str(con_file))
+    print(("Getting conservation from: " + str(con_file)))
     print
     BedTool.from_dataframe(df).saveas(args.outfile+'.datamatrix/conservation_temp.bed')
     composed_command = " ".join([cmd, con_file, args.outfile+'.datamatrix/conservation_temp.bed',
@@ -213,7 +213,7 @@ def get_conservation_scores(con_file, df, cmd="bigWigAverageOverBed"):
 
 def get_var_counts(bedtool, var_file):
     print
-    print("Getting variation from: " + str(var_file))
+    print(("Getting variation from: " + str(var_file)))
     print
     var = BedTool(var_file).sort().remove_invalid().saveas(args.outfile+'.datamatrix/varfile')#.sort()
     source = str(var_file).split('/')[-1]
@@ -261,7 +261,7 @@ def get_kmer_counts(kmer_list):
         
         if __name__ == '__main__':
             p = Pool(args.ncores)
-            p.map(run_emboss_wordcount, itertools.izip(filename, itertools.repeat(args.kmer_list[i])))
+            p.map(run_emboss_wordcount, zip(filename, itertools.repeat(args.kmer_list[i])))
        
         wc_list = glob.glob(args.outfile+'.datamatrix/emboss/*.'+str(kmer)+'.wc')
         df_list = []
@@ -392,6 +392,10 @@ def save_bed(df, filename):
     df.to_csv(filename, compression='gzip', sep='\t', index=False,
               header=False)
 
+print (args.var_files)
+print ()
+print (list(args.var_files))
+
 def get_data(df):
 
     Popen('mkdir -p ./'+args.outfile+".datamatrix/temp/", shell=True)
@@ -424,14 +428,14 @@ def get_data(df):
 
     if args.rnafold == True:
         print
-        print "Starting RNAfold for MFE scoring"
+        print("Starting RNAfold for MFE scoring")
         get_MFE_scores()
     elif args.rnafold == False:
         pass
     
     if args.qgrs_mapper == True:
         print
-        print "Starting QGRS Mapper for G-Quadruplex scoring"
+        print("Starting QGRS Mapper for G-Quadruplex scoring")
         get_QGRS_scores()
     elif args.qgrs_mapper == False:
         pass        
@@ -468,10 +472,10 @@ if not args.debug:
     pass
 else:
     print
-    print("Running in debug mode. Only the first " + str(args.debug) + " entries will be used.")
+    print(("Running in debug mode. Only the first " + str(args.debug) + " entries will be used."))
 
 print
-print "Starting datamatrix assembly process"
+print("Starting datamatrix assembly process")
 
 Popen('mkdir '+args.outfile+'.datamatrix', shell=True)
 
@@ -479,7 +483,7 @@ Popen('mkdir '+args.outfile+'.datamatrix', shell=True)
 ##the FASTA file.
 
 print
-print "Loading genome, creating FASTA index file and extracting chrom sizes"
+print("Loading genome, creating FASTA index file and extracting chrom sizes")
 
 pysam.faidx(args.genome_file)
 get_chromsizes(args.genome_file)
@@ -488,19 +492,19 @@ get_chromsizes(args.genome_file)
 
 if args.gtf_file:
     print
-    print "Loading reference GTF file"
+    print("Loading reference GTF file")
     gtf_ref = BedTool(args.gtf_file)   
     
 print
-print "Sorting input bed file."
+print("Sorting input bed file.")
 
 input_bed = BedTool(args.input_file).sort().saveas(args.outfile+'.datamatrix/input_list.bed')
     
 if args.n_rand >= 1:
     print
-    print "Shuffling input bed in the genome and generating randomized background."
+    print("Shuffling input bed in the genome and generating randomized background.")
     print
-    print "Generating "+str(args.n_rand)+" times the size of input list for random background."
+    print("Generating "+str(args.n_rand)+" times the size of input list for random background.")
     n_rand = np.arange(args.n_rand)
         
     if args.gtf_file:
@@ -524,7 +528,7 @@ if args.n_rand >= 1:
     
 if args.n_rand == 0:
     print
-    print "Skipping randomized background step"
+    print("Skipping randomized background step")
     cat_command = " ".join(['cat '+args.outfile+'.datamatrix/input_list.bed > '+args.outfile+'.datamatrix/genomic_ranges.bed'])
     p = Popen(cat_command, stdout=PIPE, shell=True)
     p.communicate()
@@ -546,11 +550,11 @@ else:
     bed = bed.head(args.debug)
 
 print
-print "Generating FASTA sequences for each entry"
+print("Generating FASTA sequences for each entry")
 
 if args.create_fastas == True:
     Popen('mkdir -p '+args.outfile+'.datamatrix/fastas', shell=True)
-    entry_list = range(len(bed))
+    entry_list = list(range(len(bed)))
 
     if __name__ == '__main__':
         p = Pool((args.ncores))
@@ -559,18 +563,18 @@ else:
     pass
 
 print
-print "Starting data extraction and matrix assembly"
+print("Starting data extraction and matrix assembly")
 
 matrix_bed = get_data(bed)
 
 print
-print "Saving final datamatrix in: "+args.outfile+'.datamatrix/'+str(args.outfile)+'.datamatrix.tsv'
+print("Saving final datamatrix in: "+args.outfile+'.datamatrix/'+str(args.outfile)+'.datamatrix.tsv')
 
 matrix_bed.set_index('name').drop_duplicates().to_csv(
         args.outfile+'.datamatrix/'+str(args.outfile) + '.datamatrix.tsv', sep='\t')
 
 print
-print "Cleaning up pybedtools temporary files"
+print("Cleaning up pybedtools temporary files")
 
 pybedtools.helpers.cleanup(verbose=False, remove_all=False)
 
@@ -580,7 +584,9 @@ if args.keep_bed == True:
 else:
     Popen('rm '+args.outfile+'.datamatrix/shuffled.bed '+\
                 args.outfile+'.datamatrix/input_list.bed '+\
-                args.outfile+'.datamatrix/varfile',
+                args.outfile+'.datamatrix/varfile '+\
+		args.outfile+'.datamatrix/bedtool_df.bed '+\
+		args.outfile+'.genomic_ranges.bed',
           shell=True)
     
 if args.keep_temp == True:
@@ -589,9 +595,10 @@ else:
     Popen('rm -r '+args.outfile+'.datamatrix/emboss/ '+\
                    args.outfile+'.datamatrix/fastas/ '+\
                    args.outfile+'.datamatrix/rnafold/ '+\
-                   args.outfile+'.datamatrix/qgrs/', 
+                   args.outfile+'.datamatrix/qgrs/ '+\
+		   args.outfile+'.datamatrix/temp/', 
           shell=True)
 
 print
-print "Thank you for using BioFeatureFinder"
+print("Thank you for using BioFeatureFinder")
 print

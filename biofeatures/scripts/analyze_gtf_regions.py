@@ -69,7 +69,7 @@ df_list = []
 
 for j in range(len(input_list)):
     print
-    print "Starting analysis for: "+args.input_list[j]
+    print("Starting analysis for: "+args.input_list[j])
     input_file  = BedTool(args.input_list[j])#.sort().saveas('sorted.bed')
 
     counts = list()

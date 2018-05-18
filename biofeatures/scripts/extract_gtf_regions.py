@@ -92,36 +92,36 @@ if args.input_file is False and args.analysis is True:
     
 def extract_features(feature):
     print
-    print "Extracting "+feature+" positions and creating GTF"
+    print("Extracting "+feature+" positions and creating GTF")
     gtf_ref.filter(lambda x: x[2] == feature).saveas('gtf_regions/'+args.outfile+'_'+feature+'.gtf')
 
 print
-print "Creating output directory (gtf_regions)"
+print("Creating output directory (gtf_regions)")
 
 Popen('mkdir -p gtf_regions', shell=True)
     
 print
-print "Loading GTF annotation"
+print("Loading GTF annotation")
 
 gtf_ref = BedTool(args.gtf_file)
 
 if args.region_list == 'auto':
     print
-    print "Running in auto mode. Finding region types present in the GTF."
+    print("Running in auto mode. Finding region types present in the GTF.")
     df = gtf_ref.to_dataframe().dropna()
     feature_list = list(df.feature.value_counts().index)
 else:
     feature_list = list(args.region_list)
 
 print
-print "Extracting the following regions: "+str(feature_list)
+print("Extracting the following regions: "+str(feature_list))
     
 p = Pool(args.ncores)
 p.map(extract_features, feature_list)
 
 if args.do_introns == True:
     print
-    print "Extracting intron positions and generating GTF"
+    print("Extracting intron positions and generating GTF")
     genes = gtf_ref.filter(lambda x: x[2] == 'gene').saveas()
     exons = gtf_ref.filter(lambda x: x[2] == 'exon').saveas()
     introns = genes.subtract(exons, s=True, nonamecheck=True).saveas()
@@ -129,7 +129,7 @@ if args.do_introns == True:
     
     if args.split_introns == True:
         print
-        print "Spliting intron in proximal and distal regions and generating GTF"
+        print("Spliting intron in proximal and distal regions and generating GTF")
         introns_distal = introns.to_dataframe().copy()
         introns_distal.start = introns_distal.start + 500
         introns_distal.end = introns_distal.end - 500
@@ -142,7 +142,7 @@ if args.do_introns == True:
     
 if args.do_splice_sites == True:
     print
-    print "Extracting splice site positions and generating GTF"
+    print("Extracting splice site positions and generating GTF")
     
     exons = gtf_ref.filter(lambda x: x[2] == 'exon').saveas()
     df = pd.concat(exons.to_dataframe(iterator=True, chunksize=10000), 
@@ -233,7 +233,7 @@ if args.do_splice_sites == True:
     BedTool.from_dataframe(p5_ss).saveas('gtf_regions/'+args.outfile+'_5pSS.gtf')
     
 print
-print "GTF files created for each region"
+print("GTF files created for each region")
 
 if args.analysis == True:
     input_file = BedTool(args.input_file).sort()
@@ -244,7 +244,7 @@ if args.analysis == True:
 
     for i in range(len(gtf_list)):
         print
-        print "Counting occurences in: "+str(name_list[i])
+        print("Counting occurences in: "+str(name_list[i]))
         ref = BedTool(gtf_list[i])#.sort()
         inter = input_file.intersect(ref, s=True, c=True, nonamecheck=True).to_dataframe()
         counts.append(inter[inter.iloc[:,-1] > 0].shape[0])
@@ -256,18 +256,18 @@ if args.analysis == True:
     df.to_csv('gtf_regions/'+args.outfile+'_gtf_distribution.tsv', sep='\t', index=False)
     
     print
-    print "GTF distribution of input intervals"
+    print("GTF distribution of input intervals")
     print
-    print df
+    print(df)
 else:
     pass
                          
 print
-print "Zipping output and cleaning temp files"
+print("Zipping output and cleaning temp files")
 
 pybedtools.helpers.cleanup(verbose=False, remove_all=False)
 Popen('gzip gtf_regions/*.gtf', shell=True)
                          
 print
-print "Thank you for using BioFeatureFinder"
+print("Thank you for using BioFeatureFinder")
 print
