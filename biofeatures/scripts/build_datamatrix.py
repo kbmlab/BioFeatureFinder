@@ -392,10 +392,6 @@ def save_bed(df, filename):
     df.to_csv(filename, compression='gzip', sep='\t', index=False,
               header=False)
 
-print (args.var_files)
-print ()
-print (list(args.var_files))
-
 def get_data(df):
 
     Popen('mkdir -p ./'+args.outfile+".datamatrix/temp/", shell=True)
