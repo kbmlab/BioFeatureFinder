@@ -54,7 +54,48 @@ BioFeatureFinder was funded by the São Paulo Research Foundation (FAPESP grants
     
 ## Testing dataset
 
-For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-binding protein eCLIP dataset (approx. 10% of the raw dataset). For the purpose of this tutorial, we will use only the phastCons scores for multiple alignments of 99 vertebrate genomes to the human genome (100way), which can be obtained directly in bigWig format (for obtaining and processing the 46way dataset, please follow the "Converting multiple wig into single bigWig" section). http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/hg19.100way.phastCons.bw). 
+For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-binding protein eCLIP dataset (approx. 10% of the raw dataset). For the purpose of this tutorial, we will use only the phastCons scores for multiple alignments of 99 vertebrate genomes to the human genome (100way), which can be obtained directly in bigWig format (for obtaining and processing the 46way dataset, please follow the "Converting multiple wig into single bigWig" section).
+    
+    #Enter the "hg19_data" inside the "test_data" folder
+    cd /full/path/to/BioFeatureFinder/test_data/hg19_data/
+    
+    #Download the hg19 (GRCh37.p13) from GENCODE ftp website
+    wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/GRCh37.p13.genome.fa.gz
+    
+    #Download the 100way phastCons scores from UCSC goldenPath
+    wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/hg19.100way.phastCons.bw
+    
+    #(OPTIONAL) Enter the "hg19_annotations" folder and extract 
+    #the GTF regions from the Homo sapiens GRCh37.p13 annotation 
+    #from Ensembl (with chameleon for UCSC-style)
+    cd ./hg19_annotations
+    extract_gtf_regions.py -g ./Homo_sapiens.GRCh37.p13.chameleonUCSC.gtf.gz -o grch37 --intron  
+    
+    #Go back to "test_data" folder
+    cd /full/path/to/BioFeatureFinder/test_data/    
+    
+    #Run region analysis to identify preferential occurence region for input dataset
+    analyze_gtf_regions.py \
+    -i ./rbfox2_sample.bed \
+    -r ./hg19_data/hg19_annotations/grch37.* \
+    -l 3pss 3utr 5pss 5utr cds intron \
+    -o rbfox2_test_regions
+    
+    #Run the "build_datamatrix" script to create extract biological features from the files
+    build_datamatrix.py \ #load the main script
+    -i ./rbfox2_sample.bed \ #set your input set of bed coordinates
+    -gen /full/path/to/BioFeatureFinder/test_data/hg19_data/GRCh37.p13.genome.fa \ #Load the genomic sequence
+    -g /full/path/to/BioFeatureFinder/test_data/hg19_data/hg19_annotations/grch37.intron.gtf.gz \ #Load the GTF file 
+    -cs /full/path/to/BioFeatureFinder/test_data/hg19_data/hg19.100way.phastCons.bw \
+    -var /full/path/to/BioFeatureFinder/test_data/hg19_data/hg19_var/* \
+    --fasta \
+    -k 4 5 6 \
+    --rnafold \
+    --qgrs \
+    --keepBED \
+    --keepTEMP \
+    -o rbfox2.test
+
 
 ## Converting multiple wig into single bigWig
 
