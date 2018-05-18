@@ -582,7 +582,7 @@ else:
                 args.outfile+'.datamatrix/input_list.bed '+\
                 args.outfile+'.datamatrix/varfile '+\
 		args.outfile+'.datamatrix/bedtool_df.bed '+\
-		args.outfile+'.genomic_ranges.bed',
+		args.outfile+'.datamatrix/genomic_ranges.bed',
           shell=True)
     
 if args.keep_temp == True:
