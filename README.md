@@ -54,60 +54,51 @@ BioFeatureFinder was funded by the São Paulo Research Foundation (FAPESP grants
     
 ## Testing dataset
 
-For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-binding protein eCLIP dataset (approx. 10% of the raw dataset). After installing BioFeatureFinder with "pip install -e ." and any dependencies, please also install the following binaries from UCSC utilities directory (http://hgdownload.soe.ucsc.edu/admin/exe/):
+For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-binding protein eCLIP dataset (approx. 10% of the raw dataset). For the purpose of this tutorial, we will use only the phastCons scores for multiple alignments of 99 vertebrate genomes to the human genome (100way), which can be obtained directly in bigWig format (for obtaining and processing the 46way dataset, please follow the "Converting multiple wig into single bigWig" section). http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/hg19.100way.phastCons.bw). 
+
+## Converting multiple wig into single bigWig
+
+After installing BioFeatureFinder with "pip install -e ." and any dependencies, please also install the following binaries from UCSC utilities directory (http://hgdownload.soe.ucsc.edu/admin/exe/):
 
     wigToBigWig 
     bigWigMerge 
     bedGraphToBigWig 
 
-Input files for BioFeatureFinder test dataset include the human genome sequence (hg19 assembly) and bigWig files with phastCon scores for conservation. Both of these files are too large to be included in GitHub, so we need to download and process these files to be used by BFF. This can either be done manually (following the steps below) ou using the "get_genome_and_conversation.sh" script located in the "test_data/hg19_data/" folder (WARNING: This step can take a long time. Alternatively, you can download only the genome sequence directly and phastCons scores for multiple alignments of 99 vertebrate genomes (100way) to the human genome already in bigWig format available at: http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons100way/hg19.100way.phastCons.bw).
+Input files for BioFeatureFinder test dataset include the human genome sequence (hg19 assembly) and bigWig files with phastCon scores for conservation. Both of these files are too large to be included in GitHub, so we need to download and process these files to be used by BFF. This can either be done manually (following the steps below) or using some type of automated script.
 
-1 - Download human hg19 (GRCh37) genome sequence
-
-    wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/GRCh37.p13.genome.fa.gz
-
-2 - Unzip the file:
-
-    gunzip ./GRCh37.p13.genome.fa.gz
-
-3 - Create a folder for store the conservation files and enter it:
-   
-    mkdir ./hg19_con
-    cd ./hg19_con
-
-4 - Download chromosome sizes from UCSC:
+1 - Download chromosome sizes from UCSC:
 
     wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes
 
-5 - Download the md5 checksum for the vertebrate conservation files:
+2 - Download the md5 checksum for the vertebrate conservation files:
 
     wget -O md5.vertebrate.txt http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/vertebrate/md5sum.txt
 
-6 - Download each wig file from the md5 and extract them:
+3 - Download each wig file from the md5 and extract them:
     
     cut -f 3 -d " " md5.vertebrate.txt |xargs -P 1 -L 1 -I % wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/phastCons46way/vertebrate/% 
     gunzip ./*.wigFix.gz
 
-7 - Remove files without data:
+4 - Remove files without data (can be identified with something like "ls -lah"):
     
     rm chrUn_gl000226.phastCons46way.wigFix
 
-8 - Convert wig files to bigWig:
+5 - Convert wig files to bigWig:
     
     ls *.wigFix | xargs -P 1 -L 1 -I % wigToBigWig ./% ./hg19.chrom.sizes ./%.bw 
 
-9 - Merge the multiple bigWig files in a single bedGraph and sort it by coordinates:
+6 - Merge the multiple bigWig files in a single bedGraph and sort it by coordinates:
     
     bigWigMerge ./*.bw hg19.phastCons46way.vertebrates.bg
     bedtools sort -i ./hg19.phastCons46way.vertebrates.bg > ./hg19.phastCons46way.vertebrates.srt.bg
     rm ./*.bw
 
-10 - Convert the bedGraph back into a bigWig binary file and clean up:
+7 - Convert the bedGraph back into a bigWig binary file and clean up:
     
     bedGraphToBigWig ./hg19.phastCons46way.vertebrates.srt.bg ./hg19.chrom.sizes ./hg19.phastCons46way.vertebrates.bw
     rm ./*.bg
 
-11 - Repeat steps 5 to 10 for other levels of conservation (placentalMammals and primates).
+8 - Repeat steps 2 to 7 for other levels of conservation (placentalMammals and primates).
     
 ## Change logs
 
