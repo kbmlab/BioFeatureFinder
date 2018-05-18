@@ -99,3 +99,10 @@ Input files for BioFeatureFinder test dataset include the human genome sequence 
 
     11. Repeat steps 5 to 10 for other levels of conservation (placentalMammals and primates).
     
+## Change logs
+
+* v1.1.0 - Re-structure of main scripts to support both Python 3.4 and 2.7
+* v1.0.3 - Added test dataset and readme file
+* v1.0.2 - Fixed bug in classifier metrics barchart plotting
+* v1.0.1 - Fixed bug in KS test
+* v1.0.0 - Original BioFeatureFinder algorithm
