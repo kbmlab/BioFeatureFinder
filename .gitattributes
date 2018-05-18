@@ -1,1 +1,2 @@
 *.tar.gz filter=lfs diff=lfs merge=lfs -text
+./test_data/hg19_data/hg19_annotations/Homo_sapiens.GRCh37.p13.chameleonUCSC.gtf.gz filter=lfs diff=lfs merge=lfs -text
