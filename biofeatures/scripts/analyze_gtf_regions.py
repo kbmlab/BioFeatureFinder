@@ -90,3 +90,4 @@ for j in range(len(args.input_list)):
     
 df_cat = pd.concat(df_list, axis=1).T
 df_cat.to_excel(args.outfile+'.xlsx')
+df_cat.to_csv(args.outfile+'.csv')
