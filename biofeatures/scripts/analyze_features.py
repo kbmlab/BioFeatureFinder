@@ -77,7 +77,7 @@ class MyParser(argparse.ArgumentParser):
         print
         self.print_help()
         print
-        print gandalf
+        print(gandalf)
         print    
         print
         print("The following error ocurred in argument parsing:")
@@ -289,7 +289,7 @@ Popen('mkdir -p ./' + args.prefix + '.analysis/statistical_analysis', shell=True
 ##Load the bed file created with all exons
 
 print
-print "Loading bed file with regions of interest"
+print("Loading bed file with regions of interest")
 print
 
 
@@ -297,7 +297,7 @@ bed_input = BedTool(args.bed_file).sort()
     
 ##Load the datamatrix generatade by "buildadatamatrix.py"
 
-print "Loading datamatrix"
+print("Loading datamatrix")
 print
 
 matrix = pd.concat(pd.read_table(args.matrix, iterator=True, chunksize=10000),
@@ -308,7 +308,7 @@ matrix = pd.concat(pd.read_table(args.matrix, iterator=True, chunksize=10000),
 if not args.filter_out:
     pass
 else:
-    print "Filtering out columns"
+    print("Filtering out columns")
     print
     out_cols = open(str(args.filter_out)).read().split(',')
     out_cols = [w.replace('\n', '') for w in out_cols]
@@ -316,7 +316,7 @@ else:
 
 ##Intersect the exons found in the analysis to get groups 1 (positive) and 0 (negative) in the matrix
 
-print "Finding input exons in the matrix and selecting groups"
+print("Finding input exons in the matrix and selecting groups")
 print
 
 bed_from_matrix = pd.DataFrame()
@@ -330,9 +330,9 @@ bed_from_matrix = BedTool.from_dataframe(bed_from_matrix).sort()
 
 matrix = group_matrices_one_sample(bed_from_matrix, bed_input, matrix).set_index('name')
    
-print "Starting statistical analysis"
+print("Starting statistical analysis")
 print
-print "Calculating Komlogorov-Smirnov test for each feature in the matrix"
+print("Calculating Komlogorov-Smirnov test for each feature in the matrix")
 print
 
 features = list(matrix.drop('group',1).columns)
@@ -348,7 +348,7 @@ for i in range(len(features)):
 
 st = pd.concat(df_list, 0).reset_index().drop('index',1)
     
-print "Adjusting pvalues using "+str(args.padj)+" and saving output"
+print("Adjusting pvalues using "+str(args.padj)+" and saving output")
 print
     
 statsR = importr('stats')
@@ -358,13 +358,13 @@ st.to_csv('./' + args.prefix + '.analysis/statistical_analysis/statistical_analy
 st.to_excel('./' + args.prefix + '.analysis/statistical_analysis/statistical_analysis_output.xlsx',
             index=False)
 
-print "Finished statistical analysis"
+print("Finished statistical analysis")
 print
     
 if not args.ks_filter:
     pass
 elif args.ks_filter:
-    print "Filtering statistically significantly features for plotting CDF and classification steps"
+    print("Filtering statistically significantly features for plotting CDF and classification steps")
     print
     sig_only = st[st['adj_pval'] <= float(args.p_th)]['Feature'].tolist()
     sig_only.append('group')
@@ -475,13 +475,13 @@ if not args.dont_plot_cdf:
                     dpi=300, bbox_inches='tight')
         plt.close()
 
-    print "Finished CDF plots for features in matrix" 
+    print("Finished CDF plots for features in matrix") 
     print
 elif args.dont_plot_cdf:
     pass
 
 if args.dont_run_clf:
-    print "Analysis complete. Thank you for using biofeatures."
+    print("Analysis complete. Thank you for using biofeatures.")
     print
     sys.exit()
 else:
@@ -533,8 +533,8 @@ for run_i in range(len(runs)):
         'mkdir -p ./' + args.prefix + '.analysis/classifier_metrics/run_' + run_id,
         shell=True)
 
-    print("Run ID: " + str(run_id) + ', Input size: ' + str(
-        df_cl.shape[0]) + ', Background size: ' + str(df_zero.shape[0]))
+    print(("Run ID: " + str(run_id) + ', Input size: ' + str(
+        df_cl.shape[0]) + ', Background size: ' + str(df_zero.shape[0])))
     print
     print(
         "Starting classification analysis with GradientBoost. This may take a long time depending on the size of the dataset")
@@ -632,13 +632,13 @@ for run_i in range(len(runs)):
 
         # TODO: write to file.
         print("Confusion matrix: ")
-        print(confusion_matrix(y_test, gclf.best_estimator_.predict(X_test)))
+        print((confusion_matrix(y_test, gclf.best_estimator_.predict(X_test))))
         print
         print("GridSeachCV best score:")
-        print(gclf.best_score_)
+        print((gclf.best_score_))
         print
         print("GridSearchCV best params")
-        print(gclf.best_params_)
+        print((gclf.best_params_))
         print
     if gbclf_params == 'default':
         print("Using default parameters.")
@@ -675,8 +675,8 @@ for run_i in range(len(runs)):
 
     clf.fit(X_train, y_train)
 
-    print(
-        "Extracting feature importance for run " + run_id + " and merging with statistical data")
+    print((
+        "Extracting feature importance for run " + run_id + " and merging with statistical data"))
     print
 
     # TODO: rename
@@ -781,11 +781,11 @@ for run_i in range(len(runs)):
     print("Confusion matrix")
     print(conf)
     print
-    print('Accuracy: ' + str(acc) + '%')
-    print('Positive predictive value (Precision): ' + str(ppv) + '%')
-    print('Negative predictive value: ' + str(npv) + '%')
-    print('Sensitivity (Recall): ' + str(sen) + '%')
-    print('Specificity: ' + str(spe) + '%')
+    print(('Accuracy: ' + str(acc) + '%'))
+    print(('Positive predictive value (Precision): ' + str(ppv) + '%'))
+    print(('Negative predictive value: ' + str(npv) + '%'))
+    print(('Sensitivity (Recall): ' + str(sen) + '%'))
+    print(('Specificity: ' + str(spe) + '%'))
     print
 
     ##For creating ROC and precision curves, we need to binarize the output and get score functions
@@ -1112,7 +1112,7 @@ msr_ms = get_mean_and_std(msr)
 df_cat = pd.concat([mtc_ms[['mean','std']],
                     msr_ms[['mean','std']],
                     roc_auc_all[['mean','std']],
-                    pre_all[['mean','std']]])
+                    av_pre_all[['mean','std']]])
 
 df_cat.to_csv('./' + args.prefix + '.analysis/overall_classifier_metrics.tsv', sep='\t')
 df_cat.to_excel('./' + args.prefix + '.analysis/overall_classifier_metrics.xlsx')

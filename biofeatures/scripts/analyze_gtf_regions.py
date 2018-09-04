@@ -67,9 +67,9 @@ name_list = [i.split('/', -1)[-1] for i in args.input_list]
 
 df_list = []
 
-for j in range(len(input_list)):
+for j in range(len(args.input_list)):
     print
-    print "Starting analysis for: "+args.input_list[j]
+    print("Starting analysis for: "+args.input_list[j])
     input_file  = BedTool(args.input_list[j])#.sort().saveas('sorted.bed')
 
     counts = list()
@@ -90,3 +90,4 @@ for j in range(len(input_list)):
     
 df_cat = pd.concat(df_list, axis=1).T
 df_cat.to_excel(args.outfile+'.xlsx')
+df_cat.to_csv(args.outfile+'.csv')

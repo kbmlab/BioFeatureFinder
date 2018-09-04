@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='featurefinder',
-    version='1.0.0',
+    version='1.1.0',
     packages=find_packages(),
     url='https://github.com/kbmlab/BioFeatureFinder',
     license='',
@@ -22,6 +22,7 @@ setup(
     scripts=[
         'biofeatures/scripts/analyze_features.py',
         'biofeatures/scripts/build_datamatrix.py',
-	'biofeatures/scripts/extract_gtf_regions.py'
+	'biofeatures/scripts/extract_gtf_regions.py',
+	'biofeatures/scripts/analyze_gtf_regions.py'
     ]
 )
