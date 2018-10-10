@@ -166,7 +166,7 @@ def nuc_cont(bedtool):
         names=['seqname', 'start', 'end', 'name', 'score', 'strand',
                '%AT', '%GC', '%A', '%C', '%G', '%T',
                '%N', '%O', 'length', 'seq'],
-        iterator=True, chunksize=10000), ignore_index=True).ix[1:]
+        iterator=True, chunksize=10000), ignore_index=True, sort=False).ix[1:]
     nuccont_df['%AT'] = nuccont_df['%AT'].astype(float).round(5)
     nuccont_df['%GC'] = nuccont_df['%GC'].astype(float).round(5)
     nuccont_df['%A'] = nuccont_df.apply(
@@ -206,7 +206,7 @@ def get_conservation_scores(con_file, df, cmd="bigWigAverageOverBed"):
                                             'sum', 'mean_' + source,
                                             'mean0_' + source), iterator=True,
                                      chunksize=10000
-                                     ), ignore_index=True)
+                                     ), ignore_index=True, sort=False)
     os.remove(args.outfile+'.datamatrix/conservation_temp.bed')
     os.remove(args.outfile+'.datamatrix/conservation_result_temp.tab')
     return result[['name', 'mean_' + source]]
@@ -221,7 +221,7 @@ def get_var_counts(bedtool, var_file):
         bedtool.intersect(var, s=True, c=True, sorted=False).to_dataframe(iterator=True,
                                                             chunksize=10000
                                                             ),
-        ignore_index=True).rename(
+        ignore_index=True, sort=False).rename(
         columns={'thickStart': 'var_count_' + source})
     return var_counts[['name', 'var_count_' + source]]
 
@@ -277,7 +277,7 @@ def get_kmer_counts(kmer_list):
         #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
         #    kmer_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()
         
-        kmer_df = pd.concat(df_list, axis=1, join='outer')
+        kmer_df = pd.concat(df_list, axis=1, join='outer', sort=False)
         
         kmer_df = kmer_df.T.add_prefix('kmer_count_').reset_index()
         kmer_df = kmer_df.groupby('index').sum()
@@ -316,7 +316,7 @@ def get_MFE_scores():
     #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
     #    mfe_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()
     
-    mfe_df = pd.concat(df_list, axis=1, join='outer')
+    mfe_df = pd.concat(df_list, axis=1, join='outer', sort=False)
     
     mfe_df = mfe_df.T.rename(columns={0:'MFE'}).reset_index().fillna(0).rename(columns={'index':'name'})
     mfe_df.to_csv(args.outfile+".datamatrix/temp/data_rnafold_results.csv", index=False)
@@ -351,7 +351,7 @@ def get_QGRS_scores():
     #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
     #    qgrs_df = executor.submit(pd.concat, df_list, axis=1, join='outer').result()    
     
-    qgrs_df = pd.DataFrame(pd.concat(df_list, axis=1, join='outer').max())
+    qgrs_df = pd.DataFrame(pd.concat(df_list, axis=1, join='outer', sort=False).max())
     
     qgrs_df = qgrs_df.rename(columns={0:'max_QGRS_score'}).reset_index().fillna(0).rename(columns={'index':'name'})
     qgrs_df.to_csv(args.outfile+".datamatrix/temp/data_qgrs_results.csv", index=False)
@@ -455,7 +455,7 @@ def get_data(df):
         #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
         #    z = executor.submit(pd.concat, z_list, axis=1, join='outer').result()
         
-        z = pd.concat(z_list, axis=1, join='outer')
+        z = pd.concat(z_list, axis=1, join='outer', sort=False)
         z = z.reset_index().rename(columns={'index':'name'}).fillna(0)
     else:
         pass

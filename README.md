@@ -143,6 +143,7 @@ Input files for BioFeatureFinder test dataset include the human genome sequence 
     
 ## Change logs
 
+* v1.1.1 - Fixed issue with hyperparameter tuning when using 10-fold cross validation
 * v1.1.0 - Re-structure of main scripts to support both Python 3.4 and 2.7
 * v1.0.3 - Added test dataset and readme file
 * v1.0.2 - Fixed bug in classifier metrics barchart plotting

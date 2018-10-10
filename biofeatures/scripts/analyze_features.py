@@ -4,14 +4,12 @@
 import sys
 import argparse
 from subprocess import Popen
-import itertools
 import pandas as pd
 import numpy as np
 from pybedtools import BedTool
 from scipy import stats
 import matplotlib
 matplotlib.use('Agg')
-import readline
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import FloatVector
 import matplotlib.pyplot as plt
@@ -28,7 +26,7 @@ from sklearn.metrics import roc_curve, auc
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import label_binarize
 from sklearn.model_selection import StratifiedKFold
-from sklearn.feature_selection import RFECV
+from sklearn.model_selection import cross_val_score
 import multiprocessing as mp
 
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -110,8 +108,8 @@ parser.add_argument('-filter', '--filter_columns', dest="filter_out",
                     help="Text file containing a comma-separated list with names of the columns to be removed from the dataframe in the analysis. Default: False",
                     metavar="filter_out.txt", required=False)
 
-parser.add_argument("-padj", '--p_adjust', dest="padj", default='bonferroni',
-                    help="Type of p-value correction used after Kolmogorov-Smirnov test, available options are: 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', 'fdr' and 'none'. Default:'bonferroni'",
+parser.add_argument("-padj", '--p_adjust', dest="padj", default='fdr',
+                    help="Type of p-value correction used after Kolmogorov-Smirnov test, available options are: 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', 'fdr' and 'none'. Default:'fdr'",
                     type=str, metavar='padj', required=False)
 
 parser.add_argument("-pth", '--p_adjust_threshold', dest="p_th", default=0.05,
@@ -123,8 +121,8 @@ parser.add_argument('--sig-only', dest="ks_filter", action="store_true",
                     help="Use only the statistically significant features (found by KS test) in the plotting classification step. Useful for filtering large data matrices to reduce computational time. Can use the '-pth' option to select the threshold of significante for feature selection. Default: False",
                     required=False)
 
-parser.add_argument("-runs", '--number_of_runs', dest="runs", default=500,
-                    help="Number of times (repetitions) to run the classification step. Default:500",
+parser.add_argument("-runs", '--number_of_runs', dest="runs", default=10,
+                    help="Number of times (repetitions) to run the classification step. Default:10",
                     type=int, metavar='INT')
 
 parser.add_argument("-nsample", '--random_sample_size', dest="nsample",
@@ -137,8 +135,13 @@ parser.add_argument("-tsize", '--train_size', dest="train_size",
                     type=float)
 
 parser.add_argument("-params", '--gbcl_parameters', dest="clf_params",
-                    default='preset',
-                    help="Type of parameter selection to be used by the classifier. Available options are: 'optimize' (runs an optimization step with GridSearchCV before every run), 'default' (uses default parameters from GradientBoostClassifier), 'preset' (uses the preset parameters which were used for the analysis of the human dataset shown in the article) and 'file' (take in input txt file with a dictionary-like struture with classifier parameters, requires the use of -pf option). Options: 'default', 'preset' and 'file'. Default:'preset'",
+                    default='optimize',
+                    help="Type of parameter selection to be used by the classifier. Available options are: 'optimize' (runs an optimization step with GridSearchCV), 'default' (uses default parameters from GradientBoostClassifier) and 'file' (take in input txt file with a dictionary-like struture with classifier parameters, requires the use of -pf option). Options: 'default', 'optimize' and 'file'. Default:'optimize'",
+                    type=str, metavar='params', required=False)
+
+parser.add_argument("-scr", '--scoring_metric', dest="scr_metric",
+                    default='roc_auc',
+                    help="Type of scoring metric used to optimize the classifier hyperparameters if the 'optmize' param option is selected. Possible options include: 'roc_auc', 'accuracy', 'balanced_accuracy', 'precision', 'average_precision' and 'recall' (for a full list of options visit: http://scikit-learn.org/stable/modules/model_evaluation.html). Default: 'roc_auc'",
                     type=str, metavar='params', required=False)
 
 parser.add_argument("-pf", '--param_file', dest="param_file",
@@ -288,9 +291,9 @@ Popen('mkdir -p ./' + args.prefix + '.analysis/statistical_analysis', shell=True
     
 ##Load the bed file created with all exons
 
-print
+print()
 print("Loading bed file with regions of interest")
-print
+print()
 
 
 bed_input = BedTool(args.bed_file).sort()
@@ -298,7 +301,7 @@ bed_input = BedTool(args.bed_file).sort()
 ##Load the datamatrix generatade by "buildadatamatrix.py"
 
 print("Loading datamatrix")
-print
+print()
 
 matrix = pd.concat(pd.read_table(args.matrix, iterator=True, chunksize=10000),
                    ignore_index=True).set_index('name').drop_duplicates().reset_index()
@@ -317,7 +320,7 @@ else:
 ##Intersect the exons found in the analysis to get groups 1 (positive) and 0 (negative) in the matrix
 
 print("Finding input exons in the matrix and selecting groups")
-print
+print()
 
 bed_from_matrix = pd.DataFrame()
 bed_from_matrix['chr'] = matrix['name'].apply(lambda x: x.split('_')[3],1)
@@ -331,9 +334,9 @@ bed_from_matrix = BedTool.from_dataframe(bed_from_matrix).sort()
 matrix = group_matrices_one_sample(bed_from_matrix, bed_input, matrix).set_index('name')
    
 print("Starting statistical analysis")
-print
+print()
 print("Calculating Komlogorov-Smirnov test for each feature in the matrix")
-print
+print()
 
 features = list(matrix.drop('group',1).columns)
 df_list = []
@@ -349,7 +352,7 @@ for i in range(len(features)):
 st = pd.concat(df_list, 0).reset_index().drop('index',1)
     
 print("Adjusting pvalues using "+str(args.padj)+" and saving output")
-print
+print()
     
 statsR = importr('stats')
 st['adj_pval'] = statsR.p_adjust(FloatVector(st['pval']),method=str(args.padj))
@@ -359,13 +362,13 @@ st.to_excel('./' + args.prefix + '.analysis/statistical_analysis/statistical_ana
             index=False)
 
 print("Finished statistical analysis")
-print
+print()
     
 if not args.ks_filter:
     pass
 elif args.ks_filter:
     print("Filtering statistically significantly features for plotting CDF and classification steps")
-    print
+    print()
     sig_only = st[st['adj_pval'] <= float(args.p_th)]['Feature'].tolist()
     sig_only.append('group')
     matrix = matrix[sig_only]
@@ -373,7 +376,7 @@ elif args.ks_filter:
     
 if not args.dont_plot_cdf:
     print("Output CDF plots for each features in matrix")
-    print
+    print()
     features = list(matrix.drop('group',1).columns)
     
     title_size=16
@@ -408,8 +411,8 @@ if not args.dont_plot_cdf:
             plt.xlim(0, 1)
         elif name.find("phastCon") != -1:
             plt.xlim(0, 1)
-        elif name.find("_count_") != -1:
-            plt.xscale('symlog')
+#        elif name.find("_count_") != -1:
+#            plt.xscale('symlog')
         else:
             plt.xlim()
 
@@ -467,8 +470,8 @@ if not args.dont_plot_cdf:
             plt.xlim(0, 1)
         elif name.find("phastCon") != -1:
             plt.xlim(0, 1)
-        elif name.find("_count_") != -1:
-            plt.xscale('symlog')
+#        elif name.find("_count_") != -1:
+#            plt.xscale('symlog')
         else:
             plt.xlim()
         plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.pdf',
@@ -476,13 +479,13 @@ if not args.dont_plot_cdf:
         plt.close()
 
     print("Finished CDF plots for features in matrix") 
-    print
+    print()
 elif args.dont_plot_cdf:
     pass
 
 if args.dont_run_clf:
     print("Analysis complete. Thank you for using biofeatures.")
-    print
+    print()
     sys.exit()
 else:
     pass
@@ -500,6 +503,8 @@ runs = np.arange(args.runs)
 sample_size = args.nsample
 gbclf_params = str(args.clf_params)
 train_size = args.train_size
+scr_metric = args.scr_metric
+ncores = args.ncores
 
 ##Popen('mkdir -p ./' + args.prefix + '.analysis/classifier_metrics', shell=True)
 
@@ -523,6 +528,224 @@ pre_all = pd.DataFrame()
 rec_all = pd.DataFrame()
 av_pre_all = pd.DataFrame()
 
+if gbclf_params == 'default':
+    print("Using default parameters.")
+    print()
+
+if gbclf_params == 'file':
+    print("Using input file as param dictionary")
+    print()
+    bp = eval(open(str(args.param_file)).read())
+    
+if gbclf_params == 'optimize':
+    
+    print("Starting parameter tuning process with stratified 10-fold cross validation")
+    print()
+    print("Selected scoring parameter: "+str(scr_metric))
+    print()
+
+    ##Since we are using the GradientBooost Classfier, the first step is to find how many features are 
+    ##optimal for group classification. To do that, we use recursive feature elimination with cross-validation.
+    ##For this step, we will use the StratifiedKFold approach with 10-fold cross validation. The "accuracy" 
+    ##scoring is proportional to the number of correct classifications
+
+    
+    df_cl = matrix[matrix['group'] != 0]
+    df_zero = matrix[matrix['group'] == 0].sample(df_cl.shape[0] * sample_size)
+    Z = pd.concat([df_cl, df_zero]).drop_duplicates()
+    
+    y = np.array(Z.group).astype('int')
+    X = np.array(Z.drop('group', 1))
+        
+    X_train, X_test, y_train, y_test = train_test_split(X,
+                                                        y,
+                                                        train_size=train_size,
+                                                        test_size=(1-train_size))
+    
+    print('Optmizing number of boosting stages (estimators)')
+    print()
+
+    opt = GradientBoostingClassifier(warm_start=True,
+                                     learning_rate=0.1, 
+                                     loss='deviance',
+                                     subsample=0.8,
+                                     random_state=10,
+                                     max_depth=6, 
+                                     min_samples_split=0.01, 
+                                     min_samples_leaf=0.001,
+                                     max_features='sqrt',
+                                     )
+
+    grid = {'n_estimators': range(10,301,10)}
+
+    opt_s1 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
+                          cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
+
+    opt_s1.fit(X_train, y_train)
+
+    print("SCORES:")
+    print(pd.DataFrame(opt_s1.cv_results_)[['params','mean_test_score','std_test_score']])
+    print()
+    print('Best result:')
+    print('SCORE: '+str(opt_s1.best_score_)+'; PARAM: '+str(opt_s1.best_params_))
+    print()
+
+    n_est = list(opt_s1.best_params_.values())[0]
+    
+    print('Optmizing number of maximum depth of the individual estimators and minimum number of samples to split a node')
+    print()
+
+    opt = GradientBoostingClassifier(warm_start=True,
+                                     n_estimators=n_est,
+                                     learning_rate=0.1, 
+                                     loss='deviance',
+                                     subsample=0.8,
+                                     random_state=10,
+                                     min_samples_leaf=0.001,
+                                     max_features='sqrt',
+                                     )
+
+    grid = {'max_depth':range(2,21,1), 
+            'min_samples_split':list(np.arange(0.001, 0.021, 0.001).round(3))}
+
+    opt_s2 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
+                          cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
+
+    opt_s2.fit(X_train, y_train)
+
+    print("SCORES:")
+    print(pd.DataFrame(opt_s2.cv_results_)[['params','mean_test_score','std_test_score']])
+    print()
+    print('Best result:')
+    print('SCORE: '+str(opt_s2.best_score_)+'; PARAM: '+str(opt_s2.best_params_))
+    print()
+    
+    m_depth = list(opt_s2.best_params_.values())[0]
+    n_split = list(opt_s2.best_params_.values())[1]
+    
+    print('Adjusting number of minimum samples in each leaf after split')
+    print()
+
+    opt = GradientBoostingClassifier(warm_start=True,
+                                     n_estimators=n_est,
+                                     min_samples_split=n_split,
+                                     max_depth=m_depth,
+                                     learning_rate=0.1, 
+                                     loss='deviance',
+                                     subsample=0.8,
+                                     random_state=10,
+                                     max_features='sqrt',
+                                     )
+
+    grid = {'min_samples_split':list(np.array(np.linspace(n_split/2, n_split*2, 10).round(5))),
+            'min_samples_leaf':list(np.array(np.linspace(n_split/20, n_split*2, 10).round(5)))}
+
+    opt_s3 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
+                          cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
+
+    opt_s3.fit(X_train, y_train)
+
+    print("SCORES:")
+    print(pd.DataFrame(opt_s3.cv_results_)[['params','mean_test_score','std_test_score']])
+    print()
+    print('Best result:')
+    print('SCORE: '+str(opt_s3.best_score_)+'; PARAM: '+str(opt_s3.best_params_))
+    print()
+    
+    n_leaf = list(opt_s3.best_params_.values())[0]
+    n_split = list(opt_s3.best_params_.values())[1]
+
+    print('Optmizing maximmum number of features')
+    print()
+
+    sqrt = int(np.sqrt(X_train.shape[1]))
+
+    opt = GradientBoostingClassifier(warm_start=True,
+                                     n_estimators=n_est,
+                                     min_samples_split=n_split,
+                                     min_samples_leaf=n_leaf,
+                                     max_depth=m_depth,
+                                     learning_rate=0.1, 
+                                     loss='deviance',
+                                     subsample=0.8,
+                                     random_state=10)                                 
+
+    grid = {'max_features':list(np.arange(2, ((sqrt*2)+2), 2, dtype=int))}
+
+    opt_s4 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
+                          cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
+
+    opt_s4.fit(X_train, y_train)
+
+    print("SCORES:")
+    print(pd.DataFrame(opt_s4.cv_results_)[['params','mean_test_score','std_test_score']])
+    print()
+    print('Best result:')
+    print('SCORE: '+str(opt_s4.best_score_)+'; PARAM: '+str(opt_s4.best_params_))
+    print()
+    
+    n_features = list(opt_s4.best_params_.values())[0]
+    
+    print('Adjusting number of estimators and learning rate')
+    print()
+
+    opt = GradientBoostingClassifier(warm_start=True,
+                                     min_samples_split=n_split,
+                                     min_samples_leaf=n_leaf,
+                                     max_depth=m_depth,
+                                     loss='deviance',
+                                     subsample=0.8,
+                                     random_state=10,
+                                     max_features=n_features,
+                                     )
+
+    grid = {'n_estimators':[n_est, n_est*5, n_est*10],
+            'learning_rate':[0.1, 0.02, 0.01]}
+
+    opt_s5 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
+                          cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
+
+    opt_s5.fit(X_train, y_train)
+
+    print("SCORES:")
+    print(pd.DataFrame(opt_s5.cv_results_)[['params','mean_test_score','std_test_score']])
+    print()
+    print('Best result:')
+    print('SCORE: '+str(opt_s5.best_score_)+'; PARAM: '+str(opt_s5.best_params_))
+    print()
+    
+    n_est = list(opt_s5.best_params_.values())[1]
+    l_rate = list(opt_s5.best_params_.values())[0]
+    
+    print('Scoring the optimized hyperparameters with stratified 10-fold cross-validation')
+
+    scr = GradientBoostingClassifier(warm_start=True,
+                                     n_estimators=n_est,
+                                     min_samples_split=n_split,
+                                     min_samples_leaf=n_leaf,
+                                     max_depth=m_depth,
+                                     learning_rate=l_rate, 
+                                     loss='deviance',
+                                     subsample=0.8,
+                                     random_state=10,
+                                     max_features=n_features,
+                                     ).fit(X_train, y_train)
+
+    scores = cross_val_score(scr, X_test, y_test, cv=StratifiedKFold(10), scoring=scr_metric)
+    print()
+    print("Final 10-fold CV score for optimized hyperparameters: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+    print()
+    
+    bp = scr.get_params()
+    
+    print("Exporting final hyperparameter selection to 'best_params.txt' file:")
+    print()
+    print(bp)
+    
+    with open('./' + args.prefix \
+      + '.analysis/best_params.txt','w') as fp:
+        fp.write(str(scr.get_params()))
+
 for run_i in range(len(runs)):
     run_id = str(runs[run_i] + 1)
     df_cl = matrix[matrix['group'] != 0]
@@ -535,15 +758,15 @@ for run_i in range(len(runs)):
 
     print(("Run ID: " + str(run_id) + ', Input size: ' + str(
         df_cl.shape[0]) + ', Background size: ' + str(df_zero.shape[0])))
-    print
+    print()
     print(
         "Starting classification analysis with GradientBoost. This may take a long time depending on the size of the dataset")
-    print
+    print()
 
     ##The first step is separating the groups from the data in different arrays
 
     print("Loading data in arrays")
-    print
+    print()
 
     y = np.array(Z.group).astype('int')
     X = np.array(Z.drop('group', 1))
@@ -552,132 +775,29 @@ for run_i in range(len(runs)):
     ## and the test group, which we will use for evaluating the performance of the classifier. The default test size is 0.25.
 
     print("Splitting train and test datasets")
-    print
+    print()
 
     X_train, X_test, y_train, y_test = train_test_split(X,
                                                         y,
-                                                        train_size=train_size)
+                                                        train_size=train_size,
+                                                        test_size=(1-train_size))
 
-    ##For parameter selection to be passed to the classifier, there are 4 options: 
-    ## 1. "optimize" - Run the optimization step which performs a GridSearchCV on several combinations of parameters 
-    ## to find the best performing one. 
-    ## 2. "default" - Run the default classfier parameters 
-    ## 3. "preset" - Use the preset parameters that was used in the human dataset testing shown in the article. 
-    ## 4. Input a text file containing a dictionary-like list of parameters of your own choice.
-    if gbclf_params == 'optimize':
-
-        ##Since we are using the GradientBooost Classfier, the first step is to find how many features are 
-        ##optimal for group classification. To do that, we use recursive feature elimination with cross-validation.
-        ##For this step, we will use the StratifiedKFold approach with 10-fold cross validation. The "accuracy" 
-        ##scoring is proportional to the number of correct classifications
-
-        clf = GradientBoostingClassifier(warm_start=True)
-
-        print(
-            "Optimizing number of features with recursive elimination using stratified 10-fold cross-validation loop")
-        print
-
-        rfecv = RFECV(estimator=clf, step=1, cv=StratifiedKFold(10),
-                      scoring='accuracy', n_jobs=args.ncores)
-
-        rfecv.fit(X, y)
-
-        print(("Optimal number of features : %d" % rfecv.n_features_))
-        print
-
-        best_n_features = rfecv.n_features_
-
-        # Plot number of features VS. cross-validation scores ('1st metric')
-        print("Plotting N.features x Cross-validation scores curve")
-        print
-
-        plt.figure()
-        plt.xlabel("Number of features selected")
-        plt.ylabel("Cross validation score")
-        plt.plot(list(range(1, len(rfecv.grid_scores_) + 1)),
-                 rfecv.grid_scores_, lw=2)
-        plt.savefig(
-            './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_feature_recursive_elimination.pdf',
-            dpi=300, bbox_inches='tight')
-        plt.close()
-
-        print("Running GridSearchCV to optimize remaining parmeters")
-        print
-
-        # TODO: parameterize
-        grid = {'n_estimators': [250, 500, 1000, 2000],
-                'max_depth': [4, 6, 8, 10],
-                'min_samples_split': [0.01, 0.1],
-                'min_samples_leaf': [0.001, 0.01],
-                'max_features': [best_n_features],
-                'learning_rate': [0.01, 0.05, 0.005],
-                'loss': ['deviance'],
-                'subsample': [0.8, 0.6, 1],
-                'random_state': [1]}
-
-        gclf = GridSearchCV(estimator=clf, param_grid=grid, n_jobs=args.ncores,
-                            cv=10)
-
-        gclf.fit(X_train, y_train)
-        bp = gclf.best_params_
-
-        with open('./' + args.prefix \
-                  + '_results/classifier_metrics/run_' + \
-                  run_id + '/run_' + run_id + \
-                  '_best_params.txt','w') as fp:
-            fp.write('{')
-            for p in list(bp.items()):
-                fp.write("'%s':%s,\n" % p)
-            fp.write('}')
-
-        # TODO: write to file.
-        print("Confusion matrix: ")
-        print((confusion_matrix(y_test, gclf.best_estimator_.predict(X_test))))
-        print
-        print("GridSeachCV best score:")
-        print((gclf.best_score_))
-        print
-        print("GridSearchCV best params")
-        print((gclf.best_params_))
-        print
-    if gbclf_params == 'default':
-        print("Using default parameters.")
-        print
-    if gbclf_params == 'preset':
-        print("Using preset parameters.")
-        print
-
-        # TODO: parameterize
-        # TODO: rename
-        bp = {'learning_rate': 0.01,
-              'loss': 'deviance',
-              'max_depth': 8,
-              'max_features': 'sqrt',
-              'min_samples_leaf': 0.001,
-              'min_samples_split': 0.01,
-              'n_estimators': 1000,
-              'random_state': 1,
-              'subsample': 0.8}
-    if gbclf_params == 'file':
-        print("Using input file as param dictionary")
-        print
-        bp = eval(open(str(args.param_file)).read())
-
+    
     print("Fitting the GradientBoost model with the training set")
-    print
+    print()
 
     names = df_cl.drop('group', 1).columns
 
     if gbclf_params == 'default':
         clf = GradientBoostingClassifier(warm_start=True)
     else:
-        clf = GradientBoostingClassifier(warm_start=True, **bp)
+        clf = GradientBoostingClassifier(**bp)
 
     clf.fit(X_train, y_train)
 
     print((
         "Extracting feature importance for run " + run_id + " and merging with statistical data"))
-    print
+    print()
 
     # TODO: rename
     a = pd.DataFrame(list(zip(clf.feature_importances_,
@@ -694,7 +814,7 @@ for run_i in range(len(runs)):
     importance = importance.merge(a.drop('Index', 1), on='Feature')
 
     print("Plotting partial dependance and deviance scores from classifier")
-    print
+    print()
 
     # Select top 5 most important features and plot partial dependance and interaction plots
 
@@ -777,20 +897,20 @@ for run_i in range(len(runs)):
     print("Classifier scores")
     print(("Mean Squared Error (MSE): %.4f" % mse))
     print(("adjusted Mutual Information (aMI): %.4f" % ami))
-    print
+    print()
     print("Confusion matrix")
     print(conf)
-    print
-    print(('Accuracy: ' + str(acc) + '%'))
-    print(('Positive predictive value (Precision): ' + str(ppv) + '%'))
-    print(('Negative predictive value: ' + str(npv) + '%'))
-    print(('Sensitivity (Recall): ' + str(sen) + '%'))
-    print(('Specificity: ' + str(spe) + '%'))
-    print
+    print()
+    print(('Accuracy: ' + str(acc*100) + '%'))
+    print(('Positive predictive value (Precision): ' + str(ppv*100) + '%'))
+    print(('Negative predictive value: ' + str(npv*100) + '%'))
+    print(('Sensitivity (Recall): ' + str(sen*100) + '%'))
+    print(('Specificity: ' + str(spe*100) + '%'))
+    print()
 
     ##For creating ROC and precision curves, we need to binarize the output and get score functions
     print("Binarizing output")
-    print
+    print()
     y_class = label_binarize(y_test, classes=[0, 1])
     n_classes = y_class.shape[1]
     y_score = clf.fit(X_train, y_train).decision_function(X_test)
@@ -798,7 +918,7 @@ for run_i in range(len(runs)):
     ###Now, let's calculate the ROC score for the classification
 
     print("Computing ROC score for classifier")
-    print
+    print()
 
     fpr = dict()
     tpr = dict()
@@ -846,7 +966,7 @@ for run_i in range(len(runs)):
     plt.close()
 
     print("Plotting Precision-Recall curve")
-    print
+    print()
     # Compute Precision-Recall and plot curve
     precision = dict()
     recall = dict()
@@ -899,12 +1019,12 @@ for run_i in range(len(runs)):
     plt.close()
 
     print('=======================')
-    print
+    print()
 
 print("Done with classification steps")
-print
+print()
 print("Calculating median importance values and standard deviation")
-print
+print()
 
 cols = importance.filter(like='_raw_importance', axis=1).columns
 importance['mean_raw_importance'] = importance.apply(
@@ -925,12 +1045,12 @@ importance.to_csv('./' + args.prefix + '.analysis/classifier_importance.tsv',
 importance.to_excel('./' + args.prefix + '.analysis/classifier_importance.xlsx')
 
 print("Plotting raw importance and relative importance barcharts")
-print
+print()
 
 plot_barchart_importance(importance)
 
 print("Plotting mean deviance curve and error region")
-print
+print()
 cols = deviance_test.columns
 deviance_test['mean'] = deviance_test.apply(lambda x: np.mean(x[cols]), 1)
 deviance_test['std'] = deviance_test.apply(lambda x: np.std(x[cols]), 1)
@@ -978,7 +1098,7 @@ plt.savefig('./' + args.prefix + '.analysis/mean_deviance.pdf',
 plt.close()
 
 print("Plotting mean ROC curve and error region")
-print
+print()
 cols = roc_fpr_all.columns
 roc_fpr_all['mean'] = roc_fpr_all.apply(lambda x: np.mean(x[cols]), 1)
 roc_fpr_all['std'] = roc_fpr_all.apply(lambda x: np.std(x[cols]), 1)
@@ -1034,7 +1154,7 @@ plt.savefig('./' + args.prefix + '.analysis/classifier_metrics/mean_roc.pdf',
 plt.close()
 
 print("Plotting mean Precision-Recall curve and error region")
-print
+print()
 cols = pre_all.columns
 pre_all['mean'] = pre_all.apply(lambda x: np.mean(x[cols]), 1)
 pre_all['std'] = pre_all.apply(lambda x: np.std(x[cols]), 1)
@@ -1090,7 +1210,7 @@ plt.close()
 
 print(
     "Plotting barcharts for mean classifier scores, confusion matrix values and associated metrics")
-print
+print()
 
 df_list = [conf_df, msr, mtc]
 title_list = ['Identified classes from confusion matrix',
@@ -1155,7 +1275,7 @@ plt.savefig(
     dpi=300, bbox_inches='tight')
 
 print ("Plotting overall feature importance and KS-statistics data")
-print
+print()
 
 sns.set_style('ticks')
 
@@ -1208,12 +1328,12 @@ plt.savefig(
     dpi=300, bbox_inches='tight')
     
 print("Zipping folders from every run in a single file")
-print
+print()
 
 Popen(
     'tar -zcf ./' + args.prefix + '.analysis/classifier_metrics/run_files.tar.gz ./' + args.prefix + '.analysis/classifier_metrics/run_*/',
     shell=True)
 
 print("Analysis complete. Thanks for using biofeatures.")
-print
+print()
 sys.exit()
