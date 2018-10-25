@@ -241,11 +241,11 @@ def plot_barchart_importance(df):
     width = 0.5
 
     rel = \
-        importance_ind.sort_values(by=['mean_rel_importance'],
+        importance_ind.sort_values('mean_rel_importance',
                                    ascending=False)[
             'mean_rel_importance'].head(N)
     rel_err = \
-        importance_ind.sort_values(by=['mean_rel_importance'],
+        importance_ind.sort_values('mean_rel_importance',
                                    ascending=False)[
             'std_rel_importance'].head(N)
 
@@ -799,7 +799,6 @@ for run_i in range(len(runs)):
         "Extracting feature importance for run " + run_id + " and merging with statistical data"))
     print()
 
-    # TODO: rename
     a = pd.DataFrame(list(zip(clf.feature_importances_,
                               np.argsort(np.argsort(clf.feature_importances_)),
                               names))).rename(
