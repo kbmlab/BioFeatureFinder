@@ -5,21 +5,17 @@ import sys
 import os
 import argparse
 from subprocess import PIPE, Popen
-from multiprocessing.pool import ThreadPool
 from multiprocessing.pool import Pool
 import multiprocessing as mp
 import warnings
 import glob
-from io import StringIO
 import shutil
-import tarfile
 import pandas as pd
 import numpy as np
 import pybedtools
 from pybedtools import BedTool
 import pysam
 import itertools
-import concurrent.futures
 
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -77,17 +73,21 @@ class MyParser(argparse.ArgumentParser):
         print   
         sys.exit(2)
 
+class BlankLinesHelpFormatter (argparse.HelpFormatter):
+    def _split_lines(self, text, width):
+        return super()._split_lines(text, width) + ['']
 
 ## Assign input data as system variables
 
-parser = MyParser(description='')
+parser = MyParser(description='', 
+                  formatter_class=BlankLinesHelpFormatter)
 
 parser.add_argument('-i', '--input', dest="input_file", 
                     help="Input list of intervals to analyze.",
                     required=True)
 
 parser.add_argument('-gen', '--genome', dest="genome_file",
-                    help="Genome FASTA associated with the build of the GTF file",
+                    help="Genome FASTA associated with the interval file.",
                     required=True)
 
 parser.add_argument('-o', '--outfile', dest="outfile", type=str,
@@ -97,11 +97,11 @@ parser.add_argument('-o', '--outfile', dest="outfile", type=str,
 parser.add_argument('-g', '--gtf', dest="gtf_file",
                     help="GTF file for guided background generation. Default: False",
                     required=False)
-
+                    
 parser.add_argument('-nuc', '--nucleotide_content', dest="nuc_info",
-                    default=1, metavar="nuc", required=False, type=int,
-                    help="Defines the ammount of information included from the nucleotide sequence, 3 options available: 'Simple','Intermediate','Full'. Options:1 = Simple:[Length and pGC], 2 = Intermediate:[Length, pGC, pG, pC, pA, pT], 3 = Full:[All data from BedTools nucleotide sequence].' Default: 1 (Simple); p = percentage")
-
+                    default='standard', metavar="nuc", required=False, type=str,
+                    help = "Defines the ammount of information included from the nucleotide sequence, 3 options available: simple [Length and GCp], intermediate [Length, GCp, Gp, Cp, Ap, Tp],'full' [All data from BedTools nucleotide sequence]. Default: simple; p = percentage")
+ 
 parser.add_argument('-cs', '--conservation-scores', nargs='+', dest="con_files",
                     default=False,
                     help="bigWig file with phastCon scores for multiple alignments. Used as a measure of conservation of the features among the aligned species, obtained from 'http://hgdownload.cse.ucsc.edu/downloads.html' under 'Conservation scores' and downloading bigWig (.bw) files. Can take multiple files as input and accepts wildcard characters (*). REQUIRES bigWigAverageOverBed tool to be installed and available on PATH (can be obtained at UCSCs binaries directory (http://hgdownload.cse.ucsc.edu/admin/exe/). If no bigWig file is available, you can download the raw phastCon scores (.pp files) and create your own bigWig files using the wigToBigWig tool from the same repository. Default: False",
@@ -111,7 +111,11 @@ parser.add_argument('-var', '--variation', nargs='+', dest="var_files", default=
                     help="Annotation file containing variation regions found in the genome (can be SNPs, strucutural variations, mutations or custom annotations). Can be obtained from UCSCs database or from Ensembl's GVF ftp directory. Can take multiple files as input and accepts wildcard characters (*). Default: False",
                     required=False)
 
-parser.add_argument('--fasta', dest="create_fastas", action='store_true',
+parser.add_argument('-u','--unstranded', dest="unstranded",
+                    action="store_true", default=False, required=False,
+                    help="Use this flag if your input file does not contain strand information for genomic intervals. Default: False")
+
+parser.add_argument('-f','--fasta', dest="create_fastas", action='store_true',
                     help="Use this option to create fasta files for each entry in the analysis. Required for k-mer search (-k) and structural MFE (-s and -sg). Default: False",
                     required=False, default=False)
 
@@ -119,11 +123,11 @@ parser.add_argument('-k', '--kmer', nargs='+', dest="kmer_list",
                     help="List of INT to create k-mers for counting. Default: False",
                     type=int, default=False, required=False)
 
-parser.add_argument('--rnafold', dest="rnafold",
+parser.add_argument('-rf','--rnafold', dest="rnafold",
                     action="store_true", default=False, required=False,
                     help="Run RNAFold (from Vienna RNA package) on each entry and extract MFE values. Requires Vienna RNA Package installed locally (https://www.tbi.univie.ac.at/RNA/) and available on PATH. Default: False")
 
-parser.add_argument('--qgrs', dest="qgrs_mapper",
+parser.add_argument('-qg','--qgrs', dest="qgrs_mapper",
                     action="store_true", default=False, required=False,
                     help="Run QGRS Mapper on each entry and extract G-Quadruplex scores. Requires QGRS Mapper installed locally (https://github.com/freezer333/qgrs-cpp; http://bioinformatics.ramapo.edu/QGRS/index.php) and available on PATH. Default: False")
 
@@ -144,11 +148,11 @@ parser.add_argument("--keepTEMP", dest="keep_temp",
                     action="store_true", default=False,
                     help="Keep the temporary files generated in each step. Default: False")
 
-parser.add_argument("--ncores", dest="ncores", default=(mp.cpu_count() - 1),
+parser.add_argument('-c',"--ncores", dest="ncores", default=(mp.cpu_count() - 1),
                     help="Number of CPU cores used to process downtream/upstream exon search. Default:(ALL_CORES)-1",
                     type=int, metavar='INT')
 
-parser.add_argument("--debug", dest="debug", metavar='INT',
+parser.add_argument("-d","--debug", dest="debug", metavar='INT',
                     type=int, default=False,
                     help="Only seaches for the first N entries. Useful for debugin and checking if the code is working properly. Default: False")
 
@@ -160,8 +164,19 @@ if args.kmer_list is True and args.create_fastas is False:
 if args.rnafold is True and args.create_fastas is False:
     parser.error("--rnafold requires --fasta.")
     
+if args.unstranded is True:
+    strd = False
+    print("")
+    print("Running in unstranded mode")
+    print("")
+elif args.unstranded is False:
+    strd = True
+    print("")
+    print("Running in stranded mode")
+    print("")
+    
 def nuc_cont(bedtool):
-    nuccont = bedtool.nucleotide_content(args.genome_file, s=True, seq=True)
+    nuccont = bedtool.nucleotide_content(args.genome_file, s=strd, seq=True)
     nuccont_df = pd.concat(nuccont.to_dataframe(
         names=['seqname', 'start', 'end', 'name', 'score', 'strand',
                '%AT', '%GC', '%A', '%C', '%G', '%T',
@@ -217,12 +232,34 @@ def get_var_counts(bedtool, var_file):
     print
     var = BedTool(var_file).sort().remove_invalid().saveas(args.outfile+'.datamatrix/varfile')#.sort()
     source = str(var_file).split('/')[-1]
-    var_counts = pd.concat(
-        bedtool.intersect(var, s=True, c=True, sorted=False).to_dataframe(iterator=True,
-                                                            chunksize=10000
-                                                            ),
-        ignore_index=True, sort=False).rename(
-        columns={'thickStart': 'var_count_' + source})
+    
+    feature = var[0]
+    
+    if not (feature.strand == "+"  or feature.strand == "-" ):
+        print(source+' does not contain +/- strand information. Running in unstranded mode')
+        var_counts = pd.concat(
+                bedtool.intersect(var, 
+                                  s=False, 
+                                  c=True, 
+                                  sorted=False
+                                  ).to_dataframe(iterator=True,
+                                                 chunksize=10000),
+                               ignore_index=True, 
+                               sort=False
+                               ).rename(
+        columns={'thickStart': 'var_count_' + source})    
+    else:
+        var_counts = pd.concat(
+                bedtool.intersect(var, 
+                                  s=strd, 
+                                  c=True, 
+                                  sorted=False
+                                  ).to_dataframe(iterator=True,
+                                                 chunksize=10000),
+                               ignore_index=True, 
+                               sort=False
+                               ).rename(
+        columns={'thickStart': 'var_count_' + source})    
     return var_counts[['name', 'var_count_' + source]]
 
 def filter_columns(df):
@@ -237,7 +274,7 @@ def filter_columns(df):
 def make_fasta(entry):
     df_slice = bed.iloc[[entry]]
     b = BedTool.from_dataframe(df_slice)
-    b.sequence(fi=args.genome_file, s=True, name=True,
+    b.sequence(fi=args.genome_file, s=strd, name=True,
                fo=args.outfile+'.datamatrix/fastas/'+df_slice['name'].to_string().split('range_id_')[1]+'.fa')
     
 def run_emboss_wordcount(arg):
@@ -475,6 +512,27 @@ print("Starting datamatrix assembly process")
 
 Popen('mkdir '+args.outfile+'.datamatrix', shell=True)
 
+print
+print("Sorting input bed file.")
+
+input_bed = BedTool(args.input_file).sort().saveas(args.outfile+'.datamatrix/input_list.bed')
+
+feature_a = input_bed[0]
+
+if (strd == False) \
+and not (feature_a.strand == "+"  or feature_a.strand == "-" ):
+    pass
+if (strd == True) \
+and (feature_a.strand == "+"  or feature_a.strand == "-" ):
+    pass
+else:
+    print("Strand information on input does not match -u flag. Check your input data.")
+    print("Bed strand data: "+str(feature_a.strand))
+    print("Option selected: --unstranded="+str(args.unstranded))
+    print()
+    print("Exiting now. Thanks for using biofeatures!")
+    sys.exit()
+
 ##Load the genome file that matches the version of the GTF you are using. Pysam will be used to build an index of
 ##the FASTA file.
 
@@ -490,11 +548,6 @@ if args.gtf_file:
     print
     print("Loading reference GTF file")
     gtf_ref = BedTool(args.gtf_file)   
-    
-print
-print("Sorting input bed file.")
-
-input_bed = BedTool(args.input_file).sort().saveas(args.outfile+'.datamatrix/input_list.bed')
     
 if args.n_rand >= 1:
     print

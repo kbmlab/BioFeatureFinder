@@ -86,10 +86,14 @@ class MyParser(argparse.ArgumentParser):
         print   
         sys.exit(2)
 
+class BlankLinesHelpFormatter (argparse.HelpFormatter):
+    def _split_lines(self, text, width):
+        return super()._split_lines(text, width) + ['']
 
 ## Assign input data as system variables
 
-parser = MyParser(description='')
+parser = MyParser(description='', 
+                  formatter_class=BlankLinesHelpFormatter)
 
 parser.add_argument('-b', '--bed', dest="bed_file",
                     help="BED file with exons/regions of interest.",
@@ -160,14 +164,46 @@ parser.add_argument("--ncores", dest="ncores", default=(mp.cpu_count() - 1),
                     help="Number of CPU cores used to multiple jobs on the classifier. Default:(ALL_CORES)-1",
                     type=int, metavar='INT')
 
+parser.add_argument('-u','--unstranded', dest="unstranded",
+                    action="store_true", default=False, required=False,
+                    help="Use this flag if your input file does not contain strand information for genomic intervals. Default: False")
+
 args = parser.parse_args()
+
+if args.unstranded is True:
+    strd = False
+    print("")
+    print("Running in unstranded mode")
+    print("")
+else:
+    strd = True
+    print("")
+    print("Running in stranded mode")
+    print("")
 
 ##Define the functions which will be used during the analysis
 
 def group_matrices_one_sample(bt, bt_a, matrix):
     # TODO: refactor common intersect call
+    feature_a = bt[0]
+    feature_b = bt_a[0]
+
+    if not (feature_a.strand == "+"  or feature_a.strand == "-" ) \
+    and not (feature_b.strand == "+"  or feature_b.strand == "-" ):
+        pass
+    if (feature_a.strand == "+"  or feature_a.strand == "-" ) \
+    and (feature_b.strand == "+"  or feature_b.strand == "-" ):
+        pass
+    else:
+        print("Strand information does not match, check your input files.")
+        print("Bed strand data: "+str(feature_b.strand))
+        print("Matrix strand data: "+str(feature_a.strand))
+        print()
+        print("Exiting now. Thanks for using biofeatures!")
+        sys.exit()
+        
     int_a = bt.intersect(bt_a,
-                         s=True,
+                         s=strd,
                          sorted=True).to_dataframe().drop_duplicates()
 
     matrix['group'] = 0
@@ -223,7 +259,7 @@ def plot_barcharts(df, title, save):
     width = 0.5  # the width of the bars
 
     fig, ax = plt.subplots()
-    rects1 = ax.bar(ind, means, width, color='lightgrey', yerr=std,
+    ax.bar(ind, means, width, color='lightgrey', yerr=std,
                     ecolor='black')
 
     # add some text for labels, title and axes ticks
@@ -328,7 +364,12 @@ bed_from_matrix['start'] = matrix['name'].apply(lambda x: x.split('_')[4],1)
 bed_from_matrix['end'] = matrix['name'].apply(lambda x: x.split('_')[5],1)
 bed_from_matrix['name'] = matrix['name']
 bed_from_matrix['score'] = 0
-bed_from_matrix['strand'] = matrix['name'].apply(lambda x: x.split('_')[6],1)
+
+if strd is True:
+    bed_from_matrix['strand'] = matrix['name'].apply(lambda x: x.split('_')[6],1)
+else:
+    pass
+
 bed_from_matrix = BedTool.from_dataframe(bed_from_matrix).sort()
 
 matrix = group_matrices_one_sample(bed_from_matrix, bed_input, matrix).set_index('name')
