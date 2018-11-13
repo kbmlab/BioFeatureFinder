@@ -104,7 +104,7 @@ parser.add_argument('-nuc', '--nucleotide_content', dest="nuc_info",
  
 parser.add_argument('-bw', '--bigwig-scores', nargs='+', dest="bw_files",
                     default=False,
-                    help="This option takes as input bigWig files with scores and calculates the mean score over each input region. REQUIRES bigWigAverageOverBed tool to be installed and available on PATH (can be obtained at UCSCs binaries directory (http://hgdownload.cse.ucsc.edu/admin/exe/)."
+                    help="This option takes as input bigWig files with scores and calculates the mean score over each input region. REQUIRES bigWigAverageOverBed tool to be installed and available on PATH (can be obtained at UCSCs binaries directory (http://hgdownload.cse.ucsc.edu/admin/exe/).",
                     metavar="somefile.bw", required=False)
 
 parser.add_argument('-var', '--variation', nargs='+', dest="var_files", default=False,
