@@ -108,8 +108,8 @@ parser.add_argument('-bw', '--bigwig-scores', nargs='+', dest="bw_files",
                     metavar="somefile.bw", required=False)
 
 parser.add_argument('-var', '--variation', nargs='+', dest="var_files", default=False,
-                    help="Annotation file containing variation regions found in the genome (can be SNPs, strucutural variations, mutations or custom annotations). Can be obtained from UCSCs database or from Ensembl's GVF ftp directory. Can take multiple files as input and accepts wildcard characters (*). Default: False",
-                    required=False)
+                    help="This option takes as input BED files containing regions of biological featues found in the genome (can be SNPs, strucutural variations, mutations or custom annotations) and counts the number of occurences in each input region. Can take multiple files as input and accepts wildcard characters (*). Default: False",
+                    metavar='somefile.bed', required=False)
 
 parser.add_argument('-u','--unstranded', dest="unstranded",
                     action="store_true", default=False, required=False,
