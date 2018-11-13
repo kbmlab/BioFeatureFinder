@@ -102,10 +102,10 @@ parser.add_argument('-nuc', '--nucleotide_content', dest="nuc_info",
                     default='standard', metavar="nuc", required=False, type=str,
                     help = "Defines the ammount of information included from the nucleotide sequence, 3 options available: simple [Length and GCp], intermediate [Length, GCp, Gp, Cp, Ap, Tp],'full' [All data from BedTools nucleotide sequence]. Default: simple; p = percentage")
  
-parser.add_argument('-cs', '--conservation-scores', nargs='+', dest="con_files",
+parser.add_argument('-bw', '--bigwig-scores', nargs='+', dest="bw_files",
                     default=False,
-                    help="bigWig file with phastCon scores for multiple alignments. Used as a measure of conservation of the features among the aligned species, obtained from 'http://hgdownload.cse.ucsc.edu/downloads.html' under 'Conservation scores' and downloading bigWig (.bw) files. Can take multiple files as input and accepts wildcard characters (*). REQUIRES bigWigAverageOverBed tool to be installed and available on PATH (can be obtained at UCSCs binaries directory (http://hgdownload.cse.ucsc.edu/admin/exe/). If no bigWig file is available, you can download the raw phastCon scores (.pp files) and create your own bigWig files using the wigToBigWig tool from the same repository. Default: False",
-                    metavar="sp.phastCons*.bw", required=False)
+                    help="This option takes as input bigWig files with scores and calculates the mean score over each input region. REQUIRES bigWigAverageOverBed tool to be installed and available on PATH (can be obtained at UCSCs binaries directory (http://hgdownload.cse.ucsc.edu/admin/exe/)."
+                    metavar="somefile.bw", required=False)
 
 parser.add_argument('-var', '--variation', nargs='+', dest="var_files", default=False,
                     help="Annotation file containing variation regions found in the genome (can be SNPs, strucutural variations, mutations or custom annotations). Can be obtained from UCSCs database or from Ensembl's GVF ftp directory. Can take multiple files as input and accepts wildcard characters (*). Default: False",
@@ -206,24 +206,24 @@ def nuc_cont(bedtool):
 
     return nuccont_df
 
-def get_conservation_scores(con_file, df, cmd="bigWigAverageOverBed"):
+def get_bigwig_scores(bw_file, df, cmd="bigWigAverageOverBed"):
     print
-    print(("Getting conservation from: " + str(con_file)))
+    print(("Getting average scores from: " + str(bw_file)))
     print
-    BedTool.from_dataframe(df).saveas(args.outfile+'.datamatrix/conservation_temp.bed')
-    composed_command = " ".join([cmd, con_file, args.outfile+'.datamatrix/conservation_temp.bed',
-                                 args.outfile+'.datamatrix/conservation_result_temp.tab'])
+    BedTool.from_dataframe(df).saveas(args.outfile+'.datamatrix/bigwig_temp.bed')
+    composed_command = " ".join([cmd, bw_file, args.outfile+'.datamatrix/bigwig_temp.bed',
+                                 args.outfile+'.datamatrix/bigwig_result_temp.tab'])
     p = Popen(composed_command, shell=True)
     stdout, stderr = p.communicate()
-    source = str(con_file.split('/')[-1])
-    result = pd.concat(pd.read_table(args.outfile+'.datamatrix/conservation_result_temp.tab',
+    source = str(bw_file.split('/')[-1])
+    result = pd.concat(pd.read_table(args.outfile+'.datamatrix/bigwig_result_temp.tab',
                                      names=('name', 'length', 'covered',
                                             'sum', 'mean_' + source,
                                             'mean0_' + source), iterator=True,
                                      chunksize=10000
                                      ), ignore_index=True, sort=False)
-    os.remove(args.outfile+'.datamatrix/conservation_temp.bed')
-    os.remove(args.outfile+'.datamatrix/conservation_result_temp.tab')
+    os.remove(args.outfile+'.datamatrix/bigwig_temp.bed')
+    os.remove(args.outfile+'.datamatrix/bigwig_result_temp.tab')
     return result[['name', 'mean_' + source]]
 
 def get_var_counts(bedtool, var_file):
@@ -444,11 +444,11 @@ def get_data(df):
     elif not args.var_files:
         pass
 
-    if args.con_files:
-        con_files_list = list(args.con_files)
-        for i in range(len(con_files_list)):
-            con = get_conservation_scores(con_files_list[i], df)
-            a = a.merge(con, on='name')
+    if args.bw_files:
+        bw_files_list = list(args.bw_files)
+        for i in range(len(bw_files_list)):
+            bw = get_bigwig_scores(bw_files_list[i], df)
+            a = a.merge(bw, on='name')
     elif not args.con_files:
         pass
 
