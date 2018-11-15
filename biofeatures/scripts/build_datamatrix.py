@@ -245,29 +245,42 @@ def get_var_counts(bedtool, var_file):
     var = BedTool(var_file).sort().remove_invalid().saveas(args.outfile+'.datamatrix/varfile')#.sort()
     source = str(var_file).split('/')[-1]
     
-    feature = var[0]
+    if args.unstranded == False:
+        feature = var[0]
     
-    if not ((feature.strand == "+") or (feature.strand == "-")):
-        print(source+' does not contain +/- strand information. Running in unstranded mode')
+        if not ((feature.strand == "+") or (feature.strand == "-")):
+            print(source+' does not contain +/- strand information. Running in unstranded mode')
+            var_counts = pd.concat(
+                    bedtool.intersect(var, 
+                                      s=False, 
+                                      c=True, 
+                                      sorted=False
+                                      ).to_dataframe(iterator=True,
+                                                     chunksize=10000),
+                                   ignore_index=True, 
+                                   sort=False)    
+        else:
+            var_counts = pd.concat(
+                    bedtool.intersect(var, 
+                                      s=strd, 
+                                      c=True, 
+                                      sorted=False
+                                      ).to_dataframe(iterator=True,
+                                                     chunksize=10000),
+                                   ignore_index=True, 
+                                   sort=False)
+    
+    elif args.unstranded == True:
         var_counts = pd.concat(
-                bedtool.intersect(var, 
-                                  s=False, 
-                                  c=True, 
-                                  sorted=False
-                                  ).to_dataframe(iterator=True,
-                                                 chunksize=10000),
-                               ignore_index=True, 
-                               sort=False)    
-    else:
-        var_counts = pd.concat(
-                bedtool.intersect(var, 
-                                  s=strd, 
-                                  c=True, 
-                                  sorted=False
-                                  ).to_dataframe(iterator=True,
-                                                 chunksize=10000),
-                               ignore_index=True, 
-                               sort=False)
+        bedtool.intersect(var, 
+                          s=False, 
+                          c=True, 
+                          sorted=False
+                          ).to_dataframe(iterator=True,
+                                         chunksize=10000),
+                       ignore_index=True, 
+                       sort=False)  
+        
     var_counts = var_counts.rename(
             columns={var_counts.columns[-1]: 'var_count_' + source})    
     return var_counts[['name', 'var_count_' + source]]
@@ -464,7 +477,7 @@ def get_data(df):
 
     if args.kmer_list:
         print()
-        print() ("Starting K-mer counting")
+        print("Starting K-mer counting")
         get_kmer_counts(args.kmer_list)
     elif not args.kmer_list:
         pass
