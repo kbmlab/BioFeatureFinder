@@ -235,7 +235,7 @@ def get_var_counts(bedtool, var_file):
     
     feature = var[0]
     
-    if not (feature.strand == "+"  or feature.strand == "-" ):
+    if not ((feature.strand == "+")  or (feature.strand == "-")):
         print(source+' does not contain +/- strand information. Running in unstranded mode')
         var_counts = pd.concat(
                 bedtool.intersect(var, 
@@ -519,14 +519,15 @@ input_bed = BedTool(args.input_file).sort().saveas(args.outfile+'.datamatrix/inp
 
 feature_a = input_bed[0]
 
-if (strd == False) \
-and not (feature_a.strand == "+"  or feature_a.strand == "-" ):
+if (strd == False) and \
+not ((feature_a.strand == "+") or (feature_a.strand == "-")):
     pass
-if (strd == True) \
-and (feature_a.strand == "+"  or feature_a.strand == "-" ):
+if (strd == True) and \
+((feature_a.strand) == "+"  or (feature_a.strand == "-")):
     pass
 else:
     print("Strand information on input does not match -u flag. Check your input data.")
+    print()
     print("Bed strand data: "+str(feature_a.strand))
     print("Option selected: --unstranded="+str(args.unstranded))
     print()
