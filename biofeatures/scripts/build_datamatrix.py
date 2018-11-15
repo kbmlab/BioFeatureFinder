@@ -257,9 +257,7 @@ def get_var_counts(bedtool, var_file):
                                   ).to_dataframe(iterator=True,
                                                  chunksize=10000),
                                ignore_index=True, 
-                               sort=False
-                               ).rename(
-        columns={'thickStart': 'var_count_' + source})    
+                               sort=False)    
     else:
         var_counts = pd.concat(
                 bedtool.intersect(var, 
@@ -269,9 +267,9 @@ def get_var_counts(bedtool, var_file):
                                   ).to_dataframe(iterator=True,
                                                  chunksize=10000),
                                ignore_index=True, 
-                               sort=False
-                               ).rename(
-        columns={'thickStart': 'var_count_' + source})    
+                               sort=False)
+    var_counts = var_counts.rename(
+            columns={var_counts.columns[-1]: 'var_count_' + source})    
     return var_counts[['name', 'var_count_' + source]]
 
 def filter_columns(df):
