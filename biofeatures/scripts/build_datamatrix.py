@@ -129,7 +129,7 @@ parser.add_argument('-rf','--rnafold', dest="rnafold",
 
 parser.add_argument('-qg','--qgrs', dest="qgrs_mapper",
                     action="store_true", default=False, required=False,
-                    help="Run QGRS Mapper on each entry and extract G-Quadruplex scores. Requires QGRS Mapper installed locally (https://github.com/freezer333/qgrs-cpp; http://bioinformatics.ramapo.edu/QGRS/index.php) and available on PATH. Default: False")
+                    help="Run QGRS Mapper on each entry and extract G-Quadruplex scores. Requires QGRS Mapper installed locally (https://github.com/freezer333/qgrs-cpp; http://bioinformatics.ramapo.edu/temp/qgrs/index.php) and available on PATH. Default: False")
 
 parser.add_argument('-custom_seq', '--custom-sequence',
                     dest="custom_seq_ex", default=False,
@@ -298,22 +298,22 @@ def make_fasta(entry):
     df_slice = bed.iloc[[entry]]
     b = BedTool.from_dataframe(df_slice)
     b.sequence(fi=args.genome_file, s=strd, name=True,
-               fo=args.outfile+'.datamatrix/fastas/'+df_slice['name'].to_string().split('range_id_')[1]+'.fa')
+               fo=args.outfile+'.datamatrix/temp/fastas/'+df_slice['name'].to_string().split('range_id_')[1]+'.fa')
     
 def run_emboss_wordcount(arg):
     file_entry = arg[0]
     kmer = arg[1]
-    composed_command = " ".join(['wordcount -sequence '+args.outfile+'.datamatrix/fastas/'+file_entry, \
+    composed_command = " ".join(['wordcount -sequence '+args.outfile+'.datamatrix/temp/fastas/'+file_entry, \
                                             '-wordsize '+str(kmer), \
                                             '-mincount 1',\
-                                            '-outfile '+args.outfile+'.datamatrix/emboss/'+file_entry+'.'+str(kmer)+'.wc',
+                                            '-outfile '+args.outfile+'.datamatrix/temp/emboss/'+file_entry+'.'+str(kmer)+'.wc',
                                             '2>>/dev/null'])
     p = Popen(composed_command, stdout=PIPE, shell=True)
     p.communicate()
 
 def get_kmer_counts(kmer_list):
-    Popen('mkdir -p '+args.outfile+'.datamatrix/emboss', shell=True)
-    filename = pd.DataFrame(glob.glob(args.outfile+'.datamatrix/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
+    Popen('mkdir -p '+args.outfile+'.datamatrix/temp/emboss', shell=True)
+    filename = pd.DataFrame(glob.glob(args.outfile+'.datamatrix/temp/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
 
     for i in range(len(args.kmer_list)):
         
@@ -323,7 +323,7 @@ def get_kmer_counts(kmer_list):
             p = Pool(args.ncores)
             p.map(run_emboss_wordcount, zip(filename, itertools.repeat(args.kmer_list[i])))
        
-        wc_list = glob.glob(args.outfile+'.datamatrix/emboss/*.'+str(kmer)+'.wc')
+        wc_list = glob.glob(args.outfile+'.datamatrix/temp/emboss/*.'+str(kmer)+'.wc')
         df_list = []
 
         for i in range(len(wc_list)):
@@ -348,21 +348,21 @@ def get_kmer_counts(kmer_list):
     #return df2
 
 def run_rnafold(files):
-    p = Popen("RNAfold -i "+args.outfile+".datamatrix/fastas/"+files+\
+    p = Popen("RNAfold -i "+args.outfile+".datamatrix/temp/fastas/"+files+\
               " --gquad --noPS | sed -n 3p | cut -f 2 -d ' ' | sed 's/(//g'| sed 's/)//g' > "+args.outfile+\
-              ".datamatrix/rnafold/"+files+\
+              ".datamatrix/temp/rnafold/"+files+\
               ".MFE", shell=True)
     p.communicate()
 
 def get_MFE_scores():
-    Popen('mkdir -p '+args.outfile+'.datamatrix/rnafold', shell=True)
-    fasta_files = pd.DataFrame(glob.glob(args.outfile+'.datamatrix/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
+    Popen('mkdir -p '+args.outfile+'.datamatrix/temp/rnafold', shell=True)
+    fasta_files = pd.DataFrame(glob.glob(args.outfile+'.datamatrix/temp/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
        
     if __name__ == '__main__':
         p = Pool(args.ncores)
         p.map(run_rnafold, fasta_files)
         
-    rf_list = glob.glob(args.outfile+'.datamatrix/rnafold/*.MFE')
+    rf_list = glob.glob(args.outfile+'.datamatrix/temp/rnafold/*.MFE')
 
     df_list = []
 
@@ -385,18 +385,18 @@ def get_MFE_scores():
     #return df_input
 
 def run_qgrs_mapper(files):
-    p = Popen('qgrs -csv -i '+args.outfile+'.datamatrix/fastas/'+files+' -o '+args.outfile+'.datamatrix/qgrs/'+files+'.qgrs.csv 2>>/dev/null', shell=True)
+    p = Popen('qgrs -csv -i '+args.outfile+'.datamatrix/temp/fastas/'+files+' -o '+args.outfile+'.datamatrix/temp/qgrs/'+files+'.qgrs.csv 2>>/dev/null', shell=True)
     p.communicate()
     
 def get_QGRS_scores():
-    Popen('mkdir -p '+args.outfile+'.datamatrix/qgrs', shell=True)
-    fasta_files = pd.DataFrame(glob.glob(args.outfile+'.datamatrix/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
+    Popen('mkdir -p '+args.outfile+'.datamatrix/temp/qgrs', shell=True)
+    fasta_files = pd.DataFrame(glob.glob(args.outfile+'.datamatrix/temp/fastas/*'))[0].apply(lambda x: x.split('/')[-1])
        
     if __name__ == '__main__':
         p = Pool(args.ncores)
         p.map(run_qgrs_mapper, fasta_files)
         
-    qgrs_list = glob.glob(args.outfile+'.datamatrix/qgrs/*.qgrs.csv')
+    qgrs_list = glob.glob(args.outfile+'.datamatrix/temp/qgrs/*.qgrs.csv')
 
     df_list = []
 
@@ -651,7 +651,7 @@ print()
 print("Generating FASTA sequences for each entry")
 
 if args.create_fastas == True:
-    Popen('mkdir -p '+args.outfile+'.datamatrix/fastas', shell=True)
+    Popen('mkdir -p '+args.outfile+'.datamatrix/temp/fastas', shell=True)
     entry_list = list(range(len(bed)))
 
     if __name__ == '__main__':
@@ -690,11 +690,7 @@ else:
 if args.keep_temp == True:
     pass
 else:
-    Popen('rm -r '+args.outfile+'.datamatrix/emboss/ '+\
-                   args.outfile+'.datamatrix/fastas/ '+\
-                   args.outfile+'.datamatrix/rnafold/ '+\
-                   args.outfile+'.datamatrix/qgrs/ '+\
-		   args.outfile+'.datamatrix/temp/', 
+    Popen('rm -r '+args.outfile+'.datamatrix/temp/', 
           shell=True)
 
 print()
