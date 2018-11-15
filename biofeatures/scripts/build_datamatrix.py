@@ -519,17 +519,15 @@ input_bed = BedTool(args.input_file).sort().saveas(args.outfile+'.datamatrix/inp
 
 feature_a = input_bed[0]
 
-if (strd == False) and \
-not ((feature_a.strand == "+") or (feature_a.strand == "-")):
+if (strd == False) and not ((feature_a.strand == "+")  or (feature_a.strand == "-" )):
     pass
-if (strd == True) and \
-((feature_a.strand) == "+"  or (feature_a.strand == "-")):
+elif (strd == True) and ((feature_a.strand == "+" ) or (feature_a.strand == "-") ):
     pass
 else:
     print("Strand information on input does not match -u flag. Check your input data.")
     print()
     print("Bed strand data: "+str(feature_a.strand))
-    print("Option selected: --unstranded="+str(args.unstranded))
+    print("Option selected: --unstranded="+str(strd))
     print()
     print("Exiting now. Thanks for using biofeatures!")
     sys.exit()
