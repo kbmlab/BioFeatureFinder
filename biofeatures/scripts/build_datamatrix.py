@@ -59,18 +59,18 @@ gandalf = """
 
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
-        print
-        self.print_help()
-        print
+        print()
+        self.print()_help()
+        print()
         print(gandalf)
-        print    
-        print
+        print()    
+        print()
         print("The following error ocurred in argument parsing:")
         sys.stderr.write('error: %s\n' % message)
-        print
+        print()
         print(
             "Check the help and try to fix the arguments. If the error persists, please contact the corresponding author")
-        print   
+        print()   
         sys.exit(2)
 
 class BlankLinesHelpFormatter (argparse.HelpFormatter):
@@ -219,9 +219,9 @@ def nuc_cont(bedtool):
     return nuccont_df
 
 def get_bigwig_scores(bw_file, df, cmd="bigWigAverageOverBed"):
-    print
+    print()
     print(("Getting average scores from: " + str(bw_file)))
-    print
+    print()
     BedTool.from_dataframe(df).saveas(args.outfile+'.datamatrix/bigwig_temp.bed')
     composed_command = " ".join([cmd, bw_file, args.outfile+'.datamatrix/bigwig_temp.bed',
                                  args.outfile+'.datamatrix/bigwig_result_temp.tab'])
@@ -239,9 +239,9 @@ def get_bigwig_scores(bw_file, df, cmd="bigWigAverageOverBed"):
     return result[['name', 'mean_' + source]]
 
 def get_var_counts(bedtool, var_file):
-    print
+    print()
     print(("Getting variation from: " + str(var_file)))
-    print
+    print()
     var = BedTool(var_file).sort().remove_invalid().saveas(args.outfile+'.datamatrix/varfile')#.sort()
     source = str(var_file).split('/')[-1]
     
@@ -465,21 +465,21 @@ def get_data(df):
         pass
 
     if args.kmer_list:
-        print
-        print ("Starting K-mer counting")
+        print()
+        print() ("Starting K-mer counting")
         get_kmer_counts(args.kmer_list)
     elif not args.kmer_list:
         pass
 
     if args.rnafold == True:
-        print
+        print()
         print("Starting RNAfold for MFE scoring")
         get_MFE_scores()
     elif args.rnafold == False:
         pass
     
     if args.qgrs_mapper == True:
-        print
+        print()
         print("Starting QGRS Mapper for G-Quadruplex scoring")
         get_QGRS_scores()
     elif args.qgrs_mapper == False:
@@ -516,15 +516,15 @@ def get_data(df):
 if not args.debug:
     pass
 else:
-    print
+    print()
     print(("Running in debug mode. Only the first " + str(args.debug) + " entries will be used."))
 
-print
+print()
 print("Starting datamatrix assembly process")
 
 Popen('mkdir '+args.outfile+'.datamatrix', shell=True)
 
-print
+print()
 print("Sorting input bed file.")
 
 input_bed = BedTool(args.input_file).sort().saveas(args.outfile+'.datamatrix/input_list.bed')
@@ -547,23 +547,38 @@ else:
 ##Load the genome file that matches the version of the GTF you are using. Pysam will be used to build an index of
 ##the FASTA file.
 
-print
-print("Loading genome, creating FASTA index file and extracting chrom sizes")
+print()
+print("Loading genome and checking for fasta index and chromsizes")
 
-pysam.faidx(args.genome_file)
-get_chromsizes(args.genome_file)
+if os.path.isfile(args.genome_file+'.fai') == True:
+    print()
+    print("Genome FASTA index found.")
+    pass
+else:
+    print()
+    print("Genome FASTA index not found. Generating now...")
+    pysam.faidx(args.genome_file)
+    
+if os.path.isfile(args.genome_file+'.chromsizes') == True:
+    print()
+    print("Genome chromsizes found.")
+    pass
+else:
+    print()
+    print("Genome chromsizes not found. Generating now...")
+    get_chromsizes(args.genome_file)
 
 ## Load the reference GTF file and convert it to a DataFrame
 
 if args.gtf_file:
-    print
+    print()
     print("Loading reference GTF file")
     gtf_ref = BedTool(args.gtf_file)   
     
 if args.n_rand >= 1:
-    print
+    print()
     print("Shuffling input bed in the genome and generating randomized background.")
-    print
+    print()
     print("Generating "+str(args.n_rand)+" times the size of input list for random background.")
     n_rand = np.arange(args.n_rand)
         
@@ -587,7 +602,7 @@ if args.n_rand >= 1:
     p.communicate()
     
 if args.n_rand == 0:
-    print
+    print()
     print("Skipping randomized background step")
     cat_command = " ".join(['cat '+args.outfile+'.datamatrix/input_list.bed > '+args.outfile+'.datamatrix/genomic_ranges.bed'])
     p = Popen(cat_command, stdout=PIPE, shell=True)
@@ -620,7 +635,7 @@ if not args.debug:
 else:
     bed = bed.head(args.debug)
 
-print
+print()
 print("Generating FASTA sequences for each entry")
 
 if args.create_fastas == True:
@@ -633,18 +648,18 @@ if args.create_fastas == True:
 else:
     pass
 
-print
+print()
 print("Starting data extraction and matrix assembly")
 
 matrix_bed = get_data(bed)
 
-print
+print()
 print("Saving final datamatrix in: "+args.outfile+'.datamatrix/'+str(args.outfile)+'.datamatrix.tsv')
 
 matrix_bed.set_index('name').drop_duplicates().to_csv(
         args.outfile+'.datamatrix/'+str(args.outfile) + '.datamatrix.tsv', sep='\t')
 
-print
+print()
 print("Cleaning up pybedtools temporary files")
 
 pybedtools.helpers.cleanup(verbose=False, remove_all=False)
@@ -670,6 +685,6 @@ else:
 		   args.outfile+'.datamatrix/temp/', 
           shell=True)
 
-print
+print()
 print("Thank you for using BioFeatureFinder")
-print
+print()
