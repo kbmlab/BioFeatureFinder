@@ -209,11 +209,11 @@ def nuc_cont(bedtool):
     nuccont_df['%O'] = nuccont_df.apply(
         lambda x: (float(x['%O']) / float(x['length'])), 1).round(5)
 
-    if args.nuc_info == 1:
+    if args.nuc_info == 'simple':
         nuccont_df = nuccont_df[['name', '%GC', 'seq']]
-    elif args.nuc_info == 2:
+    elif args.nuc_info == 'intermediate':
         nuccont_df = nuccont_df[['name', '%GC', '%G', '%C', '%A', '%T', 'seq']]
-    elif args.nuc_info == 3:
+    elif args.nuc_info == 'full':
         pass
 
     return nuccont_df
@@ -496,8 +496,9 @@ def get_data(df):
     elif args.qgrs_mapper == False:
         pass        
  
-    if str(args.nuc_info) == 3:
-        z = a.drop(['length','seqname', 'start', 'end', 'score', 'strand', 'seq'], 1)
+    if str(args.nuc_info) == 'full':
+        z = a.drop(['length','seqname', 'start', 'end', 
+                    'score', 'strand', 'seq'], 1)
     else:
         z = a.drop('seq', 1)
     
