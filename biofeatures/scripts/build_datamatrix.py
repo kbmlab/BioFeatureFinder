@@ -60,7 +60,7 @@ gandalf = """
 class MyParser(argparse.ArgumentParser):
     def error(self, message):
         print()
-        self.print()_help()
+        self.print_help()
         print()
         print(gandalf)
         print()    
