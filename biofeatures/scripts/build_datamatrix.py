@@ -177,11 +177,23 @@ elif args.unstranded is False:
     
 def nuc_cont(bedtool):
     nuccont = bedtool.nucleotide_content(args.genome_file, s=strd, seq=True)
-    nuccont_df = pd.concat(nuccont.to_dataframe(
-        names=['seqname', 'start', 'end', 'name', 'score', 'strand',
-               '%AT', '%GC', '%A', '%C', '%G', '%T',
-               '%N', '%O', 'length', 'seq'],
-        iterator=True, chunksize=10000), ignore_index=True, sort=False).ix[1:]
+    
+    if args.unstranded==True:
+        nuccont_df = pd.concat(nuccont.to_dataframe(
+                names=['seqname', 'start', 'end', 'name', 'score',
+                       '%AT', '%GC', '%A', '%C', '%G', '%T',
+                       '%N', '%O', 'length', 'seq'],
+                iterator=True, chunksize=10000), 
+        ignore_index=True, sort=False).ix[1:]
+    
+    elif args.unstranded==False:
+        nuccont_df = pd.concat(nuccont.to_dataframe(
+            names=['seqname', 'start', 'end', 'name', 'score', 'strand',
+                   '%AT', '%GC', '%A', '%C', '%G', '%T',
+                   '%N', '%O', 'length', 'seq'],
+            iterator=True, chunksize=10000), 
+        ignore_index=True, sort=False).ix[1:]
+    
     nuccont_df['%AT'] = nuccont_df['%AT'].astype(float).round(5)
     nuccont_df['%GC'] = nuccont_df['%GC'].astype(float).round(5)
     nuccont_df['%A'] = nuccont_df.apply(
@@ -235,7 +247,7 @@ def get_var_counts(bedtool, var_file):
     
     feature = var[0]
     
-    if not ((feature.strand == "+")  or (feature.strand == "-")):
+    if not ((feature.strand == "+") or (feature.strand == "-")):
         print(source+' does not contain +/- strand information. Running in unstranded mode')
         var_counts = pd.concat(
                 bedtool.intersect(var, 
@@ -583,14 +595,25 @@ if args.n_rand == 0:
         
     
 bed = BedTool(args.outfile+'.datamatrix/genomic_ranges.bed').to_dataframe().reset_index()
-bed['name'] = 'range_id_R' + (bed['index'] + 1).astype(str) + '_' + \
+
+if args.unstranded == True:
+    bed['name'] = 'range_id_R' + (bed['index'] + 1).astype(str) + '_' + \
                               bed['chrom'].astype(str) + '_' + \
                               bed['start'].astype(str) + '_' + \
-                              bed['end'].astype(str) + '_' + \
-                              bed['strand'].astype(str)
+                              bed['end'].astype(str)
     
-bed = bed[['chrom', 'start', 'end', 'name', 'score', 'strand']
-         ].drop_duplicates().sort_values(by=['chrom', 'start'])
+    bed = bed[['chrom', 'start', 'end', 'name', 'score']
+             ].drop_duplicates().sort_values(by=['chrom', 'start'])
+
+elif args.unstranded == False:
+    bed['name'] = 'range_id_R' + (bed['index'] + 1).astype(str) + '_' + \
+                                  bed['chrom'].astype(str) + '_' + \
+                                  bed['start'].astype(str) + '_' + \
+                                  bed['end'].astype(str) + '_' + \
+                                  bed['strand'].astype(str)
+    
+    bed = bed[['chrom', 'start', 'end', 'name', 'score', 'strand']
+             ].drop_duplicates().sort_values(by=['chrom', 'start'])
     
 if not args.debug:
     pass
