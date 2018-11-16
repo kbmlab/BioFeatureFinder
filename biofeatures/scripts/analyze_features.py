@@ -188,11 +188,11 @@ def group_matrices_one_sample(bt, bt_a, matrix):
     feature_a = bt[0]
     feature_b = bt_a[0]
 
-    if not (feature_a.strand == "+"  or feature_a.strand == "-" ) \
-    and not (feature_b.strand == "+"  or feature_b.strand == "-" ):
+    if not ((feature_a.strand == "+")  or (feature_a.strand == "-" )) \
+    and not ((feature_b.strand == "+")  or (feature_b.strand == "-" )):
         pass
-    if (feature_a.strand == "+"  or feature_a.strand == "-" ) \
-    and (feature_b.strand == "+"  or feature_b.strand == "-" ):
+    if ((feature_a.strand == "+")  or (feature_a.strand == "-" )) \
+    and ((feature_b.strand == "+")  or (feature_b.strand == "-" )):
         pass
     else:
         print("Strand information does not match, check your input files.")
