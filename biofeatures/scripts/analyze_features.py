@@ -347,7 +347,7 @@ if not args.filter_out:
     pass
 else:
     print("Filtering out columns")
-    print
+    print()
     out_cols = open(str(args.filter_out)).read().split(',')
     out_cols = [w.replace('\n', '') for w in out_cols]
     matrix = matrix.drop(out_cols, 1)
