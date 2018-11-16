@@ -188,14 +188,13 @@ def group_matrices_one_sample(bt, bt_a, matrix):
     feature_a = bt[0]
     feature_b = bt_a[0]
 
-    if not ((feature_a.strand == "+")  or (feature_a.strand == "-" )) \
-    and not ((feature_b.strand == "+")  or (feature_b.strand == "-" )):
+    if not ((feature_b.strand == "+")  or (feature_b.strand == "-" )) and not ((feature_a.strand == "+")  or (feature_a.strand == "-" )):
         pass
-    if ((feature_a.strand == "+")  or (feature_a.strand == "-" )) \
-    and ((feature_b.strand == "+")  or (feature_b.strand == "-" )):
+    elif ((feature_b.strand == "+")  or (feature_b.strand == "-" )) and ((feature_a.strand == "+" ) or (feature_a.strand == "-") ):
         pass
     else:
-        print("Strand information does not match, check your input files.")
+        print("Strand information on input does not match data on matrix. Check your input data.")
+        print()
         print("Bed strand data: "+str(feature_b.strand))
         print("Matrix strand data: "+str(feature_a.strand))
         print()
