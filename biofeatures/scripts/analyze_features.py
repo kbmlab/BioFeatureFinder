@@ -933,20 +933,6 @@ for run_i in range(len(runs)):
     conf_df = conf_df.append(conf_df_r).astype(int).reset_index().drop('index',
                                                                        1)
 
-    print("Classifier scores")
-    print(("Mean Squared Error (MSE): %.4f" % mse))
-    print(("adjusted Mutual Information (aMI): %.4f" % ami))
-    print()
-    print("Confusion matrix")
-    print(conf)
-    print()
-    print(('Accuracy: ' + str(acc*100) + '%'))
-    print(('Positive predictive value (Precision): ' + str(ppv*100) + '%'))
-    print(('Negative predictive value: ' + str(npv*100) + '%'))
-    print(('Sensitivity (Recall): ' + str(sen*100) + '%'))
-    print(('Specificity: ' + str(spe*100) + '%'))
-    print()
-
     ##For creating ROC and precision curves, we need to binarize the output and get score functions
     print("Binarizing output")
     print()
@@ -1058,6 +1044,21 @@ for run_i in range(len(runs)):
     plt.close()
 
     print('=======================')
+    print()
+    print("Overall classifier scores:")
+    print(("Mean Squared Error (MSE): %.4f" % mse))
+    print(("adjusted Mutual Information (aMI): %.4f" % ami))
+    print(('ROC curve AUC = {0:0.2f}'.format(roc_auc["micro_run_" + run_id])))
+    print(('Precision-Recall curve AUC = {0:0.2f}'.format(average_precision["micro_run_" + run_id])))
+    print()
+    print("Confusion matrix")
+    print(conf)
+    print()
+    print(('Accuracy: ' + str(acc*100) + '%'))
+    print(('Positive predictive value (Precision): ' + str(ppv*100) + '%'))
+    print(('Negative predictive value: ' + str(npv*100) + '%'))
+    print(('Sensitivity (Recall): ' + str(sen*100) + '%'))
+    print(('Specificity: ' + str(spe*100) + '%'))
     print()
 
 print("Done with classification steps")
