@@ -962,7 +962,6 @@ for run_i in range(len(runs)):
                                          tol=0.01)
     else:
         clf = GradientBoostingClassifier(**bp,
-                                         warm_start=True,
                                          validation_fraction=0.2,
                                          n_iter_no_change=5, 
                                          tol=0.01)
