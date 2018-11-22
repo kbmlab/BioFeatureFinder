@@ -27,6 +27,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import label_binarize
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import cross_val_score
+from sklearn.feature_selection import mutual_info_classif,VarianceThreshold
 import multiprocessing as mp
 
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -97,64 +98,72 @@ parser = MyParser(description='',
 
 parser.add_argument('-b', '--bed', dest="bed_file",
                     help="BED file with exons/regions of interest.",
-                    required=True)
+                    required=True, metavar='sample.data.bed')
 
 parser.add_argument('-m', '--matrix', dest="matrix",
                     help="Data matrix with biological features created by 'build_datamatrix.py'",
-                    required=True)
+                    required=True, metavar='input.datamatrix.tsv')
 
 parser.add_argument('-o', '--outfile', dest="prefix",  # type=str,
                     help="prefix for use on the output files",
                     metavar="prefix", required=True)
 
-parser.add_argument('-filter', '--filter_columns', dest="filter_out",
-                    default=False,
+parser.add_argument('-f', '--filter_columns', dest="filter_out",
+                    default=False, 
                     help="Text file containing a comma-separated list with names of the columns to be removed from the dataframe in the analysis. Default: False",
                     metavar="filter_out.txt", required=False)
 
-parser.add_argument("-padj", '--p_adjust', dest="padj", default='fdr',
+parser.add_argument("-p", '--p_adjust', dest="padj", default='fdr',
                     help="Type of p-value correction used after Kolmogorov-Smirnov test, available options are: 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', 'fdr' and 'none'. Default:'fdr'",
-                    type=str, metavar='padj', required=False)
+                    type=str, metavar='fdr', required=False)
 
 parser.add_argument("-pth", '--p_adjust_threshold', dest="p_th", default=0.05,
                     help="Threshold of adjusted p-value for significance. If using --sig-only-CLF, only significantly different features are passed down to the classifier for group separation. Default: 0.05",
-                    type=float, required=False)
+                    type=float, required=False, metavar=0.05)
 
-parser.add_argument('--sig-only', dest="ks_filter", action="store_true",
+parser.add_argument('-s','--sig-only', dest="ks_filter", action="store_true",
                     default=False,
                     help="Use only the statistically significant features (found by KS test) in the plotting classification step. Useful for filtering large data matrices to reduce computational time. Can use the '-pth' option to select the threshold of significante for feature selection. Default: False",
                     required=False)
 
-parser.add_argument("-runs", '--number_of_runs', dest="runs", default=10,
-                    help="Number of times (repetitions) to run the classification step. Default:10",
-                    type=int, metavar='INT')
+parser.add_argument("-c", '--correlation-filter', dest="corr_th", default=False,
+                    help="Remove features which exhibit linear correlation scores above a certain threshold (from 0 to 1). Default: 0.95",
+                    type=float, metavar=0.95, required=False)
 
-parser.add_argument("-nsample", '--random_sample_size', dest="nsample",
-                    type=int, metavar='INT', default=1,
+parser.add_argument("-a", '--ami-filter', dest="ami_th", default=0.01,
+                    help="Remove non-informative features based on adjusted mutual information (aMI) scores below a certain threshold (from 0 to 1). If set to 0, will remove features with 0 aMI scores and keep all features with positive scores. Default: 0.01",
+                    type=float, metavar=0.01, required=False)
+
+parser.add_argument("-r", '--runs', dest="runs", default=10,
+                    help="Number of times (repetitions) to run the classification step. Default:10",
+                    type=int, metavar=10)
+
+parser.add_argument("-n", '--sample_size', dest="nsample",
+                    type=int, metavar=1, default=1,
                     help="Relative size of randomly sampled exons in comparisson to input exons. Default:1 (i.e. 1x the amount of input exons)")
 
-parser.add_argument("-tsize", '--train_size', dest="train_size",
-                    default=0.80,
-                    help="Fraction of sample used for training the classifier model. The remaining sample pool will be used for testing the classifier. Default: 0.80",
+parser.add_argument("-t", '--train_size', dest="train_size",
+                    default=0.80, metavar=0.80,
+                    help="Fraction of sample used for training the classifier model. The remaining sample pool will be used for testing the classifier (from 0 to 1). Default: 0.80",
                     type=float)
 
-parser.add_argument("-params", '--gbcl_parameters', dest="clf_params",
+parser.add_argument("-pr", '--parameters', dest="clf_params",
                     default='optimize',
                     help="Type of parameter selection to be used by the classifier. Available options are: 'optimize' (runs an optimization step with GridSearchCV), 'default' (uses default parameters from GradientBoostClassifier) and 'file' (take in input txt file with a dictionary-like struture with classifier parameters, requires the use of -pf option). Options: 'default', 'optimize' and 'file'. Default:'optimize'",
-                    type=str, metavar='params', required=False)
+                    type=str, metavar='optimize', required=False)
 
 parser.add_argument("-scr", '--scoring_metric', dest="scr_metric",
                     default='roc_auc',
                     help="Type of scoring metric used to optimize the classifier hyperparameters if the 'optmize' param option is selected. Possible options include: 'roc_auc', 'accuracy', 'balanced_accuracy', 'precision', 'average_precision' and 'recall' (for a full list of options visit: http://scikit-learn.org/stable/modules/model_evaluation.html). Default: 'roc_auc'",
-                    type=str, metavar='params', required=False)
+                    type=str, metavar='roc_auc', required=False)
 
 parser.add_argument("-pf", '--param_file', dest="param_file",
                     help="Input text with with dictionary-like structure with parameter options for GradientBoostClassifier. Ex. {'n_estimators':300,'loss':'deviance',...}",
-                    metavar='file', required=False)
+                    metavar='param_file.txt', required=False)
 
-parser.add_argument("--no-plotCDF", dest="dont_plot_cdf",
+parser.add_argument("--no-plot", dest="dont_plot_cdf",
                     action="store_true", default=False,
-                    help="Use this flag if you want to skip plotting CDF graphs for each feature in the matrix. Default: False")
+                    help="Use this flag if you want to skip plotting graphs for each feature in the matrix. Default: False")
 
 parser.add_argument("--no-CLF", dest="dont_run_clf",
                     action="store_true", default=False,
@@ -162,7 +171,7 @@ parser.add_argument("--no-CLF", dest="dont_run_clf",
 
 parser.add_argument("--ncores", dest="ncores", default=(mp.cpu_count() - 1),
                     help="Number of CPU cores used to multiple jobs on the classifier. Default:(ALL_CORES)-1",
-                    type=int, metavar='INT')
+                    type=int, metavar=4)
 
 parser.add_argument('-u','--unstranded', dest="unstranded",
                     action="store_true", default=False, required=False,
@@ -326,7 +335,6 @@ Popen('mkdir -p ./' + args.prefix + '.analysis/statistical_analysis', shell=True
     
 ##Load the bed file created with all exons
 
-print()
 print("Loading bed file with regions of interest")
 print()
 
@@ -396,9 +404,9 @@ print()
     
 statsR = importr('stats')
 st['adj_pval'] = statsR.p_adjust(FloatVector(st['pval']),method=str(args.padj))
-st.to_csv('./' + args.prefix + '.analysis/statistical_analysis/statistical_analysis_output.tsv',
+st.to_csv('./' + args.prefix + '.analysis/statistical_analysis_output.tsv',
           sep='\t', index=False)
-st.to_excel('./' + args.prefix + '.analysis/statistical_analysis/statistical_analysis_output.xlsx',
+st.to_excel('./' + args.prefix + '.analysis/statistical_analysis_output.xlsx',
             index=False)
 
 print("Finished statistical analysis")
@@ -407,15 +415,35 @@ print()
 if not args.ks_filter:
     pass
 elif args.ks_filter:
-    print("Filtering statistically significantly features for plotting CDF and classification steps")
+    print("Filtering statistically significantly features.")
     print()
     sig_only = st[st['adj_pval'] <= float(args.p_th)]['Feature'].tolist()
     sig_only.append('group')
     matrix = matrix[sig_only]
     
+if not args.corr_th:
+    pass
+elif args.corr_th:
+    print("Calculating linear correlation matrix and filtering features above threshold.")
+    print()
+    corr_matrix = matrix.drop(['group'], axis=1).corr().abs()
+    upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool))
+    to_drop = [column for column in upper.columns if any(upper[column] >= args.corr_th)]
+    matrix = matrix.drop(to_drop, axis=1)
+    
+    print('Features above threshold:')
+    print()
+    print(to_drop)
+    print()
+    print('Saving correlation matrix')
+    print()
+    corr_matrix.to_csv('./' + args.prefix + '.analysis/statistical_analysis/correlation_matrix.tsv',
+                       sep='\t')
+    corr_matrix.to_excel('./' + args.prefix + '.analysis/statistical_analysis/correlation_matrix.xlsx')
+    
     
 if not args.dont_plot_cdf:
-    print("Output CDF plots for each features in matrix")
+    print("Output plots for each features in matrix")
     print()
     features = list(matrix.drop('group',1).columns)
     
@@ -596,6 +624,58 @@ if gbclf_params == 'optimize':
     
     y = np.array(Z.group).astype('int')
     X = np.array(Z.drop('group', 1))
+    
+    print('Removing features non-informative features based on aMI score')
+    print()
+    
+    mi_scores = mutual_info_classif(X, y, 
+                            discrete_features='auto', 
+                            n_neighbors=3, 
+                            copy=True, 
+                            random_state=None)
+
+    dd = []
+
+    for score, fname in sorted(zip(mi_scores, Z.columns.tolist()), reverse=True):
+        dd.append([fname, score])
+
+    dm = pd.DataFrame(dd, columns=['features','ami_score'])
+
+    selector = VarianceThreshold()
+    selector.fit(X, y)
+    var_scores = list(selector.variances_)
+
+    dd = []
+
+    for score, fname in sorted(zip(var_scores, Z.drop('group', axis=1).columns.tolist()), reverse=True):
+        dd.append([fname, score])
+
+    dv = pd.DataFrame(dd, columns=['features','var_score'])
+
+    ami_var = dm.merge(dv, on='features')
+    
+    ami_var.to_csv('./' + args.prefix + '.analysis/statistical_analysis/features_ami_and_variance_scores.tsv',
+                       sep='\t')
+    ami_var.to_excel('./' + args.prefix + '.analysis/statistical_analysis/features_ami_and_variance_scores.xlsx')
+    
+    if args.ami_th == 0:
+        if len(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist()):
+            Z2 = Z.drop(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist(), axis=1)
+            y = np.array(Z2.group).astype('int')
+            X = np.array(Z2.drop('group', 1))
+        else:
+            print('No features found with aMI lower than threshold')
+            print()
+            pass
+    else:
+        if len(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist()):
+            Z2 = Z.drop(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist(), axis=1)
+            y = np.array(Z2.group).astype('int')
+            X = np.array(Z2.drop('group', 1))
+        else:
+            print('No features found with aMI lower than threshold')
+            print()
+            pass
         
     X_train, X_test, y_train, y_test = train_test_split(X,
                                                         y,
@@ -609,19 +689,18 @@ if gbclf_params == 'optimize':
                                      learning_rate=0.1, 
                                      loss='deviance',
                                      subsample=0.8,
-                                     random_state=10,
+                                     random_state=0,
                                      max_depth=6, 
                                      min_samples_split=0.01, 
                                      min_samples_leaf=0.001,
-                                     max_features='sqrt',
-                                     )
+                                     max_features='sqrt')
 
     grid = {'n_estimators': range(10,301,10)}
 
     opt_s1 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
                           cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
 
-    opt_s1.fit(X_train, y_train)
+    opt_s1.fit(X, y)
 
     print("SCORES:")
     print(pd.DataFrame(opt_s1.cv_results_)[['params','mean_test_score','std_test_score']])
@@ -640,10 +719,9 @@ if gbclf_params == 'optimize':
                                      learning_rate=0.1, 
                                      loss='deviance',
                                      subsample=0.8,
-                                     random_state=10,
+                                     random_state=0,
                                      min_samples_leaf=0.001,
-                                     max_features='sqrt',
-                                     )
+                                     max_features='sqrt')
 
     grid = {'max_depth':range(2,21,1), 
             'min_samples_split':list(np.arange(0.001, 0.021, 0.001).round(3))}
@@ -651,7 +729,7 @@ if gbclf_params == 'optimize':
     opt_s2 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
                           cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
 
-    opt_s2.fit(X_train, y_train)
+    opt_s2.fit(X, y)
 
     print("SCORES:")
     print(pd.DataFrame(opt_s2.cv_results_)[['params','mean_test_score','std_test_score']])
@@ -673,9 +751,8 @@ if gbclf_params == 'optimize':
                                      learning_rate=0.1, 
                                      loss='deviance',
                                      subsample=0.8,
-                                     random_state=10,
-                                     max_features='sqrt',
-                                     )
+                                     random_state=0,
+                                     max_features='sqrt')
 
     grid = {'min_samples_split':list(np.array(np.linspace(n_split/2, n_split*2, 10).round(5))),
             'min_samples_leaf':list(np.array(np.linspace(n_split/20, n_split*2, 10).round(5)))}
@@ -683,7 +760,7 @@ if gbclf_params == 'optimize':
     opt_s3 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
                           cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
 
-    opt_s3.fit(X_train, y_train)
+    opt_s3.fit(X, y)
 
     print("SCORES:")
     print(pd.DataFrame(opt_s3.cv_results_)[['params','mean_test_score','std_test_score']])
@@ -698,7 +775,7 @@ if gbclf_params == 'optimize':
     print('Optmizing maximmum number of features')
     print()
 
-    sqrt = int(np.sqrt(X_train.shape[1]))
+    sqrt = int(np.sqrt(X.shape[1]))
 
     opt = GradientBoostingClassifier(warm_start=True,
                                      n_estimators=n_est,
@@ -708,14 +785,14 @@ if gbclf_params == 'optimize':
                                      learning_rate=0.1, 
                                      loss='deviance',
                                      subsample=0.8,
-                                     random_state=10)                                 
+                                     random_state=0)                                 
 
-    grid = {'max_features':list(np.arange(2, ((sqrt*2)+2), 2, dtype=int))}
+    grid = {'max_features':list(np.arange(((sqrt/2)), ((sqrt*2)+2), 2, dtype=int))}
 
     opt_s4 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
                           cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
 
-    opt_s4.fit(X_train, y_train)
+    opt_s4.fit(X, y)
 
     print("SCORES:")
     print(pd.DataFrame(opt_s4.cv_results_)[['params','mean_test_score','std_test_score']])
@@ -735,9 +812,8 @@ if gbclf_params == 'optimize':
                                      max_depth=m_depth,
                                      loss='deviance',
                                      subsample=0.8,
-                                     random_state=10,
-                                     max_features=n_features,
-                                     )
+                                     random_state=0,
+                                     max_features=n_features)
 
     grid = {'n_estimators':[n_est, n_est*5, n_est*10],
             'learning_rate':[0.1, 0.02, 0.01]}
@@ -745,7 +821,7 @@ if gbclf_params == 'optimize':
     opt_s5 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
                           cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
 
-    opt_s5.fit(X_train, y_train)
+    opt_s5.fit(X, y)
 
     print("SCORES:")
     print(pd.DataFrame(opt_s5.cv_results_)[['params','mean_test_score','std_test_score']])
@@ -767,9 +843,8 @@ if gbclf_params == 'optimize':
                                      learning_rate=l_rate, 
                                      loss='deviance',
                                      subsample=0.8,
-                                     random_state=10,
-                                     max_features=n_features,
-                                     ).fit(X_train, y_train)
+                                     random_state=0,
+                                     max_features=n_features).fit(X_train, y_train)
 
     scores = cross_val_score(scr, X_test, y_test, cv=StratifiedKFold(10), scoring=scr_metric)
     print()
@@ -810,7 +885,59 @@ for run_i in range(len(runs)):
 
     y = np.array(Z.group).astype('int')
     X = np.array(Z.drop('group', 1))
+    
+    print('Removing non-informative features based on aMI score')
+    print()
+    
+    mi_scores = mutual_info_classif(X, y, 
+                            discrete_features='auto', 
+                            n_neighbors=3, 
+                            copy=True, 
+                            random_state=None)
 
+    dd = []
+
+    for score, fname in sorted(zip(mi_scores, Z.columns.tolist()), reverse=True):
+        dd.append([fname, score])
+
+    dm = pd.DataFrame(dd, columns=['features','ami_score'])
+
+    selector = VarianceThreshold()
+    selector.fit(X, y)
+    var_scores = list(selector.variances_)
+
+    dd = []
+
+    for score, fname in sorted(zip(var_scores, Z.drop('group', axis=1).columns.tolist()), reverse=True):
+        dd.append([fname, score])
+
+    dv = pd.DataFrame(dd, columns=['features','var_score'])
+
+    ami_var = dm.merge(dv, on='features')
+    
+    ami_var.to_csv('./' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_features_ami_and_variance_scores.tsv',
+                       sep='\t')
+    ami_var.to_excel('./' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_features_ami_and_variance_scores.xlsx')
+    
+    if args.ami_th == 0:
+        if len(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist()):
+            Z2 = Z.drop(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist(), axis=1)
+            y = np.array(Z2.group).astype('int')
+            X = np.array(Z2.drop('group', 1))
+        else:
+            print('No features found with aMI lower than threshold')
+            print()
+            pass
+    else:
+        if len(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist()):
+            Z2 = Z.drop(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist(), axis=1)
+            y = np.array(Z2.group).astype('int')
+            X = np.array(Z2.drop('group', 1))
+        else:
+            print('No features found with aMI lower than threshold')
+            print()
+            pass
+        
     ##Then, we split the total data in 2 groups: training group (which we will train our model and optimize the parameters) 
     ## and the test group, which we will use for evaluating the performance of the classifier. The default test size is 0.25.
 
@@ -829,9 +956,16 @@ for run_i in range(len(runs)):
     names = df_cl.drop('group', 1).columns
 
     if gbclf_params == 'default':
-        clf = GradientBoostingClassifier(warm_start=True)
+        clf = GradientBoostingClassifier(warm_start=True, 
+                                         validation_fraction=0.2,
+                                         n_iter_no_change=5, 
+                                         tol=0.01)
     else:
-        clf = GradientBoostingClassifier(**bp)
+        clf = GradientBoostingClassifier(**bp,
+                                         warm_start=True,
+                                         validation_fraction=0.2,
+                                         n_iter_no_change=5, 
+                                         tol=0.01)
 
     clf.fit(X_train, y_train)
 
