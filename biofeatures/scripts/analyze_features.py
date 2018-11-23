@@ -956,15 +956,9 @@ for run_i in range(len(runs)):
     names = df_cl.drop('group', 1).columns
 
     if gbclf_params == 'default':
-        clf = GradientBoostingClassifier(warm_start=True, 
-                                         validation_fraction=0.2,
-                                         n_iter_no_change=5, 
-                                         tol=0.01)
+        clf = GradientBoostingClassifier(warm_start=True)
     else:
-        clf = GradientBoostingClassifier(**bp,
-                                         validation_fraction=0.2,
-                                         n_iter_no_change=5, 
-                                         tol=0.01)
+        clf = GradientBoostingClassifier(**bp)
 
     clf.fit(X_train, y_train)
 
