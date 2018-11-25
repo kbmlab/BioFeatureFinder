@@ -660,18 +660,18 @@ if gbclf_params == 'optimize':
     
     if args.ami_th == 0:
         if len(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist()):
-            Z2 = Z.drop(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist(), axis=1)
-            y = np.array(Z2.group).astype('int')
-            X = np.array(Z2.drop('group', 1))
+            Z = Z.drop(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist(), axis=1)
+            y = np.array(Z.group).astype('int')
+            X = np.array(Z.drop('group', 1))
         else:
             print('No features found with aMI lower than threshold')
             print()
             pass
     else:
         if len(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist()):
-            Z2 = Z.drop(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist(), axis=1)
-            y = np.array(Z2.group).astype('int')
-            X = np.array(Z2.drop('group', 1))
+            Z = Z.drop(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist(), axis=1)
+            y = np.array(Z.group).astype('int')
+            X = np.array(Z.drop('group', 1))
         else:
             print('No features found with aMI lower than threshold')
             print()
@@ -693,7 +693,10 @@ if gbclf_params == 'optimize':
                                      max_depth=6, 
                                      min_samples_split=0.01, 
                                      min_samples_leaf=0.001,
-                                     max_features='sqrt')
+                                     max_features='sqrt',
+                                     validation_fraction=0.2,
+                                     n_iter_no_change=5, 
+                                     tol=1e-4)
 
     grid = {'n_estimators': range(10,301,10)}
 
@@ -721,7 +724,10 @@ if gbclf_params == 'optimize':
                                      subsample=0.8,
                                      random_state=0,
                                      min_samples_leaf=0.001,
-                                     max_features='sqrt')
+                                     max_features='sqrt',
+                                     validation_fraction=0.2,
+                                     n_iter_no_change=5, 
+                                     tol=1e-4)
 
     grid = {'max_depth':range(2,21,1), 
             'min_samples_split':list(np.arange(0.001, 0.021, 0.001).round(3))}
@@ -752,7 +758,10 @@ if gbclf_params == 'optimize':
                                      loss='deviance',
                                      subsample=0.8,
                                      random_state=0,
-                                     max_features='sqrt')
+                                     max_features='sqrt',
+                                     validation_fraction=0.2,
+                                     n_iter_no_change=5, 
+                                     tol=1e-4)
 
     grid = {'min_samples_split':list(np.array(np.linspace(n_split/2, n_split*2, 10).round(5))),
             'min_samples_leaf':list(np.array(np.linspace(n_split/20, n_split*2, 10).round(5)))}
@@ -785,7 +794,10 @@ if gbclf_params == 'optimize':
                                      learning_rate=0.1, 
                                      loss='deviance',
                                      subsample=0.8,
-                                     random_state=0)                                 
+                                     random_state=0,
+                                     validation_fraction=0.2,
+                                     n_iter_no_change=5, 
+                                     tol=1e-4)                                 
 
     grid = {'max_features':list(np.arange(((sqrt/2)), ((sqrt*2)+2), 2, dtype=int))}
 
@@ -813,7 +825,10 @@ if gbclf_params == 'optimize':
                                      loss='deviance',
                                      subsample=0.8,
                                      random_state=0,
-                                     max_features=n_features)
+                                     max_features=n_features,
+                                     validation_fraction=0.2,
+                                     n_iter_no_change=5, 
+                                     tol=1e-4)
 
     grid = {'n_estimators':[n_est, n_est*5, n_est*10],
             'learning_rate':[0.1, 0.02, 0.01]}
@@ -844,7 +859,10 @@ if gbclf_params == 'optimize':
                                      loss='deviance',
                                      subsample=0.8,
                                      random_state=0,
-                                     max_features=n_features).fit(X_train, y_train)
+                                     max_features=n_features,
+                                     validation_fraction=0.2,
+                                     n_iter_no_change=5, 
+                                     tol=1e-4).fit(X_train, y_train)
 
     scores = cross_val_score(scr, X_test, y_test, cv=StratifiedKFold(10), scoring=scr_metric)
     print()
@@ -920,19 +938,19 @@ for run_i in range(len(runs)):
     ami_var.to_excel('./' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_features_ami_and_variance_scores.xlsx')
     
     if args.ami_th == 0:
-        if len(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist()):
-            Z2 = Z.drop(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist(), axis=1)
-            y = np.array(Z2.group).astype('int')
-            X = np.array(Z2.drop('group', 1))
+        if len(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist()) > 0:
+            Z = Z.drop(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist(), axis=1)
+            y = np.array(Z.group).astype('int')
+            X = np.array(Z.drop('group', 1))
         else:
             print('No features found with aMI lower than threshold')
             print()
             pass
     else:
-        if len(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist()):
-            Z2 = Z.drop(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist(), axis=1)
-            y = np.array(Z2.group).astype('int')
-            X = np.array(Z2.drop('group', 1))
+        if len(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist()) > 0:
+            Z = Z.drop(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist(), axis=1)
+            y = np.array(Z.group).astype('int')
+            X = np.array(Z.drop('group', 1))
         else:
             print('No features found with aMI lower than threshold')
             print()
@@ -953,10 +971,13 @@ for run_i in range(len(runs)):
     print("Fitting the GradientBoost model with the training set")
     print()
 
-    names = df_cl.drop('group', 1).columns
+    names = Z.drop('group', 1).columns
 
     if gbclf_params == 'default':
-        clf = GradientBoostingClassifier(warm_start=True)
+        clf = GradientBoostingClassifier(warm_start=True,
+                                         validation_fraction=0.2,
+                                         n_iter_no_change=5, 
+                                         tol=1e-4)
     else:
         clf = GradientBoostingClassifier(**bp)
 
@@ -966,32 +987,41 @@ for run_i in range(len(runs)):
         "Extracting feature importance for run " + run_id + " and merging with statistical data"))
     print()
 
-    a = pd.DataFrame(list(zip(clf.feature_importances_,
-                              np.argsort(np.argsort(clf.feature_importances_)),
-                              names))).rename(
-        columns={0: 'run_' + run_id + '_raw_importance',
-                 1: 'Index',
-                 2: 'Feature'}
-    ).sort_values('Index', ascending=False)
+    clf_fi = []
+
+    for score, fname in sorted(zip(clf.feature_importances_, 
+                                   Z.drop('group', axis=1).columns.tolist()), 
+                               reverse=True):
+            clf_fi.append([fname, score])
+        
+    a = pd.DataFrame(clf_fi, 
+                    columns=['Feature','run_' + run_id + '_raw_importance']
+                    ).sort_values('run_' + run_id + '_raw_importance',
+                                  ascending=False)
 
     max_importance = a['run_' + run_id + '_raw_importance'].max()
     a['run_' + run_id + '_rel_importance'] = 100.0 * (
         a['run_' + run_id + '_raw_importance'] / max_importance)
-    importance = importance.merge(a.drop('Index', 1), on='Feature')
+    
+    importance = importance.merge(a, on='Feature')
 
     print("Plotting partial dependance and deviance scores from classifier")
     print()
 
     # Select top 5 most important features and plot partial dependance and interaction plots
 
-    do_these = a.sort_values(by='Index', ascending=False).index[:4].values
+    do_these = a.sort_values(by=('run_' + run_id + '_raw_importance'), 
+                             ascending=False).index[:10].values
+
+    names = a.sort_values(by=('run_' + run_id + '_raw_importance'), 
+                      ascending=False)[:10]['Feature']
 
     features = list(do_these)
     features.append((do_these[0], do_these[1]))
     fig, axs = plot_partial_dependence(clf, X_train, features,
                                        feature_names=names,
-                                       n_jobs=1, grid_resolution=15,
-                                       figsize=(14, 8),
+                                       n_jobs=ncores, grid_resolution=100,
+                                       figsize=(12,16),
                                        label=0)
 
     plt.subplots_adjust(top=0.9)  # tight_layout causes overlap with suptitle
@@ -1005,8 +1035,7 @@ for run_i in range(len(runs)):
 
     ##Plot deviance x number os iteration
     ###############################################################################
-    params = clf.get_params()
-    test_score = np.zeros((params['n_estimators'],), dtype=np.float64)
+    test_score = np.zeros((clf.estimators_.shape[0],), dtype=np.float64)
 
     for i, y_pred in enumerate(clf.staged_decision_function(X_test)):
         test_score[i] = clf.loss_(y_test, y_pred)
@@ -1014,9 +1043,9 @@ for run_i in range(len(runs)):
     plt.figure(figsize=(6, 6))
     plt.subplot(1, 1, 1)
     plt.title('Deviance')
-    plt.plot(np.arange(params['n_estimators']) + 1, clf.train_score_, 'b-',
+    plt.plot(np.arange(clf.estimators_.shape[0]) + 1, clf.train_score_, 'b-',
              label='Training Set Deviance')
-    plt.plot(np.arange(params['n_estimators']) + 1, test_score, 'r-',
+    plt.plot(np.arange(clf.estimators_.shape[0]) + 1, test_score, 'r-',
              label='Test Set Deviance')
     plt.legend(loc='upper right')
     plt.xlabel('Boosting Iterations')
@@ -1027,8 +1056,8 @@ for run_i in range(len(runs)):
         bbox_inches='tight')
     plt.close()
 
-    deviance_train['run_' + run_id] = clf.train_score_
-    deviance_test['run_' + run_id] = test_score
+    deviance_train['run_' + run_id] = pd.Series(clf.train_score_)
+    deviance_test['run_' + run_id] = pd.Series(test_score)
 
     print("Run trained classifier in test subset from data")
     print
@@ -1236,25 +1265,25 @@ plt.figure(figsize=(6, 6))
 plt.subplot(1, 1, 1)
 plt.title('Deviance')
 
-train_err = np.array(deviance_train['std'])
-test_err = np.array(deviance_test['std'])
+train_err = np.array(deviance_train.dropna()['std'])
+test_err = np.array(deviance_test.dropna()['std'])
 
-plt.plot(np.arange(len(deviance_train)) + 1, np.array(deviance_train['mean']),
+plt.plot(np.arange(len(deviance_train.dropna())) + 1, np.array(deviance_train.dropna()['mean']),
          'b-',
          label='Training Set Deviance', )
 
-plt.fill_between(np.arange(len(deviance_train)) + 1,
-                 np.array(deviance_train['mean']) + train_err,
-                 np.array(deviance_train['mean']) - train_err,
+plt.fill_between(np.arange(len(deviance_train.dropna())) + 1,
+                 np.array(deviance_train.dropna()['mean']) + train_err,
+                 np.array(deviance_train.dropna()['mean']) - train_err,
                  alpha=0.2)
 
-plt.plot(np.arange(len(deviance_test)) + 1, np.array(deviance_test['mean']),
+plt.plot(np.arange(len(deviance_test.dropna())) + 1, np.array(deviance_test.dropna()['mean']),
          'r-',
          label='Test Set Deviance')
 
-plt.fill_between(np.arange(len(deviance_test)) + 1,
-                 np.array(deviance_test['mean']) + test_err,
-                 np.array(deviance_test['mean']) - test_err,
+plt.fill_between(np.arange(len(deviance_test.dropna())) + 1,
+                 np.array(deviance_test.dropna()['mean']) + test_err,
+                 np.array(deviance_test.dropna()['mean']) - test_err,
                  alpha=0.2, color='red')
 
 plt.legend(loc='upper right')
