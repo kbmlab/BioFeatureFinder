@@ -1480,44 +1480,51 @@ if importance.shape[0] >= 10:
 else:
     N = importance.shape[0]
 
-importance_ind = importance.set_index("Feature").head(N)
+importance_ind = importance.sort_values(by=['mean_rel_importance'], ascending=False).set_index("Feature").head(N)
 
 ind = np.arange(N)  # the x locations for the groups
-width = 0.25   
+width = 0.25  
 
-rel = importance_ind.sort_values(by=['mean_rel_importance'], ascending=False)['mean_rel_importance'].head(N)
-rel_err = importance_ind.sort_values(by=['mean_rel_importance'], ascending=False)['std_rel_importance'].head(N)
+rel = importance_ind['mean_rel_importance'].head(N)
+rel_err = importance_ind['std_rel_importance'].head(N)
 names = (str(rel.index)).split("/")[-1]
 
 #    importance_ind['-log10(q-value)'] = importance_ind['adj_pval_0_vs_1'].apply(lambda x: (np.log10(x))*-1, 1)
-ks = importance_ind.sort_values(by=['mean_rel_importance'], ascending=False)['ks'].head(N)
+ks = importance_ind['ks'].head(N)
 
 fig = plt.figure(figsize=(6,6)) # Create matplotlib figure
 ax = fig.add_subplot(111) # Create matplotlib axes
 ax2 = ax.twiny() # Create another axes that shares the same x-axis as ax.
 
 rel.plot(kind='barh', edgecolor='black', linewidth=0.5, color='white', 
-         label='Relative importance', ax=ax, width=width, position=1,
+         label='Relative importance', ax=ax2, width=width, position=1,
          xerr=rel_err, ecolor='black')
 
 ks.plot(kind='barh', edgecolor='black', linewidth=0.5, color='lightgrey', 
-        label='KS test', ax=ax2, width=width, position=0)
+        label='KS test', ax=ax, width=width, position=0)
 
-ax.legend(loc='center left', bbox_to_anchor=(0, -0.175), fontsize=12)
-ax.tick_params(axis='both', which='major', labelsize=14)
-ax.grid(b=False)
-ax.patch.set_visible(False)
-ax.set_xlabel('Relative importance', size=14)
-ax.set_yticks(ind)
-ax.set_yticklabels(rel.index, fontsize=14)
-
-ax2.legend(loc='center left', bbox_to_anchor=(0.5, -0.175), fontsize=12)
-ax2.set_xlabel('KS test', size=14)
+ax2.legend(loc='center left', bbox_to_anchor=(0.05, -0.175), fontsize=12)
 ax2.tick_params(axis='both', which='major', labelsize=14)
 ax2.grid(b=False)
 ax2.patch.set_visible(False)
+ax2.set_xlabel('Relative importance', size=14)
+ax2.tick_params(which='major', axis='x', pad=5)
+ax2.xaxis.labelpad = 10
 
+ax.legend(loc='center left', bbox_to_anchor=(0.55, -0.175), fontsize=12)
+ax.set_xlabel('KS test', size=14)
+ax.tick_params(axis='both', which='major', labelsize=14)
+ax.grid(b=False)
+ax.patch.set_visible(False)
+
+ax2.tick_params(top=False, bottom=False, left=False, right=False, labelleft=True, labeltop=True)
+ax.tick_params(top=False, bottom=False, left=False, right=False, labelleft=True, labelbottom=True)
+
+plt.gca().invert_yaxis()
 plt.tick_params(axis='both', which='major', labelsize=14)
+
+sns.despine(offset=5, trim=True, ax=ax)
+sns.despine(offset=5, trim=True, ax=ax2)
 
 plt.savefig(
     './' + args.prefix + '.analysis/classifier_results.pdf',
