@@ -99,8 +99,8 @@ parser.add_argument('-g', '--gtf', dest="gtf_file",
                     required=False)
                     
 parser.add_argument('-nuc', '--nucleotide_content', dest="nuc_info",
-                    default='standard', metavar="nuc", required=False, type=str,
-                    help = "Defines the ammount of information included from the nucleotide sequence, 3 options available: simple [Length and GCp], intermediate [Length, GCp, Gp, Cp, Ap, Tp],'full' [All data from BedTools nucleotide sequence]. Default: simple; p = percentage")
+                    default='simple', metavar="nuc", required=False, type=str,
+                    help = "Defines the ammount of information included from the nucleotide sequence, 3 options available: simple [Length and GCp], intermediate [Length, GCp, Gp, Cp, Ap, Tp], full [All data from BedTools nucleotide sequence]. Default: simple; p = percentage")
  
 parser.add_argument('-bw', '--bigwig-scores', nargs='+', dest="bw_files",
                     default=False,
@@ -511,6 +511,10 @@ def get_data(df):
         
         for i in range(len(temp_files)):
             df = pd.read_csv(temp_files[i], index_col=0);
+            if ((args.nuc_info == 'full') & ("data_generic_results.csv" in temp_files[i])):
+                df = df.set_index('name')
+            else:
+                pass
             z_list.append(df)
         
         #with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
