@@ -830,8 +830,8 @@ if gbclf_params == 'optimize':
                                      n_iter_no_change=5, 
                                      tol=1e-4)
 
-    grid = {'n_estimators':[n_est, n_est*5, n_est*10, n_est*20],
-            'learning_rate':[0.1, 0.02, 0.01, 0.005]}
+    grid = {'n_estimators':[n_est, n_est*5, n_est*10],
+            'learning_rate':[0.1, 0.02, 0.01]}
 
     opt_s5 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
                           cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
