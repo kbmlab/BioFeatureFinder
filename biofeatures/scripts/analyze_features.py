@@ -709,7 +709,7 @@ if gbclf_params == 'optimize':
     print(pd.DataFrame(opt_s1.cv_results_)[['params','mean_test_score','std_test_score']])
     print()
     print('Best result:')
-    print('SCORE: '+str(opt_s1.best_score_)+'; PARAM: '+str(opt_s1.best_params_))
+    print('SCORE: '+str(opt_s1.best_score_)+'; PARAM: '+str(opt_s1.best_params_)+'; ESTIMATORS USED WITH EARLY STOPPING: '+str(opt_s1.best_estimator_.n_estimators_))
     print()
 
     n_est = list(opt_s1.best_params_.values())[0]
@@ -830,8 +830,8 @@ if gbclf_params == 'optimize':
                                      n_iter_no_change=5, 
                                      tol=1e-4)
 
-    grid = {'n_estimators':[n_est, n_est*5, n_est*10],
-            'learning_rate':[0.1, 0.02, 0.01]}
+    grid = {'n_estimators':[n_est, n_est*5, n_est*10, n_est*20],
+            'learning_rate':[0.1, 0.02, 0.01, 0.005]}
 
     opt_s5 = GridSearchCV(estimator=opt, param_grid=grid, n_jobs=ncores,
                           cv=StratifiedKFold(10), scoring=scr_metric, return_train_score=True)
