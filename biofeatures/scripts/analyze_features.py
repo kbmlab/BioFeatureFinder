@@ -1449,9 +1449,9 @@ rects1 = ax.bar(ind, means, width,
 
 # add some text for labels, title and axes ticks
 ax.set_ylabel('Value', fontsize=14)
-ax.set_yticklabels([0.0,0.2,0.4,0.6,0.8,1.0], fontsize=12)
+ax.set_yticklabels([0.0,0.2,0.4,0.6,0.8,1.0], fontsize=14)
 ax.set_xticks(ind)
-ax.set_xticklabels(df_cat.index, rotation=45, fontsize=12)
+ax.set_xticklabels(df_cat.index, rotation=45, fontsize=14)
 ax.grid(False)
 
 rects = ax.patches
@@ -1461,7 +1461,12 @@ labels = ["%.2f" % i for i in means]
 
 for rect, label in zip(rects, labels):
     height = rect.get_height()
-    ax.text(rect.get_x() + rect.get_width()/2, height+0.01, label, ha='center', va='bottom')
+    ax.text(rect.get_x() + rect.get_width()/2, 
+            height+0.01, 
+            label, 
+            ha='center', 
+            va='bottom',
+            fontsize=14)
     
 
 sns.despine(top=True, right=True, left=False, bottom=False, offset=None, trim=False)

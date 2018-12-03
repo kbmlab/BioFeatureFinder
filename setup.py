@@ -2,22 +2,27 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(
-    name='featurefinder',
+    name='biofeaturefinder',
     version='1.1.3',
     packages=find_packages(),
     url='https://github.com/kbmlab/BioFeatureFinder',
-    license='',
+    license='GPLv3',
     author='fciamponi',
     author_email='felipe.ciamponi@gmail.com',
     description='Methods for extracting features from genomic ranges and determining distinguishing marks.',
     install_requires=[
-        'pandas',
-        'scikit-learn',
-        'pybedtools',
-        'pysam',
-        'matplotlib',
-        'scipy',
-        'rpy2'
+#        'argparse',
+	'glob2',
+	'matplotlib',
+	'numpy',
+	'pandas',
+	'pybedtools',
+	'pysam',
+	'rpy2',
+	'scipy',
+	'seaborn',
+	'scikit-learn',
+#	'system'
     ],
     scripts=[
         'biofeatures/scripts/analyze_features.py',

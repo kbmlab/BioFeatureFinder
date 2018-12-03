@@ -18,11 +18,15 @@ Script used for creating the data matrix for biological features associated with
 
 Script used to extract each region (CDS, UTR, Splice Site, Exon, Intron and etc...) from the refference annotation file. By default, it uses the 3rd column of the GTF (Feature) to identify which regions are present in the annotation and extract them. For extracting intronic annotation, it requires the existence of both "gene" and "exon" features in the annotation.
 
+* ./biofeatures/scripts/analyze_gtf_regions.py
+
+Script used to compare an input BED annotation with multiple GTF references, to indentify preferential regions.
+
 ## Dependency Installation
 
 ### With anaconda (recommended):
 
-    conda install -c bioconda pysam pybedtools matplotlib pandas pybedtools scikit-learn matplotlib scipy rpy2
+    conda install argparse glob2 matplotlib numpy pandas pybedtools pysam rpy2 scipy seaborn setuptools scikit-learn system
     
 ### External dependencies (must be available on PATH)
     
