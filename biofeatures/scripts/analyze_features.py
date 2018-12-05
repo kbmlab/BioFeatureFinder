@@ -87,7 +87,7 @@ class MyParser(argparse.ArgumentParser):
         print   
         sys.exit(2)
 
-if sys.version_info[0] > 3:
+if sys.version_info[0] >= 3:
     class BlankLinesHelpFormatter (argparse.HelpFormatter):
         def _split_lines(self, text, width):
             return super()._split_lines(text, width) + ['']
@@ -95,7 +95,7 @@ if sys.version_info[0] > 3:
     parser = MyParser(description='', 
                       formatter_class=BlankLinesHelpFormatter)
 
-elif sys.version_info[0] < 3:
+else:
     parser = MyParser(description='')
     
 ## Assign input data as system variables
