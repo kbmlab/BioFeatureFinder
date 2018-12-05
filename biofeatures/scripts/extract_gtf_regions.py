@@ -10,9 +10,7 @@ import pybedtools
 from pybedtools import BedTool
 import warnings
 import subprocess
-from subprocess import PIPE, Popen
 import multiprocessing as mp
-from multiprocessing.pool import ThreadPool
 from multiprocessing.pool import Pool
 import glob
 
@@ -34,9 +32,16 @@ class MyParser(argparse.ArgumentParser):
         sys.exit(2)
 
 
-## Assign input data as system variables
+if sys.version_info[0] >= 3:
+    class BlankLinesHelpFormatter (argparse.HelpFormatter):
+        def _split_lines(self, text, width):
+            return super()._split_lines(text, width) + ['']
+    
+    parser = MyParser(description='', 
+                      formatter_class=BlankLinesHelpFormatter)
 
-parser = MyParser(description='')
+else:
+    parser = MyParser(description='')
 
 parser.add_argument('-g', '--gtf', dest="gtf_file",
                     help="GTF file downloaded from Ensembl database. Available at http://www.ensembl.org/info/data/ftp/index.html. Used for analysis of intronic, 3UTR, 5UTR and CDS regions.",
@@ -62,8 +67,8 @@ parser.add_argument('--splice-sites', dest='do_splice_sites', action='store_true
                     help="Use this option to extract 3' and 5' splice site annotations from the GTF. Requires --intron option. Default: False",
                     required=False, default=False)
 
-parser.add_argument("-w","--window", dest="window", default=200,
-                    help="Window size that will span the splice site in bp. Default: 200",
+parser.add_argument("-w","--window", dest="window", default=20,
+                    help="Window size that will span the splice site in bp. Default: 20",
                     type=int, metavar='INT')
 
 parser.add_argument("-rt","--ratio", dest="ratio", default=0.5,
@@ -98,7 +103,8 @@ def extract_features(feature):
 print
 print("Creating output directory (gtf_regions)")
 
-Popen('mkdir -p gtf_regions', shell=True)
+os.makedirs('./gtf_regions',
+            exist_ok=True)
     
 print
 print("Loading GTF annotation")
@@ -191,8 +197,8 @@ if args.do_splice_sites == True:
 
     last_exons_minus = df_ns_exons_minus.groupby(['transcript_id']).first().reset_index()
     p3_ss_last_minus = last_exons_minus.copy()
-    p3_ss_last_minus['start'] = (p3_ss_first_plus['end']-(wd*rt)).astype(int)
-    p3_ss_last_minus['end'] = (p3_ss_first_plus['end']+(wd*(1-rt))).astype(int)
+    p3_ss_last_minus['start'] = (p3_ss_last_minus['end']-(wd*rt)).astype(int)
+    p3_ss_last_minus['end'] = (p3_ss_last_minus['end']+(wd*(1-rt))).astype(int)
 
     p3_ss_last = pd.concat([p3_ss_last_plus, p3_ss_last_minus]).reindex(columns=df.columns)
 
@@ -226,10 +232,10 @@ if args.do_splice_sites == True:
     p3_ss_middle = pd.concat([p3_ss_middle_plus, p3_ss_middle_minus]).reindex(columns=df.columns)
     p5_ss_middle = pd.concat([p5_ss_middle_plus, p5_ss_middle_minus]).reindex(columns=df.columns)
     
-    p3_ss = pd.concat([p3_ss_first, p3_ss_middle]).drop(['tag','transcript_id','exon_id'],1)
+    p3_ss = pd.concat([p3_ss_last, p3_ss_middle]).drop(['tag','transcript_id','exon_id'],1)
     BedTool.from_dataframe(p3_ss).saveas('gtf_regions/'+args.outfile+'_3pSS.gtf')
 
-    p5_ss = pd.concat([p5_ss_last, p5_ss_middle]).drop(['tag','transcript_id','exon_id'],1)
+    p5_ss = pd.concat([p5_ss_first, p5_ss_middle]).drop(['tag','transcript_id','exon_id'],1)
     BedTool.from_dataframe(p5_ss).saveas('gtf_regions/'+args.outfile+'_5pSS.gtf')
     
 print
@@ -253,7 +259,7 @@ if args.analysis == True:
     df['Region'] = name_list
     df['Counts'] = counts
     df['Ratio (counts/input)'] = df.Counts.apply(lambda x: str(round((float(x)/size)*100, 2))+'%')
-    df.to_csv('gtf_regions/'+args.outfile+'_gtf_distribution.tsv', sep='\t', index=False)
+    df.to_csv('./gtf_regions/'+args.outfile+'_gtf_distribution.tsv', sep='\t', index=False)
     
     print
     print("GTF distribution of input intervals")
@@ -266,7 +272,7 @@ print
 print("Zipping output and cleaning temp files")
 
 pybedtools.helpers.cleanup(verbose=False, remove_all=False)
-Popen('gzip gtf_regions/*.gtf', shell=True)
+subprocess.Popen('gzip ./gtf_regions/*.gtf', shell=True)
                          
 print
 print("Thank you for using BioFeatureFinder")

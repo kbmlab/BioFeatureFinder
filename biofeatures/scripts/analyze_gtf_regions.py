@@ -9,12 +9,10 @@ import numpy as np
 import pybedtools
 from pybedtools import BedTool
 import warnings
-import subprocess
-from subprocess import PIPE, Popen
-import multiprocessing as mp
-from multiprocessing.pool import ThreadPool
-from multiprocessing.pool import Pool
-import glob
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.ioff()
 
 warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -33,10 +31,18 @@ class MyParser(argparse.ArgumentParser):
         self.print_help()
         sys.exit(2)
 
+if sys.version_info[0] >= 3:
+    class BlankLinesHelpFormatter (argparse.HelpFormatter):
+        def _split_lines(self, text, width):
+            return super()._split_lines(text, width) + ['']
+    
+    parser = MyParser(description='', 
+                      formatter_class=BlankLinesHelpFormatter)
+
+else:
+    parser = MyParser(description='')
 
 ## Assign input data as system variables
-
-parser = MyParser(description='')
 
 parser.add_argument('-i', '--input', dest="input_list", nargs='+',
                     help="Input list of target genomic regions files for analysis",
@@ -87,7 +93,47 @@ for j in range(len(args.input_list)):
     df[name_list[j]] = counts
     df.set_index('Region', inplace=True)
     df_list.append(df)
+
+os.makedirs('./'+args.outfile+'_region_analysis/', 
+            exist_ok=True)
     
 df_cat = pd.concat(df_list, axis=1).T
-df_cat.to_excel(args.outfile+'.xlsx')
-df_cat.to_csv(args.outfile+'.csv')
+df_cat.to_excel('./'+args.outfile+'_region_analysis/'+args.outfile+'.xlsx')
+df_cat.to_csv('./'+args.outfile+'_region_analysis/'+args.outfile+'.csv')
+
+print("Plotting clustermap")
+print()
+
+g = sns.clustermap(df_cat, 
+                   z_score=0,
+                   metric='seuclidean',
+                   method='single',
+                   linewidths=.5,
+                   annot=True, fmt=".2f",
+                   cmap="coolwarm",
+                   col_cluster=True,
+                   row_cluster=True,
+                   figsize=(np.array(df_cat.T.shape)/1.5))
+
+g.ax_heatmap.set_title('Clustermap of Regions x Input', 
+                       size=20, position=(0.5,1.3))
+
+g.ax_heatmap.set_xlabel('Regions', size=20)
+g.ax_heatmap.set_ylabel('Input', size=20)
+g.ax_heatmap.tick_params(axis='both', which='major', labelsize=14)
+
+plt.savefig('./'+args.outfile+'_region_analysis/clustermap.pdf',
+            dpi=300, bbox_inches='tight')
+
+plt.savefig('./'+args.outfile+'_region_analysis/clustermap.svg',
+            dpi=300, bbox_inches='tight')
+
+plt.savefig('./'+args.outfile+'_region_analysis/clustermap.jpg',
+            dpi=300, bbox_inches='tight', quality=95)
+
+plt.close()
+
+pybedtools.helpers.cleanup(verbose=False, remove_all=False)
+
+print("Finished region analysis. Thank you for using BioFeatureFinder")
+print()

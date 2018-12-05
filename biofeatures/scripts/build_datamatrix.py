@@ -167,22 +167,11 @@ if args.kmer_list is True and args.create_fastas is False:
     
 if args.rnafold is True and args.create_fastas is False:
     parser.error("--rnafold requires --fasta.")
-    
-if args.unstranded is True:
-    strd = False
-    print("")
-    print("Running in unstranded mode")
-    print("")
-elif args.unstranded is False:
-    strd = True
-    print("")
-    print("Running in stranded mode")
-    print("")
-    
+       
 def nuc_cont(bedtool):
     nuccont = bedtool.nucleotide_content(args.genome_file, s=strd, seq=True)
     
-    if args.unstranded==True:
+    if strd == False:
         nuccont_df = pd.concat(nuccont.to_dataframe(
                 names=['seqname', 'start', 'end', 'name', 'score',
                        '%AT', '%GC', '%A', '%C', '%G', '%T',
@@ -190,7 +179,7 @@ def nuc_cont(bedtool):
                 iterator=True, chunksize=10000), 
         ignore_index=True, sort=False).ix[1:]
     
-    elif args.unstranded==False:
+    elif strd == True:
         nuccont_df = pd.concat(nuccont.to_dataframe(
             names=['seqname', 'start', 'end', 'name', 'score', 'strand',
                    '%AT', '%GC', '%A', '%C', '%G', '%T',
@@ -249,7 +238,7 @@ def get_var_counts(bedtool, var_file):
     var = BedTool(var_file).sort().remove_invalid().saveas(args.outfile+'.datamatrix/varfile')#.sort()
     source = str(var_file).split('/')[-1]
     
-    if args.unstranded == False:
+    if strd == True:
         feature = var[0]
     
         if not ((feature.strand == "+") or (feature.strand == "-")):
@@ -274,7 +263,7 @@ def get_var_counts(bedtool, var_file):
                                    ignore_index=True, 
                                    sort=False)
     
-    elif args.unstranded == True:
+    elif strd == False:
         var_counts = pd.concat(
         bedtool.intersect(var, 
                           s=False, 
@@ -551,18 +540,12 @@ input_bed = BedTool(args.input_file).sort().saveas(args.outfile+'.datamatrix/inp
 
 feature_a = input_bed[0]
 
-if (strd == False) and not ((feature_a.strand == "+")  or (feature_a.strand == "-" )):
-    pass
-elif (strd == True) and ((feature_a.strand == "+" ) or (feature_a.strand == "-") ):
-    pass
+if feature_a.strand == (("+") or ("-")):
+    print("Strand information found in input file. Running in stranded mode.")
+    strd = True
 else:
-    print("Strand information on input does not match -u flag. Check your input data.")
-    print()
-    print("Bed strand data: "+str(feature_a.strand))
-    print("Option selected: --unstranded="+str(strd))
-    print()
-    print("Exiting now. Thanks for using biofeatures!")
-    sys.exit()
+    print("Strand information NOT found in input file. Running in unstranded mode.")
+    strd = False
 
 ##Load the genome file that matches the version of the GTF you are using. Pysam will be used to build an index of
 ##the FASTA file.
@@ -631,7 +614,7 @@ if args.n_rand == 0:
     
 bed = BedTool(args.outfile+'.datamatrix/genomic_ranges.bed').to_dataframe().reset_index()
 
-if args.unstranded == True:
+if strd == False:
     bed['name'] = 'range_id_R' + (bed['index'] + 1).astype(str) + '_' + \
                               bed['chrom'].astype(str) + '_' + \
                               bed['start'].astype(str) + '_' + \
@@ -640,7 +623,7 @@ if args.unstranded == True:
     bed = bed[['chrom', 'start', 'end', 'name', 'score']
              ].drop_duplicates().sort_values(by=['chrom', 'start'])
 
-elif args.unstranded == False:
+elif strd == True:
     bed['name'] = 'range_id_R' + (bed['index'] + 1).astype(str) + '_' + \
                                   bed['chrom'].astype(str) + '_' + \
                                   bed['start'].astype(str) + '_' + \

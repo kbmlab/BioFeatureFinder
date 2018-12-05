@@ -178,22 +178,7 @@ parser.add_argument("--ncores", dest="ncores", default=(mp.cpu_count() - 1),
                     help="Number of CPU cores used to multiple jobs on the classifier. Default:(ALL_CORES)-1",
                     type=int, metavar=4)
 
-parser.add_argument('-u','--unstranded', dest="unstranded",
-                    action="store_true", default=False, required=False,
-                    help="Use this flag if your input file does not contain strand information for genomic intervals. Default: False")
-
 args = parser.parse_args()
-
-if args.unstranded is True:
-    strd = False
-    print("")
-    print("Running in unstranded mode")
-    print("")
-else:
-    strd = True
-    print("")
-    print("Running in stranded mode")
-    print("")
 
 ##Define the functions which will be used during the analysis
 
@@ -203,8 +188,10 @@ def group_matrices_one_sample(bt, bt_a, matrix):
     feature_b = bt_a[0]
 
     if not ((feature_b.strand == "+")  or (feature_b.strand == "-" )) and not ((feature_a.strand == "+")  or (feature_a.strand == "-" )):
+        strd = False
         pass
     elif ((feature_b.strand == "+")  or (feature_b.strand == "-" )) and ((feature_a.strand == "+" ) or (feature_a.strand == "-") ):
+        strd = True
         pass
     else:
         print("Strand information on input does not match data on matrix. Check your input data.")
@@ -345,6 +332,13 @@ print()
 
 
 bed_input = BedTool(args.bed_file).sort()
+
+if bed_input.strand == (("+") or ("-")):
+    print("Strand information found in input file. Running in stranded mode.")
+    strd = True
+else:
+    print("Strand information NOT found in input file. Running in unstranded mode.")
+    strd = False
     
 ##Load the datamatrix generatade by "buildadatamatrix.py"
 
