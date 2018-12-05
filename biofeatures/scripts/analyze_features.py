@@ -87,14 +87,19 @@ class MyParser(argparse.ArgumentParser):
         print   
         sys.exit(2)
 
-class BlankLinesHelpFormatter (argparse.HelpFormatter):
-    def _split_lines(self, text, width):
-        return super()._split_lines(text, width) + ['']
+if sys.version_info[0] > 3:
+    class BlankLinesHelpFormatter (argparse.HelpFormatter):
+        def _split_lines(self, text, width):
+            return super()._split_lines(text, width) + ['']
+    
+    parser = MyParser(description='', 
+                      formatter_class=BlankLinesHelpFormatter)
 
+elif sys.version_info[0] < 3:
+    parser = MyParser(description='')
+    
 ## Assign input data as system variables
 
-parser = MyParser(description='', 
-                  formatter_class=BlankLinesHelpFormatter)
 
 parser.add_argument('-b', '--bed', dest="bed_file",
                     help="BED file with exons/regions of interest.",
