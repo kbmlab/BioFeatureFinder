@@ -101,37 +101,41 @@ df_cat = pd.concat(df_list, axis=1).T
 df_cat.to_excel('./'+args.outfile+'_region_analysis/'+args.outfile+'.xlsx')
 df_cat.to_csv('./'+args.outfile+'_region_analysis/'+args.outfile+'.csv')
 
-print("Plotting clustermap")
-print()
-
-g = sns.clustermap(df_cat, 
-                   z_score=0,
-                   metric='seuclidean',
-                   method='single',
-                   linewidths=.5,
-                   annot=True, fmt=".2f",
-                   cmap="coolwarm",
-                   col_cluster=True,
-                   row_cluster=True,
-                   figsize=(np.array(df_cat.T.shape)/1.5))
-
-g.ax_heatmap.set_title('Clustermap of Regions x Input', 
-                       size=20, position=(0.5,1.3))
-
-g.ax_heatmap.set_xlabel('Regions', size=20)
-g.ax_heatmap.set_ylabel('Input', size=20)
-g.ax_heatmap.tick_params(axis='both', which='major', labelsize=14)
-
-plt.savefig('./'+args.outfile+'_region_analysis/clustermap.pdf',
-            dpi=300, bbox_inches='tight')
-
-plt.savefig('./'+args.outfile+'_region_analysis/clustermap.svg',
-            dpi=300, bbox_inches='tight')
-
-plt.savefig('./'+args.outfile+'_region_analysis/clustermap.jpg',
-            dpi=300, bbox_inches='tight', quality=95)
-
-plt.close()
+if len(args.input_list) >= 2:
+    
+    print("Plotting clustermap")
+    print()
+    
+    g = sns.clustermap(df_cat, 
+                       z_score=0,
+                       metric='seuclidean',
+                       method='single',
+                       linewidths=.5,
+                       annot=True, fmt=".2f",
+                       cmap="coolwarm",
+                       col_cluster=True,
+                       row_cluster=True,
+                       figsize=(np.array(df_cat.T.shape)/1.5))
+    
+    g.ax_heatmap.set_title('Clustermap of Regions x Input', 
+                           size=20, position=(0.5,1.3))
+    
+    g.ax_heatmap.set_xlabel('Regions', size=20)
+    g.ax_heatmap.set_ylabel('Input', size=20)
+    g.ax_heatmap.tick_params(axis='both', which='major', labelsize=14)
+    
+    plt.savefig('./'+args.outfile+'_region_analysis/clustermap.pdf',
+                dpi=300, bbox_inches='tight')
+    
+    plt.savefig('./'+args.outfile+'_region_analysis/clustermap.svg',
+                dpi=300, bbox_inches='tight')
+    
+    plt.savefig('./'+args.outfile+'_region_analysis/clustermap.jpg',
+                dpi=300, bbox_inches='tight', quality=95)
+    
+    plt.close()
+else:
+    pass
 
 pybedtools.helpers.cleanup(verbose=False, remove_all=False)
 
