@@ -115,10 +115,6 @@ parser.add_argument('-var', '--variation', nargs='+', dest="var_files", default=
                     help="This option takes as input BED files containing regions of biological featues found in the genome (can be SNPs, strucutural variations, mutations or custom annotations) and counts the number of occurences in each input region. Can take multiple files as input and accepts wildcard characters (*). Default: False",
                     metavar='somefile.bed', required=False)
 
-parser.add_argument('-u','--unstranded', dest="unstranded",
-                    action="store_true", default=False, required=False,
-                    help="Use this flag if your input file does not contain strand information for genomic intervals. Default: False")
-
 parser.add_argument('-f','--fasta', dest="create_fastas", action='store_true',
                     help="Use this option to create fasta files for each entry in the analysis. Required for k-mer search (-k) and structural MFE (-s and -sg). Default: False",
                     required=False, default=False)
@@ -243,6 +239,7 @@ def get_var_counts(bedtool, var_file):
         if 'strand' not in list(BedTool(var[0:1]).saveas().to_dataframe().columns):
             
             print(source+' does not contain +/- strand information. Running in unstranded mode')
+            print()
             var_counts = pd.concat(
                     bedtool.intersect(var, 
                                       s=False, 
@@ -540,9 +537,11 @@ input_bed = BedTool(args.input_file).sort().saveas(args.outfile+'.datamatrix/inp
 
 if 'strand' in list(BedTool(input_bed[0:1]).saveas().to_dataframe().columns):
     print("Strand information found in input file. Running in stranded mode.")
+    print()
     strd = True
 else:
     print("Strand information NOT found in input file. Running in unstranded mode.")
+    print()
     strd = False
 
 ##Load the genome file that matches the version of the GTF you are using. Pysam will be used to build an index of
