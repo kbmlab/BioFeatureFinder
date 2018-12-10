@@ -239,9 +239,9 @@ def get_var_counts(bedtool, var_file):
     source = str(var_file).split('/')[-1]
     
     if strd == True:
-        feature = var[0]
-    
-        if not ((feature.strand == "+") or (feature.strand == "-")):
+        
+        if 'strand' not in list(BedTool(var[0:1]).saveas().to_dataframe().columns):
+            
             print(source+' does not contain +/- strand information. Running in unstranded mode')
             var_counts = pd.concat(
                     bedtool.intersect(var, 
@@ -538,9 +538,7 @@ print("Sorting input bed file.")
 
 input_bed = BedTool(args.input_file).sort().saveas(args.outfile+'.datamatrix/input_list.bed')
 
-feature_a = input_bed[0]
-
-if feature_a.strand == (("+") or ("-")):
+if 'strand' in list(BedTool(input_bed[0:1]).saveas().to_dataframe().columns):
     print("Strand information found in input file. Running in stranded mode.")
     strd = True
 else:
