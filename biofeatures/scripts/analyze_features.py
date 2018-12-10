@@ -313,13 +313,15 @@ print("Loading bed file with regions of interest")
 print()
 
 
-bed_input = BedTool(args.bed_file).sort()
+input_bed = BedTool(args.bed_file).sort()
 
-if bed_input.strand == (("+") or ("-")):
+if 'strand' in list(BedTool(input_bed[0:1]).saveas().to_dataframe().columns):
     print("Strand information found in input file. Running in stranded mode.")
+    print()
     strd = True
 else:
     print("Strand information NOT found in input file. Running in unstranded mode.")
+    print()
     strd = False
     
 ##Load the datamatrix generatade by "buildadatamatrix.py"
@@ -360,7 +362,7 @@ else:
 
 bed_from_matrix = BedTool.from_dataframe(bed_from_matrix).sort()
 
-matrix = group_matrices_one_sample(bed_from_matrix, bed_input, matrix).set_index('name')
+matrix = group_matrices_one_sample(bed_from_matrix, input_bed, matrix).set_index('name')
    
 print("Starting statistical analysis")
 print()
