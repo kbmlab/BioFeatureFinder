@@ -102,7 +102,7 @@ else:
 ## Assign input data as system variables
 
 
-parser.add_argument('-b', '--bed', dest="bed_file",
+parser.add_argument('-i', '--input', dest="bed_file",
                     help="BED file with exons/regions of interest.",
                     required=True, metavar='sample.data.bed')
 
