@@ -183,26 +183,7 @@ args = parser.parse_args()
 
 ##Define the functions which will be used during the analysis
 
-def group_matrices_one_sample(bt, bt_a, matrix):
-    # TODO: refactor common intersect call
-    feature_a = bt[0]
-    feature_b = bt_a[0]
-
-    if not ((feature_b.strand == "+")  or (feature_b.strand == "-" )) and not ((feature_a.strand == "+")  or (feature_a.strand == "-" )):
-        strd = False
-        pass
-    elif ((feature_b.strand == "+")  or (feature_b.strand == "-" )) and ((feature_a.strand == "+" ) or (feature_a.strand == "-") ):
-        strd = True
-        pass
-    else:
-        print("Strand information on input does not match data on matrix. Check your input data.")
-        print()
-        print("Bed strand data: "+str(feature_b.strand))
-        print("Matrix strand data: "+str(feature_a.strand))
-        print()
-        print("Exiting now. Thanks for using biofeatures!")
-        sys.exit()
-        
+def group_matrices_one_sample(bt, bt_a, matrix):      
     int_a = bt.intersect(bt_a,
                          s=strd,
                          sorted=True).to_dataframe().drop_duplicates()
