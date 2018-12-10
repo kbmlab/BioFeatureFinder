@@ -147,11 +147,12 @@ Input files for BioFeatureFinder test dataset include the human genome sequence 
     
 ## Change logs
 
-* v1.1.3 - Added early-stopping to GradientBoostClassifier
-* v1.1.2 - Added adjusted mutual information (aMI) and linear correlation as feature selection tools
-* v1.1.1 - Fixed issue with hyperparameter tuning when using 10-fold cross validation
-* v1.1.0 - Re-structure of main scripts to support both Python 3.4 and 2.7
-* v1.0.3 - Added test dataset and readme file
-* v1.0.2 - Fixed bug in classifier metrics barchart plotting
-* v1.0.1 - Fixed bug in KS test
-* v1.0.0 - Original BioFeatureFinder algorithm
+* v1.1.4 - analyze_features.py now plots additional visualization options (total of 4: CDF, violin plot, histogram and KDE) in a single multi-page PDF file; analyze_gtf_regions now outputs a clustermap with rudimentary hierarchical clustering using centroid algorithm.
+* v1.1.3 - Added early-stopping to GradientBoostClassifier.
+* v1.1.2 - Added mutual information score (MI) and linear correlation as feature selection tools.
+* v1.1.1 - Fixed issue with hyperparameter tuning when using 10-fold cross validation.
+* v1.1.0 - Re-structure of main scripts to support both Python 3.4 and 2.7.
+* v1.0.3 - Added test dataset and readme file.
+* v1.0.2 - Fixed bug in classifier metrics barchart plotting.
+* v1.0.1 - Fixed bug in KS test.
+* v1.0.0 - Original BioFeatureFinder algorithm.

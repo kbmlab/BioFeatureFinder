@@ -13,6 +13,7 @@ matplotlib.use('Agg')
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import FloatVector
 import matplotlib.pyplot as plt
+import matplotlib.backends.backend_pdf
 import seaborn as sns
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble.partial_dependence import plot_partial_dependence
@@ -446,106 +447,141 @@ if not args.dont_plot_cdf:
     print()
     features = list(matrix.drop('group',1).columns)
     
-    title_size=16
-    tick_size=14
-    axis_size=14
+    with matplotlib.backends.backend_pdf.PdfPages('./' + args.prefix + '.analysis/features_distributions.pdf') as pdf:
+        for i in range(len(features)):
+            name = (features[i]).split("/")[-1]
+            sl = matrix[[features[i],'group']]
     
-    for i in range(len(features)):
-        name = (features[i]).split("/")[-1]
-        sl = matrix[[features[i],'group']]
-
-        plt.figure(1, figsize=(18,6))
-        plt.suptitle("Cumulative distribution and kernel density for "+str(name), 
-                     fontsize=title_size, y=1.01)
-        plt.subplot(121)
-
-        sns.set(font_scale = 1.5)
-        sns.set_style("whitegrid", {'axes.grid' : False})
-    #     plt.figure(figsize=(8, 8))
-        plot_cdf(sl[sl['group'] == 0][features[i]].values,
-                 bins=100,
-                 label='Background regions', c='black', linewidth=1.5,
-                 linestyle='solid')
-        plot_cdf(sl[sl['group'] == 1][features[i]].values,
-                 bins=100,
-                 label='Input regions', c='black', linewidth=1.5,
-                 linestyle='dashed')
-
-        plt.legend(loc=0)
-        plt.ylim(0, 1)
-
-        if name.find("%") != -1:
-            plt.xlim(0, 1)
-        elif name.find("phastCon") != -1:
-            plt.xlim(0, 1)
-#        elif name.find("_count_") != -1:
-#            plt.xscale('symlog')
-        else:
-            plt.xlim()
-
-        plt.xlabel(str(name), fontsize=axis_size)
-        plt.ylabel('Cumulative distribution of samples', fontsize=axis_size)
-        plt.rc('xtick', labelsize=tick_size)
-        plt.rc('ytick', labelsize=tick_size)
-
-        plt.subplot(122)
-        #sns.set(font_scale = 1.5)
-        sns.set_style("whitegrid", {'axes.grid' : False})
-
-        shade = False
-        label0='Background regions'
-        label1='Input regions'
-
-        if name.find('_count_') != -1 or \
-           name.find('QGRS') != -1 or \
-            name.find('MFE') != -1:
-                sns.kdeplot(sl[sl['group'] == 0][features[i]], 
-                            color='k', 
-                            cut=0, 
-                            shade=shade,
-                            bw=1,
-                            label=label0)
-
-                sns.kdeplot(sl[sl['group'] == 1][features[i]], 
-                            color='k', 
-                            cut=0, 
-                            shade=shade,
-                            bw=1,
-                            label=label1,
-                            ls='--')
-        else:
-            sns.kdeplot(sl[sl['group'] == 0][features[i]], 
-                        color='k', 
-                        cut=0, 
-                        shade=shade,
-                        label=label0)
-
-            sns.kdeplot(sl[sl['group'] == 1][features[i]], 
-                        color='k', 
-                        cut=0, 
-                        shade=shade,
-                        label=label1,
-                        ls='--')
-
-
-        plt.xlabel(str(name), fontsize=axis_size)
-        plt.ylabel('Density', fontsize=axis_size)
-        plt.rc('xtick', labelsize=tick_size)
-        plt.rc('ytick', labelsize=tick_size)
-
-        if name.find("%") != -1:
-            plt.xlim(0, 1)
-        elif name.find("phastCon") != -1:
-            plt.xlim(0, 1)
-#        elif name.find("_count_") != -1:
-#            plt.xscale('symlog')
-        else:
-            plt.xlim()
-        plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.pdf',
-                    dpi=300, bbox_inches='tight')
-        plt.close()
-
-    print("Finished CDF plots for features in matrix") 
+            plt.figure(1, figsize=(12,18))
+            plt.rc('xtick', labelsize=14)
+            plt.rc('ytick', labelsize=14)
+            plt.suptitle("Distribution plots for "+str(name), 
+                         fontsize=14, y=0.91)
+    
+            sns.set(font_scale = 1)
+            sns.set_style("whitegrid", {'axes.grid' : False})
+    
+            ax1 = plt.subplot2grid((3, 2), (0, 0), colspan=1)
+            ax2 = plt.subplot2grid((3, 2), (0, 1), colspan=1)
+            ax3 = plt.subplot2grid((3, 2), (1, 0), colspan=2)
+            ax4 = plt.subplot2grid((3, 2), (2, 0), colspan=2)
+    
+    
+            plot_cdf(sl[sl['group'] == 0][features[i]].values,
+                     bins=100,
+                     label='Background regions', c='black', linewidth=1.5,
+                     linestyle='solid',
+                     ax=ax1)
+    
+            plot_cdf(sl[sl['group'] == 1][features[i]].values,
+                     bins=100,
+                     label='Input regions', c='black', linewidth=1.5,
+                     linestyle='dashed',
+                     ax=ax1)
+    
+            sns.despine(top=True, right=True, left=False, bottom=False)
+    
+            ax1.legend(loc=0)
+            ax1.set_ylim(0, 1)
+            ax1.set_xlim()
+    
+            ax1.set_xlabel(str(name), fontsize=14)
+            ax1.set_ylabel('Cumulative distribution of samples', fontsize=14)
+    
+    
+            sns.violinplot(x='group', y=features[i], data=sl, 
+                           palette=['lightgrey','white'],
+                           showfliers=True,
+                           inner='quartile',
+                           scale='width',
+                           dodge=True, linewidth=1,
+                           ax=ax2)
+    
+            sns.despine(top=True, right=True, left=False, bottom=False)
+    
+    
+            ax2.set_ylabel(str(name), fontsize=14)
+            ax2.set_xlabel('Regions', fontsize=14)
+            ax2.set_xticklabels(['Background','Input'], fontsize=12)
+    
+            shade = False
+            label0='Background regions'
+            label1='Input regions'
+    
+            if name.find("_count_") != -1:
+                nbins = list(np.arange(sl[features[i]].min(),
+                                       sl[features[i]].max()+0.5,
+                                       1))
+            else:
+                nbins = 'auto'
+    
+            x1 = sl[sl['group'] == 0][features[i]]
+            x2 = sl[sl['group'] == 1][features[i]]
+    
+            (n, bins, patches) = ax3.hist([x1, x2], density=True, 
+                                           label=[label0,label1],
+                                           color=['lightgrey','white'],
+                                           bins=nbins,
+                                           edgecolor='black',
+                                           linewidth=1,
+                                           alpha=1)
+    
+            sns.despine(top=True, right=True, left=False, bottom=False)
+    
+            plt.legend(loc=0)
+    
+            ax3.legend(loc=0)
+            ax3.set_xlabel(str(name), fontsize=14)
+            ax3.set_ylabel('Density', fontsize=14)
+    
+            if name.find("_count_") != -1:
+                xticks = np.unique(np.round(ax3.get_xticks(),0)).astype(int)
+                ax3.set_xticks(xticks)
+                ax3.set_xticklabels(xticks)
+                ax3.set_xlim(left=0)
+            else:
+                ax3.set_xlim()
+    
+            sns.distplot(sl[sl['group'] == 0][features[i]],
+                         label=label0,
+                         norm_hist=True,
+                         ax=ax4,
+                         kde=True,
+                         rug=False,
+                         hist=False,
+                         bins=nbins,
+                         hist_kws={"histtype": "step", "linewidth": 1,
+                                   "alpha": 1, "color": "k", "ls":'solid'},
+                         kde_kws={"color": "k", "ls":'solid'})
+    
+            sns.distplot(sl[sl['group'] == 1][features[i]],
+                         label=label1,
+                         norm_hist=True,
+                         ax=ax4,
+                         kde=True,
+                         rug=False,
+                         hist=False,
+                         bins=nbins,
+                         hist_kws={"histtype": "step", "linewidth": 1,
+                                   "alpha": 1, "color": "k", "ls":'dashed'},
+                         kde_kws={"color": "k", "ls":'dashed'})
+    
+            sns.despine(top=True, right=True, left=False, bottom=False)
+    
+            ax4.legend(loc=0)
+            ax4.set_xlabel(str(name), fontsize=14)
+            ax4.set_ylabel('Density', fontsize=14)
+            ax4.set_xlim()
+            
+            plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.pdf',
+                        dpi=300, bbox_inches='tight')
+            
+            pdf.savefig()
+            plt.close()
+            
+        pdf.close()    
+        
+    print("Finished distribution plots for features in matrix") 
     print()
 elif args.dont_plot_cdf:
     pass
