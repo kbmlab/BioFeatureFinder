@@ -2,6 +2,14 @@
 #### Load the required packages
 
 import sys
+import warnings
+
+##Ignore warnings, but allow them to be switched on with -W option
+    
+if not sys.warnoptions:
+    warnings.simplefilter("ignore")
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+
 import argparse
 from subprocess import Popen
 import pandas as pd
@@ -35,7 +43,7 @@ import glob
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
-#plt.ioff()
+plt.ioff()
 
 gandalf = """
     -----------------------       ....
@@ -218,6 +226,135 @@ def plot_cdf(data, bins=50, ax=None, **plotting_args):
         ax = plt.gca()
     x, y = cdf(data, bins=bins)
     ax.plot(x, y, **plotting_args)
+    
+def plot_distributions(feature):
+    name = (feature).split("/")[-1]
+    sl = matrix[[feature,'group']]
+    
+    plt.figure(1, figsize=(12,18))
+    plt.rc('xtick', labelsize=14)
+    plt.rc('ytick', labelsize=14)
+    plt.suptitle("Distribution plots for "+str(name), 
+                 fontsize=14, y=0.91)
+    
+    sns.set(font_scale = 1)
+    sns.set_style("whitegrid", {'axes.grid' : False})
+    
+    ax1 = plt.subplot2grid((3, 2), (0, 0), colspan=1)
+    ax2 = plt.subplot2grid((3, 2), (0, 1), colspan=1)
+    ax3 = plt.subplot2grid((3, 2), (1, 0), colspan=2)
+    ax4 = plt.subplot2grid((3, 2), (2, 0), colspan=2)
+    
+    
+    plot_cdf(sl[sl['group'] == 0][feature].values,
+             bins=100,
+             label='Background regions', c='black', linewidth=1.5,
+             linestyle='solid',
+             ax=ax1)
+    
+    plot_cdf(sl[sl['group'] == 1][feature].values,
+             bins=100,
+             label='Input regions', c='black', linewidth=1.5,
+             linestyle='dashed',
+             ax=ax1)
+    
+    sns.despine(top=True, right=True, left=False, bottom=False)
+    
+    ax1.legend(loc=0)
+    ax1.set_ylim(0, 1)
+    ax1.set_xlim()
+    
+    ax1.set_xlabel(str(name), fontsize=14)
+    ax1.set_ylabel('Cumulative distribution of samples', fontsize=14)
+    
+    sns.violinplot(x='group', y=feature, data=sl, 
+                   palette=['lightgrey','white'],
+                   showfliers=True,
+                   inner='quartile',
+                   scale='width',
+                   dodge=True, linewidth=1,
+                   ax=ax2)
+    
+    sns.despine(top=True, right=True, left=False, bottom=False)
+    
+    
+    ax2.set_ylabel(str(name), fontsize=14)
+    ax2.set_xlabel('Regions', fontsize=14)
+    ax2.set_xticklabels(['Background','Input'], fontsize=12)
+     
+    label0='Background regions'
+    label1='Input regions'
+    
+    if name.find("_count_") != -1:
+        nbins = list(np.arange(sl[feature].min(),
+                               sl[feature].max()+0.5,
+                               1))
+    else:
+        nbins = 'auto'
+    
+    x1 = sl[sl['group'] == 0][feature]
+    x2 = sl[sl['group'] == 1][feature]
+    
+    (n, bins, patches) = ax3.hist([x1, x2], density=True, 
+                                   label=[label0,label1],
+                                   color=['lightgrey','white'],
+                                   bins=nbins,
+                                   edgecolor='black',
+                                   linewidth=1,
+                                   alpha=1)
+    
+    sns.despine(top=True, right=True, left=False, bottom=False)
+    
+    ax3.legend(loc=0)
+    ax3.set_xlabel(str(name), fontsize=14)
+    ax3.set_ylabel('Density', fontsize=14)
+    
+    if name.find("_count_") != -1:
+        xticks = np.unique(np.round(ax3.get_xticks(),0)).astype(int)
+        ax3.set_xticks(xticks)
+        ax3.set_xticklabels(xticks)
+        ax3.set_xlim(left=0)
+    else:
+        ax3.set_xlim()
+    
+    sns.distplot(sl[sl['group'] == 0][feature],
+                 label=label0,
+                 norm_hist=True,
+                 ax=ax4,
+                 kde=True,
+                 rug=False,
+                 hist=False,
+                 bins=nbins,
+                 hist_kws={"histtype": "step", "linewidth": 1,
+                           "alpha": 1, "color": "k", "ls":'solid'},
+                 kde_kws={"color": "k", "ls":'solid'})
+    
+    sns.distplot(sl[sl['group'] == 1][feature],
+                 label=label1,
+                 norm_hist=True,
+                 ax=ax4,
+                 kde=True,
+                 rug=False,
+                 hist=False,
+                 bins=nbins,
+                 hist_kws={"histtype": "step", "linewidth": 1,
+                           "alpha": 1, "color": "k", "ls":'dashed'},
+                 kde_kws={"color": "k", "ls":'dashed'})
+    
+    sns.despine(top=True, right=True, left=False, bottom=False)
+    
+    ax4.legend(loc=0)
+    ax4.set_xlabel(str(name), fontsize=14)
+    ax4.set_ylabel('Density', fontsize=14)
+    ax4.set_xlim()
+            
+    plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.pdf',
+                dpi=300, bbox_inches='tight')
+    
+    plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.jpg',
+                dpi=300, bbox_inches='tight', quality=95)
+            
+    plt.close()
 
 def get_mean_and_std(df):
     df2 = df.T
@@ -299,8 +436,7 @@ def plot_barchart_importance(df):
         './' + args.prefix + '.analysis/classifier_metrics/mean_importance.pdf',
         dpi=300, bbox_inches='tight')
     plt.close()
-
-
+    
 ##Create directory for output
 
 Popen('mkdir -p ./' + args.prefix + '.analysis', shell=True)
@@ -432,135 +568,9 @@ if not args.dont_plot_cdf:
     print()
     features = list(matrix.drop('group',1).columns)
     
-    for i in range(len(features)):
-        name = (features[i]).split("/")[-1]
-        sl = matrix[[features[i],'group']]
-    
-        plt.figure(1, figsize=(12,18))
-        plt.rc('xtick', labelsize=14)
-        plt.rc('ytick', labelsize=14)
-        plt.suptitle("Distribution plots for "+str(name), 
-                     fontsize=14, y=0.91)
-    
-        sns.set(font_scale = 1)
-        sns.set_style("whitegrid", {'axes.grid' : False})
-    
-        ax1 = plt.subplot2grid((3, 2), (0, 0), colspan=1)
-        ax2 = plt.subplot2grid((3, 2), (0, 1), colspan=1)
-        ax3 = plt.subplot2grid((3, 2), (1, 0), colspan=2)
-        ax4 = plt.subplot2grid((3, 2), (2, 0), colspan=2)
-    
-    
-        plot_cdf(sl[sl['group'] == 0][features[i]].values,
-                 bins=100,
-                 label='Background regions', c='black', linewidth=1.5,
-                 linestyle='solid',
-                 ax=ax1)
-    
-        plot_cdf(sl[sl['group'] == 1][features[i]].values,
-                 bins=100,
-                 label='Input regions', c='black', linewidth=1.5,
-                 linestyle='dashed',
-                 ax=ax1)
-    
-        sns.despine(top=True, right=True, left=False, bottom=False)
-    
-        ax1.legend(loc=0)
-        ax1.set_ylim(0, 1)
-        ax1.set_xlim()
-    
-        ax1.set_xlabel(str(name), fontsize=14)
-        ax1.set_ylabel('Cumulative distribution of samples', fontsize=14)
-    
-        sns.violinplot(x='group', y=features[i], data=sl, 
-                       palette=['lightgrey','white'],
-                       showfliers=True,
-                       inner='quartile',
-                       scale='width',
-                       dodge=True, linewidth=1,
-                       ax=ax2)
-    
-        sns.despine(top=True, right=True, left=False, bottom=False)
-    
-    
-        ax2.set_ylabel(str(name), fontsize=14)
-        ax2.set_xlabel('Regions', fontsize=14)
-        ax2.set_xticklabels(['Background','Input'], fontsize=12)
-     
-        shade = False
-        label0='Background regions'
-        label1='Input regions'
-        
-        if name.find("_count_") != -1:
-            nbins = list(np.arange(sl[features[i]].min(),
-                                   sl[features[i]].max()+0.5,
-                                   1))
-        else:
-            nbins = 'auto'
-        
-        x1 = sl[sl['group'] == 0][features[i]]
-        x2 = sl[sl['group'] == 1][features[i]]
-    
-        (n, bins, patches) = ax3.hist([x1, x2], density=True, 
-                                       label=[label0,label1],
-                                       color=['lightgrey','white'],
-                                       bins=nbins,
-                                       edgecolor='black',
-                                       linewidth=1,
-                                       alpha=1)
-    
-        sns.despine(top=True, right=True, left=False, bottom=False)
-    
-        ax3.legend(loc=0)
-        ax3.set_xlabel(str(name), fontsize=14)
-        ax3.set_ylabel('Density', fontsize=14)
-    
-        if name.find("_count_") != -1:
-            xticks = np.unique(np.round(ax3.get_xticks(),0)).astype(int)
-            ax3.set_xticks(xticks)
-            ax3.set_xticklabels(xticks)
-            ax3.set_xlim(left=0)
-        else:
-            ax3.set_xlim()
-    
-        sns.distplot(sl[sl['group'] == 0][features[i]],
-                     label=label0,
-                     norm_hist=True,
-                     ax=ax4,
-                     kde=True,
-                     rug=False,
-                     hist=False,
-                     bins=nbins,
-                     hist_kws={"histtype": "step", "linewidth": 1,
-                               "alpha": 1, "color": "k", "ls":'solid'},
-                     kde_kws={"color": "k", "ls":'solid'})
-    
-        sns.distplot(sl[sl['group'] == 1][features[i]],
-                     label=label1,
-                     norm_hist=True,
-                     ax=ax4,
-                     kde=True,
-                     rug=False,
-                     hist=False,
-                     bins=nbins,
-                     hist_kws={"histtype": "step", "linewidth": 1,
-                               "alpha": 1, "color": "k", "ls":'dashed'},
-                     kde_kws={"color": "k", "ls":'dashed'})
-    
-        sns.despine(top=True, right=True, left=False, bottom=False)
-    
-        ax4.legend(loc=0)
-        ax4.set_xlabel(str(name), fontsize=14)
-        ax4.set_ylabel('Density', fontsize=14)
-        ax4.set_xlim()
-                
-        plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.pdf',
-                    dpi=300, bbox_inches='tight')
-        
-        plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.jpg',
-                    dpi=300, bbox_inches='tight', quality=95)
-                
-        plt.close()
+    if __name__ == '__main__':
+        p = mp.Pool(args.ncores)
+        p.map(plot_distributions, features)
     
     pdf_list = glob.glob('./' + args.prefix + '.analysis/feature_plots/*.pdf')
     merger = PdfFileMerger()
