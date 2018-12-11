@@ -578,7 +578,7 @@ if not args.dont_plot_cdf:
     for pdf in pdf_list:
         merger.append(pdf)
 
-    merger.write("result.pdf")    
+    merger.write('./' + args.prefix + '.analysis/feature_distributions.pdf')    
                 
     print("Finished distribution plots for features in matrix") 
     print()
