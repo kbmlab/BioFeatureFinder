@@ -1225,7 +1225,7 @@ for run_i in range(len(runs)):
     plt.ylabel('Precision', size=20)
     plt.xlim([-0.05, 1.05])
     # plt.ylim([-0.05, 1.05])
-    plt.ylim(ymax=1.05)
+    plt.ylim(top=1.05)
     plt.legend(loc="lower left", fontsize=18)
     plt.savefig(
         './' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_precision_recall_curve.pdf',
@@ -1428,7 +1428,7 @@ plt.plot(rec_all['mean'], pre_all['mean'], '-', color='black',
 #                  color='red', alpha=0.2)
 
 plt.xlim([-0.05, 1.05])
-plt.ylim(ymax=1.05)
+plt.ylim(top=1.05)
 plt.xlabel('Recall', fontsize=14)
 plt.ylabel('Precision', fontsize=14)
 plt.title('Precision-Recall', fontsize=14)
