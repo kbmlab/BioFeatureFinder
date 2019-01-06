@@ -38,7 +38,6 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import mutual_info_classif,VarianceThreshold
 import multiprocessing as mp
-from PyPDF2 import PdfFileMerger
 import glob
 
 pd.options.mode.chained_assignment = None  # default='warn'
