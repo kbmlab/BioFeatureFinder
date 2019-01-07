@@ -143,7 +143,7 @@ parser.add_argument('-s','--sig-only', dest="ks_filter", action="store_true",
                     required=False)
 
 parser.add_argument("-c", '--correlation-filter', dest="corr_th", default=False,
-                    help="Remove features which exhibit linear correlation scores above a certain threshold (from 0 to 1). Default: 0.95",
+                    help="Remove features which exhibit linear correlation scores above a certain threshold (from 0 to 1). Default: False",
                     type=float, metavar=0.95, required=False)
 
 parser.add_argument("-a", '--ami-filter', dest="ami_th", default=0.01,
@@ -568,9 +568,12 @@ if not args.dont_plot_cdf:
     print()
     features = list(matrix.drop('group',1).columns)
     
-    if __name__ == '__main__':
-        p = mp.Pool(args.ncores)
-        p.map(plot_distributions, features)
+#    if __name__ == '__main__':
+#        p = mp.Pool(args.ncores)
+#        p.map(plot_distributions, features)
+    
+    with mp.Pool(args.ncores) as pool:
+        pool.map(plot_distributions, features)
     
     pdf_list = glob.glob('./' + args.prefix + '.analysis/feature_plots/*.pdf')
     merger = PdfFileMerger()
