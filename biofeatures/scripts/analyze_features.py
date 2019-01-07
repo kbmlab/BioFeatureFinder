@@ -351,8 +351,8 @@ def plot_distributions(feature):
     plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.pdf',
                 dpi=300, bbox_inches='tight')
     
-    plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.jpg',
-                dpi=300, bbox_inches='tight', quality=95)
+#    plt.savefig('./' + args.prefix + '.analysis/feature_plots/' + name + '.jpg',
+#                dpi=300, bbox_inches='tight', quality=95)
             
     plt.close()
 
