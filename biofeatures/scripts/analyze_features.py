@@ -23,6 +23,7 @@ from rpy2.robjects.vectors import FloatVector
 import matplotlib.pyplot as plt
 import matplotlib.backends.backend_pdf
 import seaborn as sns
+from PyPDF2 import PdfFileMerger
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble.partial_dependence import plot_partial_dependence
 from sklearn.metrics import adjusted_mutual_info_score
