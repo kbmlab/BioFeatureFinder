@@ -392,8 +392,12 @@ def plot_barcharts(df, title, save):
 
 def plot_barchart_importance(df):
     importance_ind = df.set_index("Feature")
-
-    N = 10
+    
+    if len(df) >= 10:
+        N = 10
+    else:
+        N = len(df)
+        
     ind = np.arange(N)  # the x locations for the groups
     width = 0.5
 
@@ -1517,10 +1521,10 @@ print()
 
 sns.set_style('ticks')
 
-if importance.shape[0] >= 10:
+if len(importance) >=10 :
     N = 10
 else:
-    N = importance.shape[0]
+    N = len(importance)
 
 importance_ind = importance.sort_values(by=['mean_rel_importance'], ascending=False).set_index("Feature").head(N)
 
@@ -1559,8 +1563,11 @@ ax.tick_params(axis='both', which='major', labelsize=14)
 ax.grid(b=False)
 ax.patch.set_visible(False)
 
-ax2.tick_params(top=False, bottom=False, left=False, right=False, labelleft=True, labeltop=True)
-ax.tick_params(top=False, bottom=False, left=False, right=False, labelleft=True, labelbottom=True)
+ax2.tick_params(top=False, bottom=False, left=False, right=False, 
+                labelleft=True, labeltop=True, labelbottom=False)
+
+ax.tick_params(top=False, bottom=False, left=False, right=False, 
+               labelleft=True, labeltop=False, labelbottom=True)
 
 plt.gca().invert_yaxis()
 plt.tick_params(axis='both', which='major', labelsize=14)
