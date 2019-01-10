@@ -23,7 +23,7 @@ from rpy2.robjects.vectors import FloatVector
 import matplotlib.pyplot as plt
 import matplotlib.backends.backend_pdf
 import seaborn as sns
-from PyPDF2 import PdfFileMerger
+#from PyPDF2 import PdfFileMerger
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble.partial_dependence import plot_partial_dependence
 from sklearn.metrics import adjusted_mutual_info_score
@@ -40,6 +40,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import mutual_info_classif,VarianceThreshold
 import multiprocessing as mp
 import glob
+from pdfrw import PdfReader, PdfWriter
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
@@ -146,8 +147,8 @@ parser.add_argument("-c", '--correlation-filter', dest="corr_th", default=False,
                     help="Remove features which exhibit linear correlation scores above a certain threshold (from 0 to 1). Default: False",
                     type=float, metavar=0.95, required=False)
 
-parser.add_argument("-a", '--ami-filter', dest="ami_th", default=0.01,
-                    help="Remove non-informative features based on adjusted mutual information (aMI) scores below a certain threshold (from 0 to 1). If set to 0, will remove features with 0 aMI scores and keep all features with positive scores. Default: 0.01",
+parser.add_argument("-mi", '--mi-filter', dest="ami_th", default=False,
+                    help="Remove non-informative features based on mutual information (MI) scores below a certain threshold (from 0 to 1). By default, it removes all features with 0 aMI scores and keep all features with positive scores. If set to a negative number (ex. -1) it disables the mi-filtering entirely (but still calculates the results and outputs the tables). Default: False",
                     type=float, metavar=0.01, required=False)
 
 parser.add_argument("-r", '--runs', dest="runs", default=10,
@@ -580,12 +581,20 @@ if not args.dont_plot_cdf:
         pool.map(plot_distributions, features)
     
     pdf_list = glob.glob('./' + args.prefix + '.analysis/feature_plots/*.pdf')
-    merger = PdfFileMerger()
+        
+    writer = PdfWriter()
+    
+    for inpfn in pdf_list:
+        writer.addpages(PdfReader(inpfn).pages)
 
-    for pdf in pdf_list:
-        merger.append(pdf)
-
-    merger.write('./' + args.prefix + '.analysis/feature_distributions.pdf')    
+    writer.write('./' + args.prefix + '.analysis/feature_distributions.pdf')
+    
+#    merger = PdfFileMerger()
+#
+#    for pdf in pdf_list:
+#        merger.append(pdf)
+#
+#    merger.write()    
                 
     print("Finished distribution plots for features in matrix") 
     print()
@@ -945,7 +954,7 @@ for run_i in range(len(runs)):
     y = np.array(Z.group).astype('int')
     X = np.array(Z.drop('group', 1))
     
-    print('Removing non-informative features based on aMI score')
+    print('Removing non-informative features based on MI score')
     print()
     
     mi_scores = mutual_info_classif(X, y, 
@@ -978,15 +987,19 @@ for run_i in range(len(runs)):
                        sep='\t')
     ami_var.to_excel('./' + args.prefix + '.analysis/classifier_metrics/run_' + run_id + '/run_' + run_id + '_features_ami_and_variance_scores.xlsx')
     
-    if args.ami_th == 0:
-        if len(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist()) > 0:
-            Z = Z.drop(ami_var[ami_var['ami_score'] == args.ami_th]['features'].tolist(), axis=1)
+    if not args.ami_th:
+        if len(ami_var[ami_var['ami_score'] == 0]['features'].tolist()) > 0:
+            Z = Z.drop(ami_var[ami_var['ami_score'] == 0]['features'].tolist(), axis=1)
             y = np.array(Z.group).astype('int')
             X = np.array(Z.drop('group', 1))
         else:
             print('No features found with aMI lower than threshold')
             print()
             pass
+    elif args.ami_th < 0:
+        print('Skipping mutual information score filter')
+        print()
+        pass
     else:
         if len(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist()) > 0:
             Z = Z.drop(ami_var[ami_var['ami_score'] < args.ami_th]['features'].tolist(), axis=1)

@@ -22,7 +22,8 @@ setup(
         'scipy >= 1.1.0',
         'seaborn >= 0.9.0',
         'scikit-learn >= 0.20',
-	'PyPDF2 >=1.26.0'
+        'pdfrw >= 0.4',
+        #'PDF2 >=1.26.0'
     ],
     scripts=[
         'biofeatures/scripts/analyze_features.py',
