@@ -635,6 +635,8 @@ if not args.debug:
 else:
     bed = bed.head(args.debug)
 
+BedTool.from_dataframe(bed).saveas(args.outfile+'.datamatrix/genomic_ranges.bed')
+
 print()
 print("Generating FASTA sequences for each entry")
 
