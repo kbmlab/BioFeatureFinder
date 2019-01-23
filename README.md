@@ -88,10 +88,10 @@ For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-bindi
     #Run the "build_datamatrix" script to create extract biological features from the files
     build_datamatrix.py \ #load the main script
     -i ./rbfox2_sample.bed \ #set your input set of bed coordinates
-    -gen /full/path/to/BioFeatureFinder/test_data/hg19_data/GRCh37.p13.genome.fa \ #Load the genomic sequence
-    -g /full/path/to/BioFeatureFinder/test_data/hg19_data/hg19_annotations/grch37.intron.gtf.gz \ #Load the GTF file 
-    -cs /full/path/to/BioFeatureFinder/test_data/hg19_data/hg19.100way.phastCons.bw \
-    -var /full/path/to/BioFeatureFinder/test_data/hg19_data/hg19_var/* \
+    -gen ./hg19_data/GRCh37.p13.genome.fa \ #Load the genomic sequence
+    -g ./hg19_data/hg19_annotations/grch37.intron.gtf.gz \ #Load the GTF file 
+    -cs ./hg19_data/hg19.100way.phastCons.bw \
+    -var ./hg19_data/hg19_var/* \
     --fasta \
     -k 4 5 6 \
     --rnafold \
@@ -99,6 +99,17 @@ For testing of the algorith, we've included a sub-sample of the RBFOX2 RNA-bindi
     --keepBED \
     --keepTEMP \
     -o rbfox2.test
+    
+    #Run the "analyze_features.py" script to identify significant features 
+    analyze_features.py \
+    -i ./rbfox2_sample.bed \
+    -m ./rbfox2.test.datamatrix/rbfox2.test.datamatrix.tsv \
+    -o rbfox2.test \
+    -p bonferroni \
+    -mi 0.01 \
+    -c 0.8 \
+    -s
+
 
 
 ## Converting multiple wig into single bigWig
