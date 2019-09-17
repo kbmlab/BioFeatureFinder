@@ -339,7 +339,7 @@ def get_kmer_counts(kmer_list):
 
 def run_rnafold(files):
     p = Popen("RNAfold -i "+args.outfile+".datamatrix/temp/fastas/"+files+\
-              " --gquad --noPS | sed -n 3p | cut -f 2 -d ' ' | sed 's/(//g'| sed 's/)//g' > "+args.outfile+\
+              " --gquad --noPS | sed -n 3p | rev | cut -f 1 -d ' ' | rev | sed 's/(//g'| sed 's/)//g' > "+args.outfile+\
               ".datamatrix/temp/rnafold/"+files+\
               ".MFE", shell=True)
     p.communicate()
